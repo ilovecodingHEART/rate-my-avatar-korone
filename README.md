@@ -1,1 +1,0 @@
-# rate-my-avatar-korone

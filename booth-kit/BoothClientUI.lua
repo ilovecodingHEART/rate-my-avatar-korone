@@ -10,8 +10,8 @@ local TweenService = game:GetService("TweenService")
 local player = Players.LocalPlayer
 
 local booth = script.Parent
-local podium = booth:WaitForChild("Podium")
-local prompt = podium:WaitForChild("ProximityPrompt")
+local tabletop = booth:WaitForChild("Tabletop")
+local prompt = tabletop:WaitForChild("ProximityPrompt")
 
 local remotes = booth:WaitForChild("Remotes")
 local requestClaim = remotes:WaitForChild("RequestClaim")

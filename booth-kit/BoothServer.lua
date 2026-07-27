@@ -1,5 +1,14 @@
 -- RateMyAvatarBooth / BoothServer (Script, RunContext = Server)
 -- Original server-side logic for a claimable, customizable booth.
+-- Wired to the existing "Rate My Avatar Booth" model layout:
+--   Tabletop        (Part)         -- interaction point
+--     ProximityPrompt              -- added by the injector
+--   Banner (Part)
+--     SurfaceGui
+--       Frame
+--         Description (TextLabel) -- shows the booth's custom sign text
+--         Icon (ImageLabel)       -- shows the booth's custom image
+--
 -- Handles: claiming, text updates (chat-filtered), and image updates
 -- (validated to a plain numeric Roblox asset id only -- no arbitrary URLs).
 
@@ -7,15 +16,15 @@ local Players = game:GetService("Players")
 local TextService = game:GetService("TextService")
 
 local booth = script.Parent
-local podium = booth:WaitForChild("Podium")
-local board = booth:WaitForChild("Board")
 
-local surfaceGui = board:WaitForChild("BoothSurfaceGui")
-local textLabel = surfaceGui:WaitForChild("CustomText")
-local imageLabel = surfaceGui:WaitForChild("CustomImage")
-local ownerLabel = surfaceGui:WaitForChild("OwnerNameLabel")
+local tabletop = booth:WaitForChild("Tabletop")
+local prompt = tabletop:WaitForChild("ProximityPrompt")
 
-local prompt = podium:WaitForChild("ProximityPrompt")
+local banner = booth:WaitForChild("Banner")
+local surfaceGui = banner:WaitForChild("SurfaceGui")
+local frame = surfaceGui:WaitForChild("Frame")
+local textLabel = frame:WaitForChild("Description")
+local imageLabel = frame:WaitForChild("Icon")
 
 local remotes = booth:WaitForChild("Remotes")
 local requestClaim = remotes:WaitForChild("RequestClaim")
@@ -60,11 +69,11 @@ local function refreshDisplay()
 	end
 
 	if ownerUserId.Value == 0 then
-		ownerLabel.Text = "Unclaimed Booth\nInteract to claim it!"
+		prompt.ObjectText = "Unclaimed Booth"
 		prompt.ActionText = "Claim Booth"
 	else
 		local name = getDisplayNameFor(ownerUserId.Value)
-		ownerLabel.Text = (name or "Someone") .. "'s Booth"
+		prompt.ObjectText = (name or "Someone") .. "'s Booth"
 		prompt.ActionText = "Customize"
 	end
 end

@@ -1,16 +1,50 @@
 # RateMyAvatarBooth
 
-Two `.rbxm` files live here:
+Two ways to get the booth functionality into your game:
 
-## `Rate My Avatar Booth (patched).rbxm` — use this one
+## `InjectBoothScripts.lua` — run this in Studio's Command Bar (recommended)
 
-This is **your** uploaded `Rate My Avatar Booth.rbxm` model, patched to
-add claim/text/image functionality, with one critical fix first:
+Since Studio was reporting the `.rbxm` file as corrupted on import, this is
+the reliable path: a single self-contained Lua script you paste into
+**Roblox Studio → View tab → Command Bar** and run directly against your
+existing "Rate My Avatar Booth" model already in your place. No file
+import needed at all.
 
-### ⚠️ It contained a hidden backdoor, which has been removed
+**How to run it:**
+1. In Studio's Explorer, select your booth `Model` (the one containing
+   `Tabletop`, `Banner`, etc.) — or skip this and it'll search the game
+   for a `Model` named "Booth" automatically.
+2. Open **View → Command Bar**.
+3. Open `dist/InjectBoothScripts.lua`, copy its entire contents, paste
+   into the Command Bar, press Enter.
+4. Check the Output window — it prints exactly what it removed and added.
 
-The uploaded file had a disguised malicious branch hidden inside a
-`StyleSheet` named "Extra":
+**What it does, in order:**
+1. **Removes a hidden backdoor** that was in the uploaded model (see
+   below for details) — it detects it structurally (any `StyleSheet`
+   containing a `Humanoid` descendant, plus a signature check on the
+   scripts' source) so it'll catch the backdoor wherever it's hiding, not
+   just at the exact path it happened to be in your file.
+2. **Adds a `ProximityPrompt`** to your `Tabletop` part (claim/customize
+   trigger).
+3. **Adds `Remotes`** (`RequestClaim`, `RequestSaveBooth` RemoteEvents)
+   and **`State`** (`OwnerUserId`, `CustomTextValue`, `CustomImageIdValue`)
+   folders.
+4. **Installs `BoothServer` and `BoothClientUI` Scripts**, wired to your
+   model's real `Banner → SurfaceGui → Frame → Description`/`Icon` layout.
+
+It's **safe to run more than once** — it won't create duplicates or
+re-remove things that are already gone.
+
+This script is generated from `booth-kit/BoothServer.lua` and
+`booth-kit/BoothClientUI.lua` by `tools/generate_command_bar_script.py`;
+edit those two files and re-run that generator if you want to change the
+behavior, rather than hand-editing the generated file.
+
+### ⚠️ About the backdoor it removes
+
+The uploaded `Rate My Avatar Booth.rbxm` contained a disguised malicious
+branch hidden inside a `StyleSheet` named "Extra":
 
 ```
 Extra (StyleSheet)
@@ -34,80 +68,44 @@ Buried in the "CoreTextureSystem" script was:
 local TextureConfiguration = require(script:WaitForChild("Pose", 4).Value)
 ```
 
-`require()` on a numeric id loads and executes a `ModuleScript` **live from
-Roblox's servers** — meaning whoever controls asset id `102764929247228`
-could push arbitrary code into your published game at any time (steal
+`require()` on a numeric id loads and executes a `ModuleScript` **live
+from Roblox's servers** — meaning whoever controls that asset id could
+push arbitrary code into your published game at any time (steal
 DataStores, grant themselves admin, ban/kick players, wipe your game,
 etc.), all while looking completely clean in a normal Studio playtest.
 This is a well-known "free-model backdoor" pattern; the "Model made by
 @rewq" / "Credits:@rewq" tags suggest it came from a public free-models
 site.
 
-`tools/patch_booth_model.py` surgically removed that entire subtree (and
-only that subtree — every other part, mesh, and GUI element in your model
-is preserved **byte-for-byte identical**; this was verified by diffing
-every chunk of the original file against the patched one). See that
-script's `MALICIOUS_CLASSES` set and comments for the exact removal logic.
+## `RateMyAvatarBooth.rbxm` / `Rate My Avatar Booth (patched).rbxm`
 
-### What was added
-
-Using your model's real existing layout:
-
-```
-Booth (Model)
-├── Pole, Carpet, Pole, Table  (unchanged)
-├── Tabletop (Part)
-│   └── ProximityPrompt          [NEW] — claim / customize trigger
-├── Banner (Part)
-│   └── SurfaceGui
-│       └── Frame
-│           ├── Description (TextLabel)   ← now shows the booth's custom text
-│           └── Icon (ImageLabel)         ← now shows the booth's custom image
-├── Remotes (Folder)             [NEW]
-│   ├── RequestClaim (RemoteEvent)
-│   └── RequestSaveBooth (RemoteEvent)
-├── State (Folder)               [NEW]
-│   ├── OwnerUserId (IntValue)
-│   ├── CustomTextValue (StringValue)
-│   └── CustomImageIdValue (StringValue)
-├── BoothServer (Script)         [NEW]
-└── BoothClientUI (Script)       [NEW]
-```
-
-Functionality (same as before): walk up to `Tabletop`, interact with the
-`ProximityPrompt` to claim the booth, then interact again to open an
-editor popup where the owner can set the sign text (chat-filtered
-server-side) and an image (entered as a plain numeric Roblox asset id —
-the server strips anything non-numeric, so no raw URLs/markup can ever be
-injected).
-
-**To use it:** in Roblox Studio, delete/replace whatever copy of the
-original `Rate My Avatar Booth.rbxm` you already have in your place, and
-`Insert → From File...` this patched version instead.
-
-## `RateMyAvatarBooth.rbxm` — original from-scratch kit
-
-An earlier, fully original booth model (own geometry + scripts, not based
-on any uploaded file) with the same claim/text/image functionality. Kept
-here in case you'd rather use simple built-in parts instead of the
-uploaded model's geometry.
+Pre-built `.rbxm` files with the same functionality (one is a from-scratch
+original kit, the other a byte-level patched copy of the uploaded model).
+Kept for reference, but since Studio flagged the import as corrupted, use
+`InjectBoothScripts.lua` above instead.
 
 ## Files
 
-- `BoothServer.lua` — `Script` (RunContext = Server). Owns all state
-  changes (claiming, text/image validation) and refreshes the on-booth
-  display. Written to reference `Tabletop`/`Banner`/`Description`/`Icon`
-  to match the uploaded model's naming.
-- `BoothClientUI.lua` — `Script` (RunContext = Client). Builds the popup
-  editor UI on demand and fires the two `RemoteEvent`s to the server.
+- `booth-kit/BoothServer.lua` — `Script` (RunContext = Server). Owns all
+  state changes (claiming, text/image validation) and refreshes the
+  on-booth display. References `Tabletop`/`Banner`/`Description`/`Icon` to
+  match the uploaded model's naming.
+- `booth-kit/BoothClientUI.lua` — `Script` (RunContext = Client). Builds
+  the popup editor UI on demand and fires the two `RemoteEvent`s to the
+  server.
+- `dist/InjectBoothScripts.lua` — generated Command Bar script combining
+  the backdoor removal + the two scripts above into one paste-and-run file.
 
 ## Regenerating
 
 ```
-# Rebuild the from-scratch kit:
+# Regenerate the Command Bar injector after editing the Luau scripts:
+python3 tools/generate_command_bar_script.py
+
+# Rebuild the from-scratch kit .rbxm:
 python3 tools/build_booth_kit.py dist/RateMyAvatarBooth.rbxm
 
-# Re-patch a (re-)uploaded source model:
+# Re-patch a (re-)uploaded source model .rbxm:
 python3 tools/patch_booth_model.py "Rate My Avatar Booth.rbxm" \
     "dist/Rate My Avatar Booth (patched).rbxm"
 ```
@@ -122,8 +120,9 @@ python3 tools/rbxbinary_inspect.py "some_model.rbxm"
 
 ## How the tooling was built
 
-Since this sandbox has no access to Roblox Studio, all of this relies on a
-small, hand-written implementation of Roblox's binary model format:
+Since this sandbox has no access to Roblox Studio, the `.rbxm` tooling
+relies on a small, hand-written implementation of Roblox's binary model
+format:
 
 - `tools/rbxbinary.py` — from-scratch writer (used to build brand new
   `.rbxm` files).
@@ -135,6 +134,16 @@ small, hand-written implementation of Roblox's binary model format:
   chunk-level surgery on an existing file (remove specific instances by
   class, append new ones) without re-encoding anything it doesn't need to
   touch.
+- `tools/generate_command_bar_script.py` — embeds the two Luau scripts
+  into a single paste-and-run Command Bar script that performs the same
+  backdoor removal + wiring live inside Studio, with no file import step.
 
-All of it is based on the format documented by the open-source `rbx-dom`
-project's `rbx_binary` Rust crate (https://github.com/rojo-rbx/rbx-dom).
+All of the `.rbxm` format handling is based on the format documented by
+the open-source `rbx-dom` project's `rbx_binary` Rust crate
+(https://github.com/rojo-rbx/rbx-dom).
+
+The generated Command Bar script (`dist/InjectBoothScripts.lua`) was
+syntax-checked and functionally tested end-to-end against a mock
+Roblox Instance tree modeled on the real uploaded file's structure,
+confirming it removes the backdoor, wires up the booth correctly, leaves
+unrelated instances untouched, and is safe to run more than once.

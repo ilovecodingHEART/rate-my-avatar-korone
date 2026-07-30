@@ -1,0 +1,23 @@
+-- ============================================================
+-- 2021 CLIENT (PEKORA) AUTO-FIXED COPY
+-- mechanical fixes applied: %* -> %s x0, pairs() wrap x0, if-expr -> __2021_if x0, compound-assign x0
+-- no manual fixes needed; paste as-is.
+-- ============================================================
+-- WHAT NEEDS ADDING
+
+-- make lbs load when joining
+-- new pls donate booth unlocked
+-- fix large sign
+-- gifting ban message "user is banned for: [reasoning]"
+-- we also need a restore stats command cause if someone gets banned then make it so we can restore or reset stats stats
+-- fix settings
+-- fix tictactoe
+-- fix admin panel ban and kick
+-- add fast loading
+-- fix unlock
+-- playerlist kick
+-- add biplane for 5 donations
+-- you gain raised even if a person doesnt claim (fix this)
+-- add nameplates
+-- additem if u dont have gamepasses
+-- fix headtags

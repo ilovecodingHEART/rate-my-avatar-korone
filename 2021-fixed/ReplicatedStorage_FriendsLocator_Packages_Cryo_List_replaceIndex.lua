@@ -1,0 +1,20 @@
+-- ============================================================
+-- 2021 CLIENT (PEKORA) AUTO-FIXED COPY
+-- mechanical fixes applied: %* -> %s x0, pairs() wrap x0, if-expr -> __2021_if x0, compound-assign x0
+-- no manual fixes needed; paste as-is.
+-- ============================================================
+-- Saved by UniversalSynSaveInstance (Join to Copy Games) https://discord.gg/wx4ThpAsmw
+
+return function(v0, v1, v2) --[[ Line: 5 ]] --[[ Name: replaceIndex ]]
+    local v3 = {};
+    local v4 = #v0;
+    assert(v1 <= v4, "index must be less or equal than the list length");
+    for v5 = 1, v4 do
+        if v5 == v1 then
+            v3[v5] = v2;
+        else
+            v3[v5] = v0[v5];
+        end;
+    end;
+    return v3;
+end;

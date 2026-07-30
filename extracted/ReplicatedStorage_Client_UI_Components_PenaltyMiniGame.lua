@@ -1,0 +1,178 @@
+-- Saved by UniversalSynSaveInstance (Join to Copy Games) https://discord.gg/wx4ThpAsmw
+
+local l_CollectionService_0 = game:GetService("CollectionService");
+local l_Roact_0 = require(game:GetService("ReplicatedStorage"):WaitForChild("Packages"):WaitForChild("Roact"));
+local v2 = require(game:GetService("ReplicatedStorage"):WaitForChild("Packages"):WaitForChild("RoactHooks")).new(l_Roact_0);
+local l_GameplayController_0 = require(script.Parent.Parent.Parent:WaitForChild("Controllers"):WaitForChild("GameplayController"));
+local l_usePx_0 = require(script.Parent.Parent:WaitForChild("Hooks"):WaitForChild("usePx"));
+local l_useAtom_0 = require(script.Parent.Parent:WaitForChild("Hooks"):WaitForChild("useAtom"));
+local l_Group_0 = require(script.Parent.Parent:WaitForChild("Components"):WaitForChild("Group"));
+local v7 = require(script.MovingCircle);
+local v8 = require(script.RotatingArrow);
+local l_Util_0 = require(game:GetService("ReplicatedStorage"):WaitForChild("Common"):WaitForChild("Util"));
+local l_atoms_0 = require(game:GetService("ReplicatedStorage"):WaitForChild("Common"):WaitForChild("atoms"));
+local l_atoms_1 = require(script.Parent.Parent.Parent:WaitForChild("atoms"));
+local _ = require(game:GetService("ReplicatedStorage"):WaitForChild("AdidasTeams"));
+local l_LocalPlayer_0 = game:GetService("Players").LocalPlayer;
+Location = function(_, v15) --[[ Line: 25 ]] --[[ Name: Location ]]
+    -- upvalues: l_CollectionService_0 (copy), l_Util_0 (copy), l_atoms_1 (copy), l_Roact_0 (copy), v7 (copy)
+    local v19 = v15.useCallback(function(v16) --[[ Line: 26 ]]
+        -- upvalues: l_CollectionService_0 (ref), l_Util_0 (ref), l_atoms_1 (ref)
+        local v17 = l_CollectionService_0:GetTagged("PenaltyGoal")[1];
+        local v18 = l_Util_0.screenToFace(v17, v16);
+        if not v18 then
+            return;
+        else
+            l_atoms_1.penaltyShootLocation(v18);
+            l_atoms_1.PenaltyStatus("power");
+            return;
+        end;
+    end);
+    return l_Roact_0.createElement(v7, {
+        onInput = v19
+    });
+end;
+Power = function(_, v21) --[[ Line: 42 ]] --[[ Name: Power ]]
+    -- upvalues: l_GameplayController_0 (copy), l_Roact_0 (copy), v8 (copy)
+    local v24 = v21.useCallback(function(v22, v23) --[[ Line: 43 ]]
+        -- upvalues: l_GameplayController_0 (ref)
+        l_GameplayController_0:Shoot(v22, v23);
+    end);
+    return l_Roact_0.createElement(v8, {
+        onInput = v24
+    });
+end;
+local function v28(_, v26) --[[ Line: 52 ]] --[[ Name: Gameplay ]]
+    -- upvalues: l_useAtom_0 (copy), l_atoms_1 (copy), l_Roact_0 (copy), v2 (copy)
+    local v27 = l_useAtom_0(v26, l_atoms_1.PenaltyStatus);
+    if v27 == "location" then
+        return l_Roact_0.createElement(v2(Location));
+    elseif v27 == "power" then
+        return l_Roact_0.createElement(v2(Power));
+    else
+        return;
+    end;
+end;
+local function v32(v29, v30) --[[ Line: 62 ]] --[[ Name: TeamDisplay ]]
+    -- upvalues: l_usePx_0 (copy), l_Roact_0 (copy), l_Util_0 (copy)
+    local v31 = l_usePx_0(v30);
+    return l_Roact_0.createElement("Frame", {
+        AnchorPoint = Vector2.new(0.5, 0), 
+        AutomaticSize = Enum.AutomaticSize.XY, 
+        BackgroundColor3 = Color3.new(1, 1, 1), 
+        BackgroundTransparency = 0.1, 
+        Position = UDim2.fromScale(0.5, 1), 
+        ZIndex = 2
+    }, {
+        textLabel = l_Roact_0.createElement("TextLabel", {
+            AutomaticSize = Enum.AutomaticSize.XY, 
+            BackgroundTransparency = 1, 
+            FontFace = Font.new("rbxassetid://11702779409", Enum.FontWeight.Heavy, Enum.FontStyle.Normal), 
+            Text = "TEAM", 
+            TextColor3 = Color3.new(), 
+            TextSize = v31(14), 
+            LayoutOrder = 1, 
+            ZIndex = 2
+        }), 
+        teamLogo = l_Roact_0.createElement("ImageLabel", {
+            BackgroundTransparency = 1, 
+            Image = ("rbxassetid://%*"):format(l_Util_0.findTeamByName(v29.team).LogoId), 
+            ScaleType = Enum.ScaleType.Fit, 
+            Size = UDim2.fromOffset(v31(14), v31(14)), 
+            LayoutOrder = 2, 
+            ZIndex = 2
+        }), 
+        uIPadding = l_Roact_0.createElement("UIPadding", {
+            PaddingBottom = UDim.new(0, v31(5)), 
+            PaddingLeft = UDim.new(0, v31(8)), 
+            PaddingRight = UDim.new(0, v31(8)), 
+            PaddingTop = UDim.new(0, v31(5))
+        }), 
+        uICorner = l_Roact_0.createElement("UICorner", {
+            CornerRadius = UDim.new(1, 0)
+        }), 
+        uIListLayout = l_Roact_0.createElement("UIListLayout", {
+            FillDirection = Enum.FillDirection.Horizontal, 
+            HorizontalAlignment = Enum.HorizontalAlignment.Center, 
+            Padding = UDim.new(0, v31(5)), 
+            SortOrder = Enum.SortOrder.LayoutOrder, 
+            VerticalAlignment = Enum.VerticalAlignment.Center
+        })
+    });
+end;
+local function v36(v33, v34) --[[ Line: 117 ]] --[[ Name: GoalDisplay ]]
+    -- upvalues: l_usePx_0 (copy), l_Roact_0 (copy), l_Group_0 (copy), v2 (copy), v32 (copy)
+    local v35 = l_usePx_0(v34);
+    return l_Roact_0.createElement("Frame", {
+        AutomaticSize = Enum.AutomaticSize.XY, 
+        BackgroundTransparency = 1
+    }, {
+        goalText = l_Roact_0.createElement(l_Group_0, {}, {
+            score = l_Roact_0.createElement("TextLabel", {
+                AnchorPoint = Vector2.new(1, 0), 
+                AutomaticSize = Enum.AutomaticSize.XY, 
+                BackgroundTransparency = 1, 
+                FontFace = Font.new("rbxassetid://11702779409", Enum.FontWeight.SemiBold, Enum.FontStyle.Normal), 
+                LayoutOrder = 1, 
+                Position = UDim2.fromScale(1, 0), 
+                Text = v33.score, 
+                TextColor3 = Color3.new(1, 1, 1), 
+                TextSize = v35(20), 
+                ZIndex = 2
+            }), 
+            textLabel = l_Roact_0.createElement("TextLabel", {
+                AutomaticSize = Enum.AutomaticSize.XY, 
+                BackgroundTransparency = 1, 
+                FontFace = Font.new("rbxassetid://11702779409", Enum.FontWeight.Heavy, Enum.FontStyle.Normal), 
+                Text = "GOALS", 
+                TextColor3 = Color3.new(1, 1, 1), 
+                TextSize = v35(20), 
+                ZIndex = 2
+            }), 
+            uIListLayout = l_Roact_0.createElement("UIListLayout", {
+                FillDirection = Enum.FillDirection.Horizontal, 
+                Padding = UDim.new(0, v35(10)), 
+                SortOrder = Enum.SortOrder.LayoutOrder
+            })
+        }), 
+        teamLogo = l_Roact_0.createElement(v2(v32), {
+            team = v33.team
+        })
+    });
+end;
+local _ = function(_, v38) --[[ Line: 167 ]] --[[ Name: GoalScore ]]
+    -- upvalues: l_usePx_0 (copy), l_useAtom_0 (copy), l_atoms_0 (copy), l_LocalPlayer_0 (copy), l_Roact_0 (copy), v2 (copy), v36 (copy)
+    local v39 = l_usePx_0(v38);
+    local v40 = l_useAtom_0(v38, l_atoms_0.goals)[l_LocalPlayer_0.Name] or 0;
+    local v41 = l_useAtom_0(v38, l_atoms_0.registeredTeam)[l_LocalPlayer_0.Name];
+    return l_Roact_0.createElement("Frame", {
+        AnchorPoint = Vector2.new(0.5, 0), 
+        AutomaticSize = Enum.AutomaticSize.X, 
+        BackgroundColor3 = Color3.new(), 
+        BackgroundTransparency = 0.1, 
+        Position = UDim2.new(0.5, 0, 0, v39(25)), 
+        Size = UDim2.fromOffset(0, v39(50)), 
+        ZIndex = 2
+    }, {
+        uIPadding = l_Roact_0.createElement("UIPadding", {
+            PaddingBottom = UDim.new(0, v39(15)), 
+            PaddingLeft = UDim.new(0, v39(25)), 
+            PaddingRight = UDim.new(0, v39(25)), 
+            PaddingTop = UDim.new(0, v39(15))
+        }), 
+        uICorner = l_Roact_0.createElement("UICorner", {
+            CornerRadius = UDim.new(1, 0)
+        }), 
+        goals = l_Roact_0.createElement(v2(v36), {
+            score = v40, 
+            team = v41
+        })
+    });
+end;
+PenaltyMiniGame = function(_, _) --[[ Line: 199 ]] --[[ Name: PenaltyMiniGame ]]
+    -- upvalues: l_Roact_0 (copy), l_Group_0 (copy), v2 (copy), v28 (copy)
+    return l_Roact_0.createElement(l_Group_0, {}, {
+        Gameplay = l_Roact_0.createElement(v2(v28))
+    });
+end;
+return v2(PenaltyMiniGame);

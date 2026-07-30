@@ -1,0 +1,739 @@
+-- Saved by UniversalSynSaveInstance (Join to Copy Games) https://discord.gg/wx4ThpAsmw
+
+-- Decompiled by Krnl
+
+game:GetService("StarterGui")
+local v_u_1 = game:GetService("Players")
+local v_u_2 = game:GetService("SoundService")
+game:GetService("GuiService")
+local v3 = game:GetService("UserInputService")
+local v_u_4 = game:GetService("TweenService")
+local v_u_5 = v_u_1.LocalPlayer
+local v6 = v_u_5.PlayerGui
+local v_u_7 = require(game.ReplicatedStorage.Remotes)
+local v_u_8 = require(game.ReplicatedStorage.NumberHelpers)
+local v_u_9 = script.Parent
+local v_u_10 = script.Parent.Parent.PlayerPopup
+local v_u_11 = v_u_9.ScrollingFrame
+local v_u_12 = v6:WaitForChild("ScreenGui")
+v6:WaitForChild("LoadingGui")
+v6:WaitForChild("CustomCoreGui")
+local v_u_13 = game:GetService("StarterGui")
+local v_u_14 = v_u_13:WaitForChild("UITemplates")
+if v3.TouchEnabled or v3.VREnabled then
+	v_u_9.Visible = false
+	v_u_10.Visible = false
+else
+	local function v_u_17(p15)
+		local booths = workspace:FindFirstChild("BoothInteractions")
+		if not booths then return end
+
+		for _, v16 in booths:GetChildren() do
+			if v16:GetAttribute("BoothOwner") == p15.UserId then
+				return v16.Position
+			end
+		end
+	end
+	v_u_13:SetCoreGuiEnabled(Enum.CoreGuiType.PlayerList, false)
+	v_u_13:SetCore("AvatarContextMenuEnabled", true)
+	v_u_13:SetCore("AvatarContextMenuTheme", {
+		["TextScale"] = 0.8,
+		["BackgroundImage"] = "",
+		["BackgroundTransparency"] = 0.1,
+		["BackgroundColor"] = Color3.fromRGB(0, 0, 0),
+		["NameTagColor"] = Color3.fromRGB(30, 30, 30),
+		["NameUnderlineColor"] = Color3.fromRGB(50, 50, 50),
+		["ButtonFrameColor"] = Color3.fromRGB(0, 0, 0),
+		["ButtonFrameTransparency"] = 0.2,
+		["ButtonUnderlineColor"] = Color3.fromRGB(50, 50, 50),
+		["Font"] = Enum.Font.Gotham
+	})
+	local function v_u_18()
+		-- upvalues: (copy) v_u_11, (copy) v_u_9
+		if v_u_11.UIListLayout.AbsoluteContentSize.Y < 400 then
+			v_u_11.AutomaticCanvasSize = Enum.AutomaticSize.None
+			v_u_11.Size = UDim2.new(0, 325, 0, v_u_11.UIListLayout.AbsoluteContentSize.Y)
+			v_u_9.Size = UDim2.new(0, 325, 0, v_u_11.UIListLayout.AbsoluteContentSize.Y + 33)
+		else
+			v_u_11.AutomaticCanvasSize = Enum.AutomaticSize.Y
+		end
+	end
+	local v_u_19 = true
+	local function v_u_22(p20, p21)
+		if p20 >= 254 then
+			p21.Info.Avatar.Icon.Visible = true
+			p21.Info.Avatar.Icon.Image = "rbxassetid://14978672360"
+			p21.Info.Avatar.Icon.ImageColor3 = Color3.fromRGB(255, 69, 69)
+			return
+		elseif p20 >= 253 then
+			p21.Info.Avatar.Icon.Visible = true
+			p21.Info.Avatar.Icon.Image = "rbxassetid://14990198272"
+			p21.Info.Avatar.Icon.ImageColor3 = Color3.fromRGB(255, 85, 0)
+			return
+		elseif p20 >= 251 then
+			p21.Info.Avatar.Icon.Visible = true
+			p21.Info.Avatar.Icon.Image = "rbxassetid://14978695721"
+			p21.Info.Avatar.Icon.ImageColor3 = Color3.fromRGB(138, 255, 182)
+			return
+		elseif p20 >= 1 then
+			p21.Info.Avatar.Icon.ImageColor3 = Color3.fromRGB(255, 255, 255)
+			p21.Info.Avatar.Icon.Image = "rbxassetid://16854470810"
+			p21.Info.Avatar.Icon.Visible = true
+		else
+			p21.Info.Avatar.Icon.Visible = false
+		end
+	end
+	local function v_u_24(p23, _)
+		-- upvalues: (copy) v_u_10
+		if p23 >= 254 then
+			v_u_10.Info.Avatar.Icon.Visible = true
+			v_u_10.Info.Avatar.Icon.Image = "rbxassetid://14978672360"
+			v_u_10.Info.Avatar.Icon.ImageColor3 = Color3.fromRGB(255, 69, 69)
+			v_u_10.Info.Info.Role.TextColor3 = Color3.fromRGB(255, 69, 69)
+			v_u_10.Info.Info.Role.Text = "Developer"
+		elseif p23 >= 248 then
+			v_u_10.Info.Avatar.Icon.Visible = true
+			v_u_10.Info.Avatar.Icon.Image = "rbxassetid://14990198272"
+			v_u_10.Info.Avatar.Icon.ImageColor3 = Color3.fromRGB(255, 85, 0)
+			v_u_10.Info.Info.Role.TextColor3 = Color3.fromRGB(255, 85, 0)
+			v_u_10.Info.Info.Role.Text = "Contributor"
+		elseif p23 >= 5 then
+			v_u_10.Info.Avatar.Icon.Visible = true
+			v_u_10.Info.Avatar.Icon.Image = "rbxassetid://14978695721"
+			v_u_10.Info.Avatar.Icon.ImageColor3 = Color3.fromRGB(138, 255, 182)
+			v_u_10.Info.Info.Role.TextColor3 = Color3.fromRGB(138, 255, 182)
+			v_u_10.Info.Info.Role.Text = "Staff"
+		elseif p23 >= 32112 then
+			v_u_10.Info.Avatar.Icon.Visible = false
+			v_u_10.Info.Info.Role.TextColor3 = Color3.fromRGB(0, 179, 255)
+			v_u_10.Info.Info.Role.Text = "Tester"
+		elseif p23 >= 21312 then
+			v_u_10.Info.Avatar.Icon.Visible = false
+			v_u_10.Info.Info.Role.TextColor3 = Color3.fromRGB(247, 0, 255)
+			v_u_10.Info.Info.Role.Text = "Partner"
+		elseif p23 >= 1 then
+			v_u_10.Info.Avatar.Icon.Visible = false
+			v_u_10.Info.Info.Role.TextColor3 = Color3.fromRGB(4, 255, 0)
+			v_u_10.Info.Info.Role.Text = "Fan"
+		else
+			v_u_10.Info.Avatar.Icon.Visible = false
+			v_u_10.Info.Info.Role.Text = ""
+		end
+		if p23 > 0 and p23 < 250 then
+			v_u_10.Info.Avatar.Icon.Visible = true
+			v_u_10.Info.Avatar.Icon.Image = "rbxassetid://16854470810"
+			v_u_10.Info.Avatar.Icon.ImageColor3 = Color3.fromRGB(255, 255, 255)
+		end
+	end
+	local function v_u_38(p_u_25)
+		-- upvalues: (copy) v_u_7, (copy) v_u_5, (copy) v_u_22, (copy) v_u_4, (copy) v_u_10, (copy) v_u_24, (copy) v_u_17, (copy) v_u_8, (copy) v_u_18
+		print((("playerlistdbg, adding player @%*"):format(p_u_25)))
+		-- i recoded this part (sinceit had shit code and could cause it to break) this line
+		local success, v_u_26 = pcall(function()
+			return v_u_7.Function("PlayerInfo"):InvokeServer(p_u_25)
+		end)
+		if not success or not v_u_26 then
+			warn("playerlistdbg, failed to get info for", p_u_25)
+			return
+		end
+		-- alr so first u gotta get the player name oh thats easy
+		if p_u_25.Name == "IlIIllIIlIlIlIIII" then
+			--v_u_26.isVIP = true
+			--v_u_26.isRobloxAdmin = true
+			--v_u_26.isStarCreator = true
+			v_u_26.hasNukeBooth = true
+		end
+		if p_u_25.Name == "22Slipz" then
+			--v_u_26.isVIP = true
+			--v_u_26.isRobloxAdmin = true
+			--v_u_26.isStarCreator = true
+			v_u_26.hasNukeBooth = true
+		end
+		local v_u_27
+		if v_u_26.isVIP then
+			v_u_27 = script.UserFrameVIP:Clone()
+		else
+			v_u_27 = script.UserFrame:Clone()
+		end
+		v_u_27.Name = ("User%*"):format(p_u_25.UserId)
+		v_u_27.ZIndex = p_u_25.UserId
+		v_u_27.Visible = false
+		v_u_27.Parent = script.Parent.ScrollingFrame
+		v_u_27.Visible = true
+		local v_u_28 = ""
+		local v_u_29 = ""
+		if v_u_26.isVerified then
+			v_u_28 = v_u_28 .. "\238\128\128"
+		end
+		if v_u_26.hasPremium then
+			v_u_28 = v_u_28 .. "\238\128\129"
+		end
+		if v_u_26.streak and v_u_26.streak > 1 then
+			if v_u_26.isVIP then
+				v_u_29 = v_u_29 .. ("<font color=\"rgb(255,125,0)\" size=\"11\">%* \240\159\148\165</font>"):format(v_u_26.streak)
+			else
+				v_u_29 = v_u_29 .. ("<font color=\"rgb(255,125,0)\" size=\"11\">%* \240\159\148\165</font>"):format(v_u_26.streak)
+			end
+		end
+		local _ = v_u_26.isVIP
+		-- later
+		if p_u_25 == v_u_5 then
+			local _ = v_u_26.rankInQuataunGroup >= 2
+		end
+		v_u_27.Info.DisplayName.Text = ("%* %* %*"):format(v_u_28, v_u_26.displayName, v_u_29)
+		v_u_27.Info.Avatar.Image = ("rbxthumb://type=AvatarHeadShot&id=%*&w=48&h=48"):format(v_u_26.userId)
+		task.spawn(function()
+			-- upvalues: (ref) v_u_27, (copy) p_u_25
+			v_u_27.Stats.Donated.Text = p_u_25:GetAttribute("Donated") or "-"
+			p_u_25:GetAttributeChangedSignal("Donated"):Connect(function()
+				-- upvalues: (ref) v_u_27, (ref) p_u_25
+				v_u_27.Stats.Donated.Text = p_u_25:GetAttribute("Donated") or "-"
+			end)
+		end)
+		task.spawn(function()
+			-- upvalues: (ref) v_u_27, (copy) p_u_25
+			v_u_27.Stats.Raised.Text = p_u_25:GetAttribute("Raised") or "-"
+			v_u_27.LayoutOrder = -(p_u_25:GetAttribute("RaisedNumber") or 0)
+			p_u_25:GetAttributeChangedSignal("Raised"):Connect(function()
+				-- upvalues: (ref) v_u_27, (ref) p_u_25
+				v_u_27.Stats.Raised.Text = p_u_25:GetAttribute("Raised") or "-"
+				v_u_27.LayoutOrder = -(p_u_25:GetAttribute("RaisedNumber") or 0)
+			end)
+		end)
+		task.spawn(function()
+			-- upvalues: (copy) v_u_26, (ref) v_u_27, (copy) p_u_25, (ref) v_u_5
+			if v_u_26.isRobloxAdmin then
+				v_u_27.Info.Avatar.SecondIcon.Image = "rbxassetid://16851788845"
+				v_u_27.Info.Avatar.SecondIcon.Visible = true
+			elseif v_u_26.isStarCreator then
+				v_u_27.Info.Avatar.SecondIcon.Image = "rbxassetid://16851787041"
+				v_u_27.Info.Avatar.SecondIcon.Visible = true
+			end
+			if p_u_25:IsFriendsWith(v_u_5.UserId) then
+				v_u_27.Info.Avatar.SecondIcon.Image = "rbxassetid://15486140100"
+				v_u_27.Info.Avatar.SecondIcon.Visible = true
+			end
+		end)
+		v_u_22(v_u_26.rankInQuataunGroup, v_u_27)
+		v_u_27.UIPadding.PaddingLeft = UDim.new(0, 50)
+		local v30 = v_u_27.UIPadding
+		local v31 = {
+			["PaddingLeft"] = UDim.new(0, 15)
+		}
+		v_u_4:Create(v30, TweenInfo.new(0.2, Enum.EasingStyle.Quint), v31):Play()
+		v_u_27.Activated:Connect(function()
+			-- upvalues: (ref) v_u_10, (copy) v_u_26, (ref) v_u_24, (ref) v_u_27, (ref) v_u_4, (ref) v_u_28, (ref) v_u_29, (ref) v_u_17, (copy) p_u_25
+			if v_u_10.Value.Value == v_u_26.userId then
+				v_u_10.Value.Value = 0
+				v_u_24(v_u_26.rankInQuataunGroup, v_u_27)
+				local v32 = v_u_10
+				local v33 = {
+					["Position"] = UDim2.new(0, v_u_27.AbsolutePosition.X, 0, v_u_27.AbsolutePosition.Y)
+				}
+				v_u_4:Create(v32, TweenInfo.new(0.35, Enum.EasingStyle.Quint), v33):Play()
+				v_u_4:Create(v_u_10, TweenInfo.new(0.35, Enum.EasingStyle.Quint), {
+					["GroupTransparency"] = 1
+				}):Play()
+				v_u_10.Info.Info.Username.Text = "@" .. v_u_26.username
+				v_u_10.Info.Info.DisplayName.Text = ("%* %* %*"):format(v_u_28, v_u_26.displayName, v_u_29)
+			else
+				if v_u_17(p_u_25) then
+					v_u_10.Actions.TeleportBooth.Visible = true
+				else
+					v_u_10.Actions.TeleportBooth.Visible = false
+				end
+				v_u_10.Value.Value = v_u_26.userId
+				v_u_24(v_u_26.rankInQuataunGroup, v_u_27)
+				v_u_10.GroupTransparency = 1
+				v_u_10.Position = UDim2.new(0, v_u_27.AbsolutePosition.X - 20, 0, v_u_27.AbsolutePosition.Y)
+				local v34 = v_u_10
+				local v35 = {
+					["Position"] = UDim2.new(0, v_u_27.AbsolutePosition.X - 10, 0, v_u_27.AbsolutePosition.Y)
+				}
+				v_u_4:Create(v34, TweenInfo.new(0.35, Enum.EasingStyle.Quint), v35):Play()
+				v_u_4:Create(v_u_10, TweenInfo.new(0.35, Enum.EasingStyle.Quint), {
+					["GroupTransparency"] = 0
+				}):Play()
+				v_u_10.Info.Avatar.Image = ("rbxthumb://type=AvatarHeadShot&id=%*&w=48&h=48"):format(v_u_26.userId)
+				v_u_10.Info.Info.Username.Text = "@" .. v_u_26.username
+				v_u_10.Info.Info.DisplayName.Text = ("%* %* %*"):format(v_u_28, v_u_26.displayName, v_u_29)
+				v_u_10.Info.Info.VIP.Visible = v_u_26.isVIP
+				v_u_10.Info.Info.RobloxAdmin.Visible = v_u_26.isRobloxAdmin
+				v_u_10.Info.Info.StarCreator.Visible = v_u_26.isStarCreator
+				v_u_10.Info.Info.NukeBadge.Visible = v_u_26.hasNukeBooth
+			end
+		end)
+		v_u_27.MouseEnter:Connect(function()
+			-- upvalues: (ref) v_u_27, (ref) v_u_4
+			v_u_4:Create(v_u_27, TweenInfo.new(0.5, Enum.EasingStyle.Quint), {
+				["BackgroundTransparency"] = 0
+			}):Play()
+		end)
+		v_u_27.MouseLeave:Connect(function()
+			-- upvalues: (ref) v_u_27, (ref) v_u_4
+			local v36 = v_u_27
+			local v37 = {
+				["BackgroundTransparency"] = v_u_27:GetAttribute("OriginalTransparency")
+			}
+			v_u_4:Create(v36, TweenInfo.new(0.5, Enum.EasingStyle.Quint), v37):Play()
+		end)
+		v_u_27.Stats.Donated.MouseEnter:Connect(function()
+			-- upvalues: (copy) p_u_25, (ref) v_u_27, (ref) v_u_8
+			if p_u_25:GetAttribute("Donated") then
+				v_u_27.Stats.Donated.Text = v_u_8.formatCommas(p_u_25:GetAttribute("DonatedNumber") or 0)
+			else
+				v_u_27.Stats.Donated.Text = "-"
+			end
+		end)
+		v_u_27.Stats.Raised.MouseEnter:Connect(function()
+			-- upvalues: (ref) v_u_27, (ref) v_u_8, (copy) p_u_25
+			v_u_27.Stats.Raised.Text = v_u_8.formatCommas(p_u_25:GetAttribute("RaisedNumber") or 0)
+		end)
+		v_u_27.Stats.Donated.MouseLeave:Connect(function()
+			-- upvalues: (ref) v_u_27, (copy) p_u_25
+			v_u_27.Stats.Donated.Text = p_u_25:GetAttribute("Donated") or "-"
+		end)
+		v_u_27.Stats.Raised.MouseLeave:Connect(function()
+			-- upvalues: (ref) v_u_27, (copy) p_u_25
+			v_u_27.Stats.Raised.Text = p_u_25:GetAttribute("Raised") or 0
+		end)
+		v_u_18()
+	end
+	local function v_u_41(p39)
+		-- upvalues: (copy) v_u_11, (copy) v_u_18
+		print((("playerlistdbg, removing player @%*"):format(p39)))
+		local v40 = v_u_11:FindFirstChild((("User%*"):format(p39.UserId)))
+		if v40 then
+			v40:Destroy()
+		else
+			warn((("Couldn\'t find player list frame for player @%*"):format(p39)))
+		end
+		v_u_18()
+	end
+	v_u_10.Actions.View.Activated:Connect(function()
+		-- upvalues: (copy) v_u_1, (copy) v_u_10, (copy) v_u_13
+		v_u_13:SetCore("AvatarContextMenuTarget", (v_u_1:GetPlayerByUserId(v_u_10.Value.Value)))
+	end)
+	local v_u_42 = nil
+	v_u_10.Actions.Report.Activated:Connect(function()
+		-- upvalues: (copy) v_u_1, (copy) v_u_10, (ref) v_u_42, (copy) v_u_12
+		local v43 = v_u_1:GetPlayerByUserId(v_u_10.Value.Value)
+		v_u_42 = v43
+		if v43 == nil then
+			warn("Reported player left")
+		else
+			v_u_12.Report.Frame.Message.Text = ("Are you sure you want to report <font color=\"rgb(255, 28, 138)\">@%* (%*)</font>?"):format(v_u_42.Name, v_u_42.DisplayName)
+			v_u_12.Report.Frame.Reason.Text = ""
+			v_u_12.Report.Visible = true
+		end
+	end)
+	v_u_10.Actions.Kick.Activated:Connect(function()
+		-- upvalues: (copy) v_u_1, (copy) v_u_10, (copy) v_u_7, (copy) v_u_12, (copy) v_u_2, (copy) v_u_14, (copy) v_u_4
+		local v44 = v_u_1:GetPlayerByUserId(v_u_10.Value.Value)
+		v_u_7.Event("KickPlayer"):FireServer(v44)
+		local v_u_45 = "success"
+		local v_u_46 = "successfully kicked!"
+		local v_u_47 = nil
+		spawn(function()
+			-- upvalues: (ref) v_u_12, (ref) v_u_2, (ref) v_u_14, (copy) v_u_45, (copy) v_u_46, (ref) v_u_4, (copy) v_u_47
+			if v_u_12.Popups:GetAttribute("Enabled") then
+				v_u_2.SFX.BellRing:Play()
+				local v48 = v_u_14[v_u_45 .. "Popup"]
+				if not v48 then
+					print("NOPE")
+					return
+				end
+				local v49 = v48:Clone()
+				v49.Message.Text = v_u_46
+				v49.Transparency = 1
+				v49.UIScale.Scale = 0
+				v49.Parent = v_u_12.Popups
+				v_u_4:Create(v49, TweenInfo.new(0.5, Enum.EasingStyle.Quint), {
+					["Transparency"] = 0
+				}):Play()
+				local v50 = v49.UIScale
+				local v51 = Enum.EasingStyle.Back
+				v_u_4:Create(v50, TweenInfo.new(0.3, v51 or Enum.EasingStyle.Quint), {
+					["Scale"] = 1
+				}):Play()
+				local v52 = v49.Message
+				local v53 = {
+					["MaxVisibleGraphemes"] = #v_u_46
+				}
+				v_u_4:Create(v52, TweenInfo.new(1, Enum.EasingStyle.Quint), v53):Play()
+				wait(v_u_47 or 4)
+				v_u_4:Create(v49, TweenInfo.new(0.25, Enum.EasingStyle.Quint), {
+					["Transparency"] = 1
+				}):Play()
+				local v54 = v49.UIScale
+				local v55 = Enum.EasingStyle.Back
+				v_u_4:Create(v54, TweenInfo.new(0.5, v55 or Enum.EasingStyle.Quint), {
+					["Scale"] = 0
+				}):Play()
+				wait(0.5)
+				v49:Destroy()
+			end
+		end)
+		v_u_10.Value.Value = 0
+		v_u_4:Create(v_u_10, TweenInfo.new(0.2, Enum.EasingStyle.Quint), {
+			["GroupTransparency"] = 1
+		}):Play()
+	end)
+	v_u_10.Actions.TeleportBooth.Activated:Connect(function()
+		-- upvalues: (copy) v_u_10, (copy) v_u_17, (copy) v_u_12, (copy) v_u_2, (copy) v_u_14, (copy) v_u_4
+		game:GetService("StarterGui")
+		local v56 = game:GetService("Players")
+		local v57 = v56:GetPlayerByUserId(v_u_10.Value.Value)
+		local v58 = v_u_17(v57)
+		if v58 then
+			print((("Teleporting to %*\'s booth"):format(v57)))
+			local v_u_59 = ("teleported to %*\'s booth!"):format(v57.DisplayName)
+			local v_u_60 = "info"
+			local v_u_61 = nil
+			spawn(function()
+				-- upvalues: (ref) v_u_12, (ref) v_u_2, (ref) v_u_14, (copy) v_u_60, (copy) v_u_59, (ref) v_u_4, (copy) v_u_61
+				if v_u_12.Popups:GetAttribute("Enabled") then
+					v_u_2.SFX.BellRing:Play()
+					local v62 = v_u_14[v_u_60 .. "Popup"]
+					if not v62 then
+						print("NOPE")
+						return
+					end
+					local v63 = v62:Clone()
+					v63.Message.Text = v_u_59
+					v63.Transparency = 1
+					v63.UIScale.Scale = 0
+					v63.Parent = v_u_12.Popups
+					v_u_4:Create(v63, TweenInfo.new(0.5, Enum.EasingStyle.Quint), {
+						["Transparency"] = 0
+					}):Play()
+					local v64 = v63.UIScale
+					local v65 = Enum.EasingStyle.Back
+					v_u_4:Create(v64, TweenInfo.new(0.3, v65 or Enum.EasingStyle.Quint), {
+						["Scale"] = 1
+					}):Play()
+					local v66 = v63.Message
+					local v67 = {
+						["MaxVisibleGraphemes"] = #v_u_59
+					}
+					v_u_4:Create(v66, TweenInfo.new(1, Enum.EasingStyle.Quint), v67):Play()
+					wait(v_u_61 or 4)
+					v_u_4:Create(v63, TweenInfo.new(0.25, Enum.EasingStyle.Quint), {
+						["Transparency"] = 1
+					}):Play()
+					local v68 = v63.UIScale
+					local v69 = Enum.EasingStyle.Back
+					v_u_4:Create(v68, TweenInfo.new(0.5, v69 or Enum.EasingStyle.Quint), {
+						["Scale"] = 0
+					}):Play()
+					wait(0.5)
+					v63:Destroy()
+				end
+			end)
+			v56.LocalPlayer.Character:MoveTo(v58)
+		else
+			print((("Couldn\'t find booth for %*"):format(v57.DisplayName)))
+			local v_u_70 = ("%* has no booth!"):format(v57.DisplayName)
+			local v_u_71 = "info"
+			local v_u_72 = nil
+			spawn(function()
+				-- upvalues: (ref) v_u_12, (ref) v_u_2, (ref) v_u_14, (copy) v_u_71, (copy) v_u_70, (ref) v_u_4, (copy) v_u_72
+				if v_u_12.Popups:GetAttribute("Enabled") then
+					v_u_2.SFX.BellRing:Play()
+					local v73 = v_u_14[v_u_71 .. "Popup"]
+					if not v73 then
+						print("NOPE")
+						return
+					end
+					local v74 = v73:Clone()
+					v74.Message.Text = v_u_70
+					v74.Transparency = 1
+					v74.UIScale.Scale = 0
+					v74.Parent = v_u_12.Popups
+					v_u_4:Create(v74, TweenInfo.new(0.5, Enum.EasingStyle.Quint), {
+						["Transparency"] = 0
+					}):Play()
+					local v75 = v74.UIScale
+					local v76 = Enum.EasingStyle.Back
+					v_u_4:Create(v75, TweenInfo.new(0.3, v76 or Enum.EasingStyle.Quint), {
+						["Scale"] = 1
+					}):Play()
+					local v77 = v74.Message
+					local v78 = {
+						["MaxVisibleGraphemes"] = #v_u_70
+					}
+					v_u_4:Create(v77, TweenInfo.new(1, Enum.EasingStyle.Quint), v78):Play()
+					wait(v_u_72 or 4)
+					v_u_4:Create(v74, TweenInfo.new(0.25, Enum.EasingStyle.Quint), {
+						["Transparency"] = 1
+					}):Play()
+					local v79 = v74.UIScale
+					local v80 = Enum.EasingStyle.Back
+					v_u_4:Create(v79, TweenInfo.new(0.5, v80 or Enum.EasingStyle.Quint), {
+						["Scale"] = 0
+					}):Play()
+					wait(0.5)
+					v74:Destroy()
+				end
+			end)
+		end
+	end)
+	v_u_7.Event("ReportPlayer").OnClientEvent:Connect(function(p81)
+		-- upvalues: (ref) v_u_42, (copy) v_u_12
+		v_u_42 = p81
+		v_u_12.Report.Frame.Message.Text = ("Are you sure you want to report <font color=\"rgb(255, 28, 138)\">@%* (%*)</font>?"):format(v_u_42.Name, v_u_42.DisplayName)
+		v_u_12.Report.Frame.Reason.Text = ""
+		v_u_12.Report.Visible = true
+	end)
+	v_u_12.Report.Frame.Options.Report.Activated:Connect(function()
+		-- upvalues: (copy) v_u_12, (copy) v_u_2, (copy) v_u_14, (copy) v_u_4, (copy) v_u_7, (ref) v_u_42
+		local v82 = v_u_12.Report.Frame.Reason.Text
+		if #v82 == 0 then
+			local v_u_83 = "danger"
+			local v_u_84 = "you must put in a reason!"
+			local v_u_85 = nil
+			spawn(function()
+				-- upvalues: (ref) v_u_12, (ref) v_u_2, (ref) v_u_14, (copy) v_u_83, (copy) v_u_84, (ref) v_u_4, (copy) v_u_85
+				if v_u_12.Popups:GetAttribute("Enabled") then
+					v_u_2.SFX.BellRing:Play()
+					local v86 = v_u_14[v_u_83 .. "Popup"]
+					if not v86 then
+						print("NOPE")
+						return
+					end
+					local v87 = v86:Clone()
+					v87.Message.Text = v_u_84
+					v87.Transparency = 1
+					v87.UIScale.Scale = 0
+					v87.Parent = v_u_12.Popups
+					v_u_4:Create(v87, TweenInfo.new(0.5, Enum.EasingStyle.Quint), {
+						["Transparency"] = 0
+					}):Play()
+					local v88 = v87.UIScale
+					local v89 = Enum.EasingStyle.Back
+					v_u_4:Create(v88, TweenInfo.new(0.3, v89 or Enum.EasingStyle.Quint), {
+						["Scale"] = 1
+					}):Play()
+					local v90 = v87.Message
+					local v91 = {
+						["MaxVisibleGraphemes"] = #v_u_84
+					}
+					v_u_4:Create(v90, TweenInfo.new(1, Enum.EasingStyle.Quint), v91):Play()
+					wait(v_u_85 or 4)
+					v_u_4:Create(v87, TweenInfo.new(0.25, Enum.EasingStyle.Quint), {
+						["Transparency"] = 1
+					}):Play()
+					local v92 = v87.UIScale
+					local v93 = Enum.EasingStyle.Back
+					v_u_4:Create(v92, TweenInfo.new(0.5, v93 or Enum.EasingStyle.Quint), {
+						["Scale"] = 0
+					}):Play()
+					wait(0.5)
+					v87:Destroy()
+				end
+			end)
+			return
+		elseif #v82 < 3 then
+			local v_u_94 = "warn"
+			local v_u_95 = "reason should have at least 3 characters!"
+			local v_u_96 = nil
+			spawn(function()
+				-- upvalues: (ref) v_u_12, (ref) v_u_2, (ref) v_u_14, (copy) v_u_94, (copy) v_u_95, (ref) v_u_4, (copy) v_u_96
+				if v_u_12.Popups:GetAttribute("Enabled") then
+					v_u_2.SFX.BellRing:Play()
+					local v97 = v_u_14[v_u_94 .. "Popup"]
+					if not v97 then
+						print("NOPE")
+						return
+					end
+					local v98 = v97:Clone()
+					v98.Message.Text = v_u_95
+					v98.Transparency = 1
+					v98.UIScale.Scale = 0
+					v98.Parent = v_u_12.Popups
+					v_u_4:Create(v98, TweenInfo.new(0.5, Enum.EasingStyle.Quint), {
+						["Transparency"] = 0
+					}):Play()
+					local v99 = v98.UIScale
+					local v100 = Enum.EasingStyle.Back
+					v_u_4:Create(v99, TweenInfo.new(0.3, v100 or Enum.EasingStyle.Quint), {
+						["Scale"] = 1
+					}):Play()
+					local v101 = v98.Message
+					local v102 = {
+						["MaxVisibleGraphemes"] = #v_u_95
+					}
+					v_u_4:Create(v101, TweenInfo.new(1, Enum.EasingStyle.Quint), v102):Play()
+					wait(v_u_96 or 4)
+					v_u_4:Create(v98, TweenInfo.new(0.25, Enum.EasingStyle.Quint), {
+						["Transparency"] = 1
+					}):Play()
+					local v103 = v98.UIScale
+					local v104 = Enum.EasingStyle.Back
+					v_u_4:Create(v103, TweenInfo.new(0.5, v104 or Enum.EasingStyle.Quint), {
+						["Scale"] = 0
+					}):Play()
+					wait(0.5)
+					v98:Destroy()
+				end
+			end)
+			return
+		elseif #v82 > 30 then
+			local v_u_105 = "warn"
+			local v_u_106 = "reason should have at most 30 characters!"
+			local v_u_107 = nil
+			spawn(function()
+				-- upvalues: (ref) v_u_12, (ref) v_u_2, (ref) v_u_14, (copy) v_u_105, (copy) v_u_106, (ref) v_u_4, (copy) v_u_107
+				if v_u_12.Popups:GetAttribute("Enabled") then
+					v_u_2.SFX.BellRing:Play()
+					local v108 = v_u_14[v_u_105 .. "Popup"]
+					if not v108 then
+						print("NOPE")
+						return
+					end
+					local v109 = v108:Clone()
+					v109.Message.Text = v_u_106
+					v109.Transparency = 1
+					v109.UIScale.Scale = 0
+					v109.Parent = v_u_12.Popups
+					v_u_4:Create(v109, TweenInfo.new(0.5, Enum.EasingStyle.Quint), {
+						["Transparency"] = 0
+					}):Play()
+					local v110 = v109.UIScale
+					local v111 = Enum.EasingStyle.Back
+					v_u_4:Create(v110, TweenInfo.new(0.3, v111 or Enum.EasingStyle.Quint), {
+						["Scale"] = 1
+					}):Play()
+					local v112 = v109.Message
+					local v113 = {
+						["MaxVisibleGraphemes"] = #v_u_106
+					}
+					v_u_4:Create(v112, TweenInfo.new(1, Enum.EasingStyle.Quint), v113):Play()
+					wait(v_u_107 or 4)
+					v_u_4:Create(v109, TweenInfo.new(0.25, Enum.EasingStyle.Quint), {
+						["Transparency"] = 1
+					}):Play()
+					local v114 = v109.UIScale
+					local v115 = Enum.EasingStyle.Back
+					v_u_4:Create(v114, TweenInfo.new(0.5, v115 or Enum.EasingStyle.Quint), {
+						["Scale"] = 0
+					}):Play()
+					wait(0.5)
+					v109:Destroy()
+				end
+			end)
+		else
+			local v_u_116 = "success"
+			local v_u_117 = "successfully reported!"
+			local v_u_118 = nil
+			spawn(function()
+				-- upvalues: (ref) v_u_12, (ref) v_u_2, (ref) v_u_14, (copy) v_u_116, (copy) v_u_117, (ref) v_u_4, (copy) v_u_118
+				if v_u_12.Popups:GetAttribute("Enabled") then
+					v_u_2.SFX.BellRing:Play()
+					local v119 = v_u_14[v_u_116 .. "Popup"]
+					if not v119 then
+						print("NOPE")
+						return
+					end
+					local v120 = v119:Clone()
+					v120.Message.Text = v_u_117
+					v120.Transparency = 1
+					v120.UIScale.Scale = 0
+					v120.Parent = v_u_12.Popups
+					v_u_4:Create(v120, TweenInfo.new(0.5, Enum.EasingStyle.Quint), {
+						["Transparency"] = 0
+					}):Play()
+					local v121 = v120.UIScale
+					local v122 = Enum.EasingStyle.Back
+					v_u_4:Create(v121, TweenInfo.new(0.3, v122 or Enum.EasingStyle.Quint), {
+						["Scale"] = 1
+					}):Play()
+					local v123 = v120.Message
+					local v124 = {
+						["MaxVisibleGraphemes"] = #v_u_117
+					}
+					v_u_4:Create(v123, TweenInfo.new(1, Enum.EasingStyle.Quint), v124):Play()
+					wait(v_u_118 or 4)
+					v_u_4:Create(v120, TweenInfo.new(0.25, Enum.EasingStyle.Quint), {
+						["Transparency"] = 1
+					}):Play()
+					local v125 = v120.UIScale
+					local v126 = Enum.EasingStyle.Back
+					v_u_4:Create(v125, TweenInfo.new(0.5, v126 or Enum.EasingStyle.Quint), {
+						["Scale"] = 0
+					}):Play()
+					wait(0.5)
+					v120:Destroy()
+				end
+			end)
+			v_u_7.Event("ReportPlayer"):FireServer(v_u_42, v82)
+			v_u_12.Report.Visible = false
+		end
+	end)
+	v_u_9.Top.DisplayName:GetPropertyChangedSignal("Text"):Connect(function()
+		local searchText = string.lower(v_u_9.Top.DisplayName.Text)
+
+		if searchText == "" then
+			for _, frame in ipairs(v_u_11:GetChildren()) do
+				if frame:IsA("TextButton") then
+					frame.Visible = true
+				end
+			end
+			return
+		end
+
+		for _, frame in ipairs(v_u_11:GetChildren()) do
+			if frame:IsA("TextButton") then
+				local displayNameLabel = frame:FindFirstChild("Info", true):FindFirstChild("DisplayName")
+				if displayNameLabel and displayNameLabel:IsA("TextLabel") then
+					local fullText = string.lower(displayNameLabel.Text)
+					frame.Visible = string.find(fullText, searchText, 1, true) ~= nil
+				else
+					frame.Visible = false
+				end
+			end
+		end
+	end)
+	v3.InputBegan:Connect(function(p128, p129)
+		-- upvalues: (ref) v_u_19, (copy) v_u_9, (copy) v_u_4, (copy) v_u_10
+		if not p129 then
+			if p128.KeyCode == Enum.KeyCode.Tab then
+				if v_u_19 then
+					local v130 = v_u_9
+					local v131 = {
+						["Position"] = UDim2.new(1, 350, 0, 10)
+					}
+					v_u_4:Create(v130, TweenInfo.new(0.2, Enum.EasingStyle.Quint), v131):Play()
+					v_u_4:Create(v_u_9, TweenInfo.new(0.2, Enum.EasingStyle.Quint), {
+						["GroupTransparency"] = 1
+					}):Play()
+					v_u_4:Create(v_u_10, TweenInfo.new(0.2, Enum.EasingStyle.Quint), {
+						["GroupTransparency"] = 1
+					}):Play()
+					v_u_19 = false
+					return
+				end
+				local v132 = v_u_9
+				local v133 = {
+					["Position"] = UDim2.new(1, -10, 0, 10)
+				}
+				v_u_4:Create(v132, TweenInfo.new(0.2, Enum.EasingStyle.Quint), v133):Play()
+				v_u_4:Create(v_u_9, TweenInfo.new(0.2, Enum.EasingStyle.Quint), {
+					["GroupTransparency"] = 0
+				}):Play()
+				v_u_19 = true
+			end
+		end
+	end)
+	for _, v134 in game.Players:GetPlayers() do
+		task.spawn(v_u_38, v134)
+	end
+	game.Players.PlayerAdded:Connect(function(p135)
+		-- upvalues: (copy) v_u_38
+		v_u_38(p135)
+	end)
+	game.Players.PlayerRemoving:Connect(function(p136)
+		-- upvalues: (copy) v_u_41
+		v_u_41(p136)
+	end)
+end

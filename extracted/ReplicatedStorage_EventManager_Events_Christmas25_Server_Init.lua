@@ -1,0 +1,128 @@
+-- Saved by UniversalSynSaveInstance (Join to Copy Games) https://discord.gg/wx4ThpAsmw
+
+local _ = game:GetService("PhysicsService");
+local l_Players_0 = game:GetService("Players");
+local l_ReplicatedStorage_0 = game:GetService("ReplicatedStorage");
+local l_EventManager_0 = require(l_ReplicatedStorage_0:WaitForChild("EventManager"));
+local l_Parent_0 = script.Parent.Parent;
+local l_Assets_0 = l_Parent_0:WaitForChild("Assets");
+local l_ThrowSnowball_0 = l_Parent_0:WaitForChild("Events"):WaitForChild("ThrowSnowball");
+local _ = l_ThrowSnowball_0:WaitForChild("Stun");
+local v8 = {};
+return {
+    Init = function() --[[ Line: 19 ]] --[[ Name: Init ]]
+        -- upvalues: l_EventManager_0 (copy), l_Players_0 (copy), l_ThrowSnowball_0 (copy), l_Assets_0 (copy), v8 (copy)
+        local l_FastCastRedux_0 = l_EventManager_0.Utils.FastCastRedux;
+        local l_Folder_0 = Instance.new("Folder");
+        l_Folder_0.Name = "server_snowballs";
+        l_Folder_0.Parent = workspace;
+        local function _(v11) --[[ Line: 29 ]] --[[ Name: registerCharacter ]]
+            -- upvalues: l_Players_0 (ref)
+            local v12 = l_Players_0:GetPlayerFromCharacter(v11.Instance.Parent) or l_Players_0:GetPlayerFromCharacter(v11.Instance.Parent.Parent);
+            if not v12 then
+                return;
+            elseif v12 and not v12:GetAttribute("IceStun") then
+                return v12;
+            else
+                return;
+            end;
+        end;
+        local function v17(v14) --[[ Line: 43 ]] --[[ Name: emit ]]
+            for _, v16 in pairs(v14:GetDescendants()) do
+                if v16:IsA("ParticleEmitter") then
+                    v16:Emit(v16:GetAttribute("EmitCount"));
+                elseif v16:IsA("Sound") then
+                    v16:Play();
+                end;
+            end;
+        end;
+        local function v25(v18, v19) --[[ Line: 53 ]] --[[ Name: iceStun ]]
+            -- upvalues: l_ThrowSnowball_0 (ref)
+            local l_Character_0 = v18.Character;
+            v18:SetAttribute("IceStun", true);
+            for _, v22 in pairs(l_Character_0:GetDescendants()) do
+                if v22:IsA("BasePart") and v22.Name ~= "HumanoidRootPart" and not v22:FindFirstChildWhichIsA("WrapLayer") then
+                    v22.Anchored = true;
+                end;
+            end;
+            l_ThrowSnowball_0.Stun:FireAllClients(v18, v19);
+            task.delay(v19, function() --[[ Line: 67 ]]
+                -- upvalues: v18 (copy), l_Character_0 (copy)
+                v18:SetAttribute("IceStun", false);
+                for _, v24 in pairs(l_Character_0:GetDescendants()) do
+                    if v24:IsA("BasePart") and v24.Name ~= "HumanoidRootPart" and not v24:FindFirstChildWhichIsA("WrapLayer") then
+                        v24.Anchored = false;
+                    end;
+                end;
+            end);
+        end;
+        local function v48(v26) --[[ Line: 80 ]] --[[ Name: createCast ]]
+            -- upvalues: l_FastCastRedux_0 (copy), l_Assets_0 (ref), l_Folder_0 (copy), v8 (ref), l_Players_0 (ref), v25 (copy), v17 (copy)
+            local v27 = l_FastCastRedux_0.new();
+            local v28 = l_FastCastRedux_0.newBehavior();
+            v28.Acceleration = Vector3.new(0, -125, 0, 0);
+            v28.RaycastParams = RaycastParams.new();
+            v28.RaycastParams.FilterType = Enum.RaycastFilterType.Exclude;
+            v28.MaxDistance = 500;
+            v28.CosmeticBulletTemplate = l_Assets_0.Models.SnowballObject;
+            v28.CosmeticBulletContainer = l_Folder_0;
+            v27.belongsTo = v26.Name;
+            v8[v26.Name] = {
+                caster = v27, 
+                behavior = v28, 
+                canFire = true, 
+                movers = {}, 
+                fire = function(v29, v30, v31) --[[ Line: 102 ]] --[[ Name: fire ]]
+                    -- upvalues: v28 (copy), v26 (copy), l_Folder_0 (ref), v27 (copy)
+                    v28.RaycastParams.FilterDescendantsInstances = {
+                        v26.Character, 
+                        l_Folder_0
+                    };
+                    v27:Fire(v29, v30, v31, v28);
+                end
+            };
+            local _ = v27.LengthChanged:Connect(function(_, v33, v34, _, _, v37) --[[ Line: 109 ]]
+                v37.Position = CFrame.new(v33, v33 + v34).Position;
+            end);
+            local _ = v27.RayHit:Connect(function(_, v40, _, v42) --[[ Line: 114 ]]
+                -- upvalues: l_Players_0 (ref), v25 (ref), v17 (ref)
+                local v43 = l_Players_0:GetPlayerFromCharacter(v40.Instance.Parent) or l_Players_0:GetPlayerFromCharacter(v40.Instance.Parent.Parent);
+                local v44 = if not v43 then nil else if not v43 or v43:GetAttribute("IceStun") then nil else v43;
+                if v44 then
+                    v25(v44, 1);
+                end;
+                v42.Transparency = 1;
+                v17(v42.Explode);
+                task.delay(5, function() --[[ Line: 124 ]]
+                    -- upvalues: v42 (copy)
+                    v42:Destroy();
+                end);
+            end);
+            local _ = v27.CastTerminating:Connect(function(_) --[[ Line: 129 ]]
+
+            end);
+            return v8[v26.Name];
+        end;
+        l_ThrowSnowball_0.OnServerInvoke = function(v49, v50) --[[ Line: 136 ]] --[[ Name: fire ]]
+            -- upvalues: v8 (ref), v48 (copy)
+            local l_RightHand_0 = v49.Character:FindFirstChild("RightHand");
+            if v49:GetAttribute("IceStun") then
+                return;
+            elseif not l_RightHand_0 then
+                return;
+            else
+                local v52 = v8[v49.Name] or v48(v49);
+                if not v52.canFire or not script.CanFire.Value then
+                    return;
+                else
+                    local l_Unit_0 = (v50 - l_RightHand_0.Position).Unit;
+                    v52.fire(l_RightHand_0.Position, l_Unit_0, l_Unit_0 * 200);
+                    v52.canFire = false;
+                    task.wait(0.5);
+                    v52.canFire = true;
+                    return true;
+                end;
+            end;
+        end;
+    end
+};

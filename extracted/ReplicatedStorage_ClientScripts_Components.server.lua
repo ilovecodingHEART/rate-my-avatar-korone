@@ -1,0 +1,1137 @@
+task.wait(2);
+local l_Players_0 = game:GetService("Players");
+local l_SoundService_0 = game:GetService("SoundService");
+local l_ReplicatedStorage_0 = game:GetService("ReplicatedStorage");
+local l_StarterGui_0 = game:GetService("StarterGui");
+local l_TweenService_0 = game:GetService("TweenService");
+local l_CollectionService_0 = game:GetService("CollectionService");
+local l_MarketplaceService_0 = game:GetService("MarketplaceService");
+local l_UserInputService_0 = game:GetService("UserInputService");
+local l_LocalPlayer_0 = l_Players_0.LocalPlayer;
+local l_ScreenGui_0 = l_LocalPlayer_0.PlayerGui:WaitForChild("ScreenGui", 100);
+local l_UITemplates_0 = l_StarterGui_0:WaitForChild("UITemplates", 100);
+local v11 = require(script.Slider);
+local v12 = require(l_ReplicatedStorage_0.Remotes);
+local function _(v13, v14, v15, v16) --[[ Line: 22 ]] --[[ Name: tween ]]
+	local v17 = TweenInfo.new(v14, v16 or Enum.EasingStyle.Quint);
+	l_TweenService_0:Create(v13, v17, v15):Play();
+end;
+local function _(v19, v20) --[[ Line: 27 ]] --[[ Name: popup ]]
+	spawn(function() --[[ Line: 28 ]]
+		if l_ScreenGui_0.Popups:GetAttribute("Enabled") then
+			l_SoundService_0.SFX.BellRing:Play();
+			local v21 = l_UITemplates_0[v19 .. "Popup"];
+			if not v21 then
+				print("NOPE");
+				return;
+			else
+				local v22 = v21:Clone();
+				v22.Message.Text = v20;
+				v22.Transparency = 1;
+				v22.UIScale.Scale = 0;
+				v22.Parent = l_ScreenGui_0.Popups;
+				local v23 = {
+					Transparency = 0
+				};
+				local v24 = TweenInfo.new(0.5, Enum.EasingStyle.Quint);
+				l_TweenService_0:Create(v22, v24, v23):Play();
+				v23 = v22.UIScale;
+				v24 = {
+					Scale = 1
+				};
+				local l_Back_0 = Enum.EasingStyle.Back;
+				local v26 = TweenInfo.new(0.3, l_Back_0 or Enum.EasingStyle.Quint);
+				l_TweenService_0:Create(v23, v26, v24):Play();
+				v23 = v22.Message;
+				v24 = {
+					MaxVisibleGraphemes = #v20
+				};
+				l_Back_0 = TweenInfo.new(1, Enum.EasingStyle.Quint);
+				l_TweenService_0:Create(v23, l_Back_0, v24):Play();
+				wait(4);
+				v23 = {
+					Transparency = 1
+				};
+				v24 = TweenInfo.new(0.25, Enum.EasingStyle.Quint);
+				l_TweenService_0:Create(v22, v24, v23):Play();
+				v23 = v22.UIScale;
+				v24 = {
+					Scale = 0
+				};
+				l_Back_0 = Enum.EasingStyle.Back;
+				v26 = TweenInfo.new(0.5, l_Back_0 or Enum.EasingStyle.Quint);
+				l_TweenService_0:Create(v23, v26, v24):Play();
+				wait(0.5);
+				v22:Destroy();
+			end;
+		end;
+	end);
+end;
+local v28 = false;
+local function _(v29) --[[ Line: 56 ]] --[[ Name: toggleLoading ]]
+	if v29 == true then
+		local l_Camera_0 = workspace.Camera;
+		local v31 = {
+			FieldOfView = 50
+		};
+		local v32 = TweenInfo.new(0.5, Enum.EasingStyle.Quint);
+		l_TweenService_0:Create(l_Camera_0, v32, v31):Play();
+		l_Camera_0 = l_ScreenGui_0.Loading;
+		v31 = {
+			GroupTransparency = 0
+		};
+		v32 = TweenInfo.new(0.5, Enum.EasingStyle.Quint);
+		l_TweenService_0:Create(l_Camera_0, v32, v31):Play();
+		v28 = true;
+		return;
+	else
+		if l_ScreenGui_0.Shade == 1 then
+			local l_Camera_1 = workspace.Camera;
+			local v34 = {
+				FieldOfView = 70
+			};
+			local v35 = TweenInfo.new(0.5, Enum.EasingStyle.Quint);
+			l_TweenService_0:Create(l_Camera_1, v35, v34):Play();
+		else
+			local l_Camera_2 = workspace.Camera;
+			local v37 = {
+				FieldOfView = 60
+			};
+			local v38 = TweenInfo.new(0.5, Enum.EasingStyle.Quint);
+			l_TweenService_0:Create(l_Camera_2, v38, v37):Play();
+		end;
+		local l_Loading_0 = l_ScreenGui_0.Loading;
+		local v40 = {
+			GroupTransparency = 1
+		};
+		local v41 = TweenInfo.new(0.5, Enum.EasingStyle.Quint);
+		l_TweenService_0:Create(l_Loading_0, v41, v40):Play();
+		v28 = false;
+		return;
+	end;
+end;
+local function _(v43) --[[ Line: 72 ]] --[[ Name: checkIfLocked ]]
+	local l_v43_Attribute_0 = v43:GetAttribute("Locked");
+	if l_v43_Attribute_0 then
+		local l_spawn_0 = spawn;
+		local v46 = "danger";
+		l_spawn_0(function() --[[ Line: 28 ]]
+			if l_ScreenGui_0.Popups:GetAttribute("Enabled") then
+				l_SoundService_0.SFX.BellRing:Play();
+				local v47 = l_UITemplates_0[v46 .. "Popup"];
+				if not v47 then
+					print("NOPE");
+					return;
+				else
+					local v48 = v47:Clone();
+					v48.Message.Text = l_v43_Attribute_0;
+					v48.Transparency = 1;
+					v48.UIScale.Scale = 0;
+					v48.Parent = l_ScreenGui_0.Popups;
+					local v49 = {
+						Transparency = 0
+					};
+					local v50 = TweenInfo.new(0.5, Enum.EasingStyle.Quint);
+					l_TweenService_0:Create(v48, v50, v49):Play();
+					v49 = v48.UIScale;
+					v50 = {
+						Scale = 1
+					};
+					local l_Back_1 = Enum.EasingStyle.Back;
+					local v52 = TweenInfo.new(0.3, l_Back_1 or Enum.EasingStyle.Quint);
+					l_TweenService_0:Create(v49, v52, v50):Play();
+					v49 = v48.Message;
+					v50 = {
+						MaxVisibleGraphemes = #l_v43_Attribute_0
+					};
+					l_Back_1 = TweenInfo.new(1, Enum.EasingStyle.Quint);
+					l_TweenService_0:Create(v49, l_Back_1, v50):Play();
+					wait(4);
+					v49 = {
+						Transparency = 1
+					};
+					v50 = TweenInfo.new(0.25, Enum.EasingStyle.Quint);
+					l_TweenService_0:Create(v48, v50, v49):Play();
+					v49 = v48.UIScale;
+					v50 = {
+						Scale = 0
+					};
+					l_Back_1 = Enum.EasingStyle.Back;
+					v52 = TweenInfo.new(0.5, l_Back_1 or Enum.EasingStyle.Quint);
+					l_TweenService_0:Create(v49, v52, v50):Play();
+					wait(0.5);
+					v48:Destroy();
+				end;
+			end;
+		end);
+		l_SoundService_0.SFX.Fail:Play();
+		coroutine.yield();
+	end;
+end;
+local _ = l_LocalPlayer_0:GetMouse();
+for _, v56 in l_ScreenGui_0.EditBooth.Frame:GetChildren() do
+	if v56:FindFirstChild("Edit") then
+		v56.MouseEnter:Connect(function() --[[ Line: 87 ]]
+			l_SoundService_0.SFX.Hover:Play();
+			local l_v56_0 = v56;
+			local v58 = {
+				BackgroundColor3 = Color3.fromRGB(235, 235, 235)
+			};
+			local v59 = TweenInfo.new(0.3, Enum.EasingStyle.Quint);
+			l_TweenService_0:Create(l_v56_0, v59, v58):Play();
+		end);
+		v56.MouseLeave:Connect(function() --[[ Line: 92 ]]
+			local l_v56_1 = v56;
+			local v61 = {
+				BackgroundColor3 = Color3.fromRGB(245, 245, 245)
+			};
+			local v62 = TweenInfo.new(0.3, Enum.EasingStyle.Quint);
+			l_TweenService_0:Create(l_v56_1, v62, v61):Play();
+		end);
+	end;
+end;
+l_ScreenGui_0.Prompt.Frame.Close.Activated:Connect(function() --[[ Line: 98 ]]
+	l_ScreenGui_0.Prompt.Visible = false;
+end);
+for _, v64 in l_CollectionService_0:GetTagged("Toggle") do
+	if v64:GetAttribute("Value") == nil then
+		v64:SetAttribute("Value", true);
+	end;
+	v64.Activated:Connect(function() --[[ Line: 111 ]]
+		local l_v64_Attribute_0 = v64:GetAttribute("Locked");
+		if l_v64_Attribute_0 then
+			local l_spawn_1 = spawn;
+			local v67 = "danger";
+			local l_l_v64_Attribute_0_0 = l_v64_Attribute_0 --[[ copy: 1 -> 5 ]];
+			l_spawn_1(function() --[[ Line: 28 ]]
+				if l_ScreenGui_0.Popups:GetAttribute("Enabled") then
+					l_SoundService_0.SFX.BellRing:Play();
+					local v69 = l_UITemplates_0[v67 .. "Popup"];
+					if not v69 then
+						print("NOPE");
+						return;
+					else
+						local v70 = v69:Clone();
+						v70.Message.Text = l_l_v64_Attribute_0_0;
+						v70.Transparency = 1;
+						v70.UIScale.Scale = 0;
+						v70.Parent = l_ScreenGui_0.Popups;
+						local v71 = {
+							Transparency = 0
+						};
+						local v72 = TweenInfo.new(0.5, Enum.EasingStyle.Quint);
+						l_TweenService_0:Create(v70, v72, v71):Play();
+						v71 = v70.UIScale;
+						v72 = {
+							Scale = 1
+						};
+						local l_Back_2 = Enum.EasingStyle.Back;
+						local v74 = TweenInfo.new(0.3, l_Back_2 or Enum.EasingStyle.Quint);
+						l_TweenService_0:Create(v71, v74, v72):Play();
+						v71 = v70.Message;
+						v72 = {
+							MaxVisibleGraphemes = #l_l_v64_Attribute_0_0
+						};
+						l_Back_2 = TweenInfo.new(1, Enum.EasingStyle.Quint);
+						l_TweenService_0:Create(v71, l_Back_2, v72):Play();
+						wait(4);
+						v71 = {
+							Transparency = 1
+						};
+						v72 = TweenInfo.new(0.25, Enum.EasingStyle.Quint);
+						l_TweenService_0:Create(v70, v72, v71):Play();
+						v71 = v70.UIScale;
+						v72 = {
+							Scale = 0
+						};
+						l_Back_2 = Enum.EasingStyle.Back;
+						v74 = TweenInfo.new(0.5, l_Back_2 or Enum.EasingStyle.Quint);
+						l_TweenService_0:Create(v71, v74, v72):Play();
+						wait(0.5);
+						v70:Destroy();
+					end;
+				end;
+			end);
+			l_SoundService_0.SFX.Fail:Play();
+			coroutine.yield();
+		end;
+		l_SoundService_0.SFX.Confirm:Play();
+		if v64:GetAttribute("Value", true) then
+			local l_Toggle_0 = v64.Toggle;
+			l_v64_Attribute_0 = {
+				BackgroundColor3 = Color3.fromRGB(200, 200, 200)
+			};
+			local v76 = TweenInfo.new(0.35, Enum.EasingStyle.Quint);
+			l_TweenService_0:Create(l_Toggle_0, v76, l_v64_Attribute_0):Play();
+			l_Toggle_0 = v64.Toggle.Circle;
+			l_v64_Attribute_0 = {
+				Position = UDim2.new(0.3, 0, 0.5, 0)
+			};
+			v76 = Enum.EasingStyle.Back;
+			local v77 = TweenInfo.new(0.35, v76 or Enum.EasingStyle.Quint);
+			l_TweenService_0:Create(l_Toggle_0, v77, l_v64_Attribute_0):Play();
+			v64:SetAttribute("Value", false);
+			v64:SetAttribute("ValueChanged", false);
+			return;
+		else
+			local l_Toggle_1 = v64.Toggle;
+			l_v64_Attribute_0 = {
+				BackgroundColor3 = Color3.fromRGB(32, 206, 145)
+			};
+			local l_Back_3 = Enum.EasingStyle.Back;
+			local v80 = TweenInfo.new(0.35, l_Back_3 or Enum.EasingStyle.Quint);
+			l_TweenService_0:Create(l_Toggle_1, v80, l_v64_Attribute_0):Play();
+			l_Toggle_1 = v64.Toggle.Circle;
+			l_v64_Attribute_0 = {
+				Position = UDim2.new(0.7, 0, 0.5, 0)
+			};
+			l_Back_3 = TweenInfo.new(0.35, Enum.EasingStyle.Quint);
+			l_TweenService_0:Create(l_Toggle_1, l_Back_3, l_v64_Attribute_0):Play();
+			v64:SetAttribute("Value", true);
+			v64:SetAttribute("ValueChanged", true);
+			return;
+		end;
+	end);
+	v64.MouseEnter:Connect(function() --[[ Line: 127 ]]
+		l_SoundService_0.SFX.Hover:Play();
+		local l_v64_0 = v64;
+		local v82 = {
+			BackgroundColor3 = Color3.fromRGB(235, 235, 235)
+		};
+		local v83 = TweenInfo.new(0.3, Enum.EasingStyle.Quint);
+		l_TweenService_0:Create(l_v64_0, v83, v82):Play();
+	end);
+	v64.MouseLeave:Connect(function() --[[ Line: 132 ]]
+		local l_v64_1 = v64;
+		local v85 = {
+			BackgroundColor3 = Color3.fromRGB(245, 245, 245)
+		};
+		local v86 = TweenInfo.new(0.3, Enum.EasingStyle.Quint);
+		l_TweenService_0:Create(l_v64_1, v86, v85):Play();
+	end);
+end;
+local v87 = nil;
+for _, v89 in l_ScreenGui_0.ColorPicker.Colors:GetChildren() do
+	if v89:IsA("TextButton") then
+		v89.Activated:Connect(function() --[[ Line: 143 ]]
+			l_SoundService_0.SFX.Confirm:Play();
+			v87.Color.BackgroundColor3 = v89.BackgroundColor3;
+			v87:SetAttribute("Value", v89.BackgroundColor3);
+			v87:SetAttribute("ValueChanged", v89.BackgroundColor3);
+			l_ScreenGui_0.ColorPicker.Visible = false;
+		end);
+		v89.MouseEnter:Connect(function() --[[ Line: 151 ]]
+			l_SoundService_0.SFX.Hover:Play();
+			local l_Preview_0 = l_ScreenGui_0.ColorPicker.Preview;
+			local v91 = {
+				BackgroundColor3 = v89.BackgroundColor3
+			};
+			local v92 = TweenInfo.new(1, Enum.EasingStyle.Quint);
+			l_TweenService_0:Create(l_Preview_0, v92, v91):Play();
+			l_Preview_0 = v89.UIScale;
+			v91 = {
+				Scale = 1.1
+			};
+			v92 = Enum.EasingStyle.Back;
+			local v93 = TweenInfo.new(0.25, v92 or Enum.EasingStyle.Quint);
+			l_TweenService_0:Create(l_Preview_0, v93, v91):Play();
+		end);
+		v89.MouseLeave:Connect(function() --[[ Line: 157 ]]
+			local l_Preview_1 = l_ScreenGui_0.ColorPicker.Preview;
+			local v95 = {
+				BackgroundColor3 = Color3.fromRGB(230, 230, 230)
+			};
+			local v96 = TweenInfo.new(1, Enum.EasingStyle.Quint);
+			l_TweenService_0:Create(l_Preview_1, v96, v95):Play();
+			l_Preview_1 = v89.UIScale;
+			v95 = {
+				Scale = 1
+			};
+			v96 = Enum.EasingStyle.Back;
+			local v97 = TweenInfo.new(0.25, v96 or Enum.EasingStyle.Quint);
+			l_TweenService_0:Create(l_Preview_1, v97, v95):Play();
+		end);
+	end;
+end;
+checkHex = function(v98) --[[ Line: 165 ]] --[[ Name: checkHex ]]
+	return string.match(v98, "^%x%x%x%x%x%x$");
+end;
+local l_CustomColor_0 = l_ScreenGui_0.ColorPicker.CustomColor;
+l_CustomColor_0.TextBox:GetPropertyChangedSignal("Text"):Connect(function() --[[ Line: 171 ]]
+	if checkHex(l_CustomColor_0.TextBox.Text:gsub("#", "")) then
+		l_CustomColor_0.Color.BackgroundColor3 = Color3.fromHex(l_CustomColor_0.TextBox.Text:gsub("#", ""));
+		return;
+	else
+		l_CustomColor_0.Color.BackgroundColor3 = Color3.fromRGB(230, 230, 230);
+		return;
+	end;
+end);
+l_CustomColor_0.Color.Activated:Connect(function() --[[ Line: 179 ]]
+	l_SoundService_0.SFX.Confirm:Play();
+	v87.Color.BackgroundColor3 = l_CustomColor_0.Color.BackgroundColor3;
+	v87:SetAttribute("Value", l_CustomColor_0.Color.BackgroundColor3);
+	v87:SetAttribute("ValueChanged", l_CustomColor_0.Color.BackgroundColor3);
+	l_ScreenGui_0.ColorPicker.Visible = false;
+end);
+l_CustomColor_0.Color.MouseEnter:Connect(function() --[[ Line: 187 ]]
+	l_SoundService_0.SFX.Hover:Play();
+	local l_Preview_2 = l_ScreenGui_0.ColorPicker.Preview;
+	local v101 = {
+		BackgroundColor3 = l_CustomColor_0.Color.BackgroundColor3
+	};
+	local v102 = TweenInfo.new(1, Enum.EasingStyle.Quint);
+	l_TweenService_0:Create(l_Preview_2, v102, v101):Play();
+	l_Preview_2 = l_CustomColor_0.Color.UIScale;
+	v101 = {
+		Scale = 1.1
+	};
+	v102 = Enum.EasingStyle.Back;
+	local v103 = TweenInfo.new(0.25, v102 or Enum.EasingStyle.Quint);
+	l_TweenService_0:Create(l_Preview_2, v103, v101):Play();
+end);
+l_CustomColor_0.Color.MouseLeave:Connect(function() --[[ Line: 193 ]]
+	local l_Preview_3 = l_ScreenGui_0.ColorPicker.Preview;
+	local v105 = {
+		BackgroundColor3 = Color3.fromRGB(230, 230, 230)
+	};
+	local v106 = TweenInfo.new(1, Enum.EasingStyle.Quint);
+	l_TweenService_0:Create(l_Preview_3, v106, v105):Play();
+	l_Preview_3 = l_CustomColor_0.Color.UIScale;
+	v105 = {
+		Scale = 1
+	};
+	v106 = Enum.EasingStyle.Back;
+	local v107 = TweenInfo.new(0.25, v106 or Enum.EasingStyle.Quint);
+	l_TweenService_0:Create(l_Preview_3, v107, v105):Play();
+end);
+local function v132(v108) --[[ Line: 198 ]] --[[ Name: setupColorPicker ]]
+	v108:SetAttribute("Value", v108.Color.BackgroundColor3);
+	v108.Activated:Connect(function() --[[ Line: 201 ]]
+		local l_v108_Attribute_0 = v108:GetAttribute("Locked");
+		if l_v108_Attribute_0 then
+			local l_spawn_2 = spawn;
+			local v111 = "danger";
+			local l_v111_0 = v111 --[[ copy: 4 -> 7 ]];
+			local l_l_v108_Attribute_0_0 = l_v108_Attribute_0 --[[ copy: 1 -> 8 ]];
+			l_spawn_2(function() --[[ Line: 28 ]]
+				if l_ScreenGui_0.Popups:GetAttribute("Enabled") then
+					l_SoundService_0.SFX.BellRing:Play();
+					local v114 = l_UITemplates_0[l_v111_0 .. "Popup"];
+					if not v114 then
+						print("NOPE");
+						return;
+					else
+						local v115 = v114:Clone();
+						v115.Message.Text = l_l_v108_Attribute_0_0;
+						v115.Transparency = 1;
+						v115.UIScale.Scale = 0;
+						v115.Parent = l_ScreenGui_0.Popups;
+						local v116 = {
+							Transparency = 0
+						};
+						local v117 = TweenInfo.new(0.5, Enum.EasingStyle.Quint);
+						l_TweenService_0:Create(v115, v117, v116):Play();
+						v116 = v115.UIScale;
+						v117 = {
+							Scale = 1
+						};
+						local l_Back_4 = Enum.EasingStyle.Back;
+						local v119 = TweenInfo.new(0.3, l_Back_4 or Enum.EasingStyle.Quint);
+						l_TweenService_0:Create(v116, v119, v117):Play();
+						v116 = v115.Message;
+						v117 = {
+							MaxVisibleGraphemes = #l_l_v108_Attribute_0_0
+						};
+						l_Back_4 = TweenInfo.new(1, Enum.EasingStyle.Quint);
+						l_TweenService_0:Create(v116, l_Back_4, v117):Play();
+						wait(4);
+						v116 = {
+							Transparency = 1
+						};
+						v117 = TweenInfo.new(0.25, Enum.EasingStyle.Quint);
+						l_TweenService_0:Create(v115, v117, v116):Play();
+						v116 = v115.UIScale;
+						v117 = {
+							Scale = 0
+						};
+						l_Back_4 = Enum.EasingStyle.Back;
+						v119 = TweenInfo.new(0.5, l_Back_4 or Enum.EasingStyle.Quint);
+						l_TweenService_0:Create(v116, v119, v117):Play();
+						wait(0.5);
+						v115:Destroy();
+					end;
+				end;
+			end);
+			l_SoundService_0.SFX.Fail:Play();
+			coroutine.yield();
+		end;
+		l_SoundService_0.SFX.Click:Play();
+		l_ScreenGui_0.ColorPicker.GroupTransparency = 1;
+		l_ScreenGui_0.ColorPicker.Visible = true;
+		l_ScreenGui_0.FontPicker.Visible = false;
+		local l_AbsoluteSize_0 = l_ScreenGui_0.AbsoluteSize;
+		l_v108_Attribute_0 = l_UserInputService_0:GetMouseLocation();
+		local v121 = l_AbsoluteSize_0.X - l_ScreenGui_0.ColorPicker.AbsoluteSize.X;
+		local v122 = math.min(l_v108_Attribute_0.X, v121);
+		l_ScreenGui_0.ColorPicker.Position = UDim2.new(0, v122, 0, l_v108_Attribute_0.Y);
+		local l_ColorPicker_0 = l_ScreenGui_0.ColorPicker;
+		local v124 = {
+			GroupTransparency = 0
+		};
+		local v125 = TweenInfo.new(0.2, Enum.EasingStyle.Quint);
+		l_TweenService_0:Create(l_ColorPicker_0, v125, v124):Play();
+		v87 = v108;
+	end);
+	v108.MouseEnter:Connect(function() --[[ Line: 217 ]]
+		l_SoundService_0.SFX.Hover:Play();
+		local l_v108_0 = v108;
+		local v127 = {
+			BackgroundColor3 = Color3.fromRGB(235, 235, 235)
+		};
+		local v128 = TweenInfo.new(0.3, Enum.EasingStyle.Quint);
+		l_TweenService_0:Create(l_v108_0, v128, v127):Play();
+	end);
+	v108.MouseLeave:Connect(function() --[[ Line: 222 ]]
+		local l_v108_1 = v108;
+		local v130 = {
+			BackgroundColor3 = Color3.fromRGB(245, 245, 245)
+		};
+		local v131 = TweenInfo.new(0.3, Enum.EasingStyle.Quint);
+		l_TweenService_0:Create(l_v108_1, v131, v130):Play();
+	end);
+end;
+for _, v134 in l_CollectionService_0:GetTagged("ColorPicker") do
+	v132(v134);
+end;
+l_CollectionService_0:GetInstanceAddedSignal("ColorPicker"):Connect(function(v135) --[[ Line: 231 ]]
+	print("object");
+	v132(v135);
+end);
+local v136 = nil;
+for _, v138 in Enum.Font:GetEnumItems() do
+	if v138.Name ~= "Unknown" then
+		local v139 = l_UITemplates_0.FontButton:Clone();
+		v139.Text = v138.Name;
+		v139.Font = v138;
+		v139.Parent = l_ScreenGui_0.FontPicker.Fonts;
+		v139.Activated:Connect(function() --[[ Line: 246 ]]
+			l_SoundService_0.SFX.Confirm:Play();
+			v136.Info.Text = v138.Name;
+			v136.Info.Font = v138;
+			v136:SetAttribute("Value", v138.Name);
+			v136:SetAttribute("ValueChanged", v138.Name);
+			l_ScreenGui_0.FontPicker.Visible = false;
+		end);
+		v139.MouseEnter:Connect(function() --[[ Line: 255 ]]
+			l_SoundService_0.SFX.Hover:Play();
+			local l_v139_0 = v139;
+			local v141 = {
+				BackgroundColor3 = Color3.fromRGB(64, 182, 255)
+			};
+			local v142 = TweenInfo.new(0.25, Enum.EasingStyle.Quint);
+			l_TweenService_0:Create(l_v139_0, v142, v141):Play();
+			l_v139_0 = v139;
+			v141 = {
+				TextColor3 = Color3.fromRGB(255, 255, 255)
+			};
+			v142 = TweenInfo.new(0.25, Enum.EasingStyle.Quint);
+			l_TweenService_0:Create(l_v139_0, v142, v141):Play();
+			l_v139_0 = v139.UIScale;
+			v141 = {
+				Scale = 1.05
+			};
+			v142 = Enum.EasingStyle.Back;
+			local v143 = TweenInfo.new(0.2, v142 or Enum.EasingStyle.Quint);
+			l_TweenService_0:Create(l_v139_0, v143, v141):Play();
+		end);
+		v139.MouseLeave:Connect(function() --[[ Line: 262 ]]
+			local l_v139_1 = v139;
+			local v145 = {
+				BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+			};
+			local v146 = TweenInfo.new(0.25, Enum.EasingStyle.Quint);
+			l_TweenService_0:Create(l_v139_1, v146, v145):Play();
+			l_v139_1 = v139;
+			v145 = {
+				TextColor3 = Color3.fromRGB(15, 34, 60)
+			};
+			v146 = TweenInfo.new(0.25, Enum.EasingStyle.Quint);
+			l_TweenService_0:Create(l_v139_1, v146, v145):Play();
+			l_v139_1 = v139.UIScale;
+			v145 = {
+				Scale = 1
+			};
+			v146 = Enum.EasingStyle.Back;
+			local v147 = TweenInfo.new(0.2, v146 or Enum.EasingStyle.Quint);
+			l_TweenService_0:Create(l_v139_1, v147, v145):Play();
+		end);
+	end;
+end;
+for _, v149 in l_CollectionService_0:GetTagged("FontPicker") do
+	v149:SetAttribute("Value", v149.Info.Font.Name);
+	v149.Activated:Connect(function() --[[ Line: 272 ]]
+		local l_v149_Attribute_0 = v149:GetAttribute("Locked");
+		if l_v149_Attribute_0 then
+			local l_spawn_3 = spawn;
+			local v152 = "danger";
+			local l_v152_0 = v152 --[[ copy: 4 -> 7 ]];
+			local l_l_v149_Attribute_0_0 = l_v149_Attribute_0 --[[ copy: 1 -> 8 ]];
+			l_spawn_3(function() --[[ Line: 28 ]]
+				if l_ScreenGui_0.Popups:GetAttribute("Enabled") then
+					l_SoundService_0.SFX.BellRing:Play();
+					local v155 = l_UITemplates_0[l_v152_0 .. "Popup"];
+					if not v155 then
+						print("NOPE");
+						return;
+					else
+						local v156 = v155:Clone();
+						v156.Message.Text = l_l_v149_Attribute_0_0;
+						v156.Transparency = 1;
+						v156.UIScale.Scale = 0;
+						v156.Parent = l_ScreenGui_0.Popups;
+						local v157 = {
+							Transparency = 0
+						};
+						local v158 = TweenInfo.new(0.5, Enum.EasingStyle.Quint);
+						l_TweenService_0:Create(v156, v158, v157):Play();
+						v157 = v156.UIScale;
+						v158 = {
+							Scale = 1
+						};
+						local l_Back_5 = Enum.EasingStyle.Back;
+						local v160 = TweenInfo.new(0.3, l_Back_5 or Enum.EasingStyle.Quint);
+						l_TweenService_0:Create(v157, v160, v158):Play();
+						v157 = v156.Message;
+						v158 = {
+							MaxVisibleGraphemes = #l_l_v149_Attribute_0_0
+						};
+						l_Back_5 = TweenInfo.new(1, Enum.EasingStyle.Quint);
+						l_TweenService_0:Create(v157, l_Back_5, v158):Play();
+						wait(4);
+						v157 = {
+							Transparency = 1
+						};
+						v158 = TweenInfo.new(0.25, Enum.EasingStyle.Quint);
+						l_TweenService_0:Create(v156, v158, v157):Play();
+						v157 = v156.UIScale;
+						v158 = {
+							Scale = 0
+						};
+						l_Back_5 = Enum.EasingStyle.Back;
+						v160 = TweenInfo.new(0.5, l_Back_5 or Enum.EasingStyle.Quint);
+						l_TweenService_0:Create(v157, v160, v158):Play();
+						wait(0.5);
+						v156:Destroy();
+					end;
+				end;
+			end);
+			l_SoundService_0.SFX.Fail:Play();
+			coroutine.yield();
+		end;
+		l_SoundService_0.SFX.Click:Play();
+		l_ScreenGui_0.FontPicker.GroupTransparency = 1;
+		l_ScreenGui_0.FontPicker.Visible = true;
+		l_ScreenGui_0.ColorPicker.Visible = false;
+		if l_ScreenGui_0:FindFirstChild("NewDropdown") then
+			l_ScreenGui_0:FindFirstChild("NewDropdown"):Destroy();
+		end;
+		local l_AbsoluteSize_1 = l_ScreenGui_0.AbsoluteSize;
+		l_v149_Attribute_0 = l_UserInputService_0:GetMouseLocation();
+		local v162 = l_AbsoluteSize_1.X - l_ScreenGui_0.FontPicker.AbsoluteSize.X;
+		local v163 = math.min(l_v149_Attribute_0.X, v162);
+		l_ScreenGui_0.FontPicker.Position = UDim2.new(0, v163, 0, l_v149_Attribute_0.Y);
+		local l_FontPicker_0 = l_ScreenGui_0.FontPicker;
+		local v165 = {
+			GroupTransparency = 0
+		};
+		local v166 = TweenInfo.new(0.2, Enum.EasingStyle.Quint);
+		l_TweenService_0:Create(l_FontPicker_0, v166, v165):Play();
+		v136 = v149;
+	end);
+	v149.MouseEnter:Connect(function() --[[ Line: 292 ]]
+		l_SoundService_0.SFX.Hover:Play();
+		local l_v149_0 = v149;
+		local v168 = {
+			BackgroundColor3 = Color3.fromRGB(235, 235, 235)
+		};
+		local v169 = TweenInfo.new(0.3, Enum.EasingStyle.Quint);
+		l_TweenService_0:Create(l_v149_0, v169, v168):Play();
+	end);
+	v149.MouseLeave:Connect(function() --[[ Line: 297 ]]
+		local l_v149_1 = v149;
+		local v171 = {
+			BackgroundColor3 = Color3.fromRGB(245, 245, 245)
+		};
+		local v172 = TweenInfo.new(0.3, Enum.EasingStyle.Quint);
+		l_TweenService_0:Create(l_v149_1, v172, v171):Play();
+	end);
+end;
+for _, v174 in l_CollectionService_0:GetTagged("Dropdown") do
+	v174:SetAttribute("Value", v174.Text);
+	if v174:FindFirstChild("Info") then
+		v174.MouseEnter:Connect(function() --[[ Line: 307 ]]
+			l_SoundService_0.SFX.Hover:Play();
+			local l_v174_0 = v174;
+			local v176 = {
+				BackgroundColor3 = Color3.fromRGB(235, 235, 235)
+			};
+			local v177 = TweenInfo.new(0.3, Enum.EasingStyle.Quint);
+			l_TweenService_0:Create(l_v174_0, v177, v176):Play();
+		end);
+		v174.MouseLeave:Connect(function() --[[ Line: 312 ]]
+			local l_v174_1 = v174;
+			local v179 = {
+				BackgroundColor3 = Color3.fromRGB(245, 245, 245)
+			};
+			local v180 = TweenInfo.new(0.3, Enum.EasingStyle.Quint);
+			l_TweenService_0:Create(l_v174_1, v180, v179):Play();
+		end);
+	end;
+	v174.Activated:Connect(function() --[[ Line: 317 ]]
+		local l_v174_Attribute_0 = v174:GetAttribute("Locked");
+		if l_v174_Attribute_0 then
+			local l_spawn_4 = spawn;
+			local v183 = "danger";
+			local l_v183_0 = v183 --[[ copy: 4 -> 7 ]];
+			local l_l_v174_Attribute_0_0 = l_v174_Attribute_0 --[[ copy: 1 -> 8 ]];
+			l_spawn_4(function() --[[ Line: 28 ]]
+				if l_ScreenGui_0.Popups:GetAttribute("Enabled") then
+					l_SoundService_0.SFX.BellRing:Play();
+					local v186 = l_UITemplates_0[l_v183_0 .. "Popup"];
+					if not v186 then
+						print("NOPE");
+						return;
+					else
+						local v187 = v186:Clone();
+						v187.Message.Text = l_l_v174_Attribute_0_0;
+						v187.Transparency = 1;
+						v187.UIScale.Scale = 0;
+						v187.Parent = l_ScreenGui_0.Popups;
+						local v188 = {
+							Transparency = 0
+						};
+						local v189 = TweenInfo.new(0.5, Enum.EasingStyle.Quint);
+						l_TweenService_0:Create(v187, v189, v188):Play();
+						v188 = v187.UIScale;
+						v189 = {
+							Scale = 1
+						};
+						local l_Back_6 = Enum.EasingStyle.Back;
+						local v191 = TweenInfo.new(0.3, l_Back_6 or Enum.EasingStyle.Quint);
+						l_TweenService_0:Create(v188, v191, v189):Play();
+						v188 = v187.Message;
+						v189 = {
+							MaxVisibleGraphemes = #l_l_v174_Attribute_0_0
+						};
+						l_Back_6 = TweenInfo.new(1, Enum.EasingStyle.Quint);
+						l_TweenService_0:Create(v188, l_Back_6, v189):Play();
+						wait(4);
+						v188 = {
+							Transparency = 1
+						};
+						v189 = TweenInfo.new(0.25, Enum.EasingStyle.Quint);
+						l_TweenService_0:Create(v187, v189, v188):Play();
+						v188 = v187.UIScale;
+						v189 = {
+							Scale = 0
+						};
+						l_Back_6 = Enum.EasingStyle.Back;
+						v191 = TweenInfo.new(0.5, l_Back_6 or Enum.EasingStyle.Quint);
+						l_TweenService_0:Create(v188, v191, v189):Play();
+						wait(0.5);
+						v187:Destroy();
+					end;
+				end;
+			end);
+			l_SoundService_0.SFX.Fail:Play();
+			coroutine.yield();
+		end;
+		l_SoundService_0.SFX.Click:Play();
+		l_ScreenGui_0.ColorPicker.Visible = false;
+		l_ScreenGui_0.FontPicker.Visible = false;
+		for _, v193 in l_ScreenGui_0:GetChildren() do
+			if v193.Name == "NewDropdown" and v193.Visible == true then
+				v193:Destroy();
+			end;
+		end;
+		local v194 = l_ScreenGui_0.Dropdown:Clone();
+		for v195, v196 in v174:GetAttributes() do
+			if v195 ~= "Value" and v195 ~= "ValueChanged" then
+				local v197 = l_UITemplates_0.DropdownButton:Clone();
+				v197.Text = v196;
+				v197.LayoutOrder = tonumber(v195);
+				v197.Parent = v194.List;
+				v197.Activated:Connect(function() --[[ Line: 336 ]]
+					if v174:FindFirstChild("Info") then
+						v174.Info.Text = v197.Text;
+					else
+						v174.Text = v197.Text;
+					end;
+					v174:SetAttribute("Value", v197.Text);
+					v174:SetAttribute("ValueChanged", v197.Text);
+					l_SoundService_0.SFX.Success:Play();
+					for _, v199 in l_ScreenGui_0:GetChildren() do
+						if v199.Name == "NewDropdown" and v199.Visible == true then
+							v199:Destroy();
+						end;
+					end;
+				end);
+				v197.MouseEnter:Connect(function() --[[ Line: 354 ]]
+					l_SoundService_0.SFX.Hover:Play();
+					local l_v197_0 = v197;
+					local v201 = {
+						BackgroundColor3 = Color3.fromRGB(64, 182, 255)
+					};
+					local v202 = TweenInfo.new(0.25, Enum.EasingStyle.Quint);
+					l_TweenService_0:Create(l_v197_0, v202, v201):Play();
+					l_v197_0 = v197;
+					v201 = {
+						TextColor3 = Color3.fromRGB(255, 255, 255)
+					};
+					v202 = TweenInfo.new(0.25, Enum.EasingStyle.Quint);
+					l_TweenService_0:Create(l_v197_0, v202, v201):Play();
+					l_v197_0 = v197.UIScale;
+					v201 = {
+						Scale = 1.05
+					};
+					v202 = Enum.EasingStyle.Back;
+					local v203 = TweenInfo.new(0.2, v202 or Enum.EasingStyle.Quint);
+					l_TweenService_0:Create(l_v197_0, v203, v201):Play();
+				end);
+				v197.MouseLeave:Connect(function() --[[ Line: 361 ]]
+					local l_v197_1 = v197;
+					local v205 = {
+						BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+					};
+					local v206 = TweenInfo.new(0.25, Enum.EasingStyle.Quint);
+					l_TweenService_0:Create(l_v197_1, v206, v205):Play();
+					l_v197_1 = v197;
+					v205 = {
+						TextColor3 = Color3.fromRGB(15, 34, 60)
+					};
+					v206 = TweenInfo.new(0.25, Enum.EasingStyle.Quint);
+					l_TweenService_0:Create(l_v197_1, v206, v205):Play();
+					l_v197_1 = v197.UIScale;
+					v205 = {
+						Scale = 1
+					};
+					v206 = Enum.EasingStyle.Back;
+					local v207 = TweenInfo.new(0.2, v206 or Enum.EasingStyle.Quint);
+					l_TweenService_0:Create(l_v197_1, v207, v205):Play();
+				end);
+			end;
+		end;
+		l_v174_Attribute_0 = l_ScreenGui_0.AbsoluteSize;
+		local l_l_UserInputService_0_MouseLocation_0 = l_UserInputService_0:GetMouseLocation();
+		local v209 = l_v174_Attribute_0.X - v194.AbsoluteSize.X;
+		local v210 = math.min(l_l_UserInputService_0_MouseLocation_0.X, v209);
+		v194.Position = UDim2.new(0, v210, 0, l_l_UserInputService_0_MouseLocation_0.Y);
+		v194.GroupTransparency = 1;
+		v194.Name = "NewDropdown";
+		v194.Parent = l_ScreenGui_0;
+		v194.Visible = true;
+		local v211 = {
+			GroupTransparency = 0
+		};
+		local v212 = TweenInfo.new(0.2, Enum.EasingStyle.Quint);
+		l_TweenService_0:Create(v194, v212, v211):Play();
+	end);
+	v174.MouseEnter:Connect(function() --[[ Line: 381 ]]
+		l_SoundService_0.SFX.Hover:Play();
+		local l_v174_2 = v174;
+		local v214 = {
+			BackgroundColor3 = Color3.fromRGB(210, 210, 210)
+		};
+		local v215 = TweenInfo.new(0.3, Enum.EasingStyle.Quint);
+		l_TweenService_0:Create(l_v174_2, v215, v214):Play();
+	end);
+	v174.MouseLeave:Connect(function() --[[ Line: 386 ]]
+		local l_v174_3 = v174;
+		local v217 = {
+			BackgroundColor3 = Color3.fromRGB(235, 235, 235)
+		};
+		local v218 = TweenInfo.new(0.3, Enum.EasingStyle.Quint);
+		l_TweenService_0:Create(l_v174_3, v218, v217):Play();
+	end);
+end;
+for _, v220 in l_CollectionService_0:GetTagged("Slider") do
+	local l_TextBox_0 = v220.SliderFrame.TextBox;
+	local v222 = {
+		0, 
+		v220:GetAttribute("Range")
+	};
+	local l_v220_Attribute_0 = v220:GetAttribute("Increment");
+	l_TextBox_0:GetPropertyChangedSignal("Text"):Connect(function() --[[ Line: 397 ]]
+		local l_Text_0 = l_TextBox_0.Text;
+		local v225 = tonumber(l_Text_0);
+		if v225 < v222[1] or v222[2] < v225 then
+			l_TextBox_0.Text = string.sub(l_Text_0, 1, -2);
+		end;
+	end);
+	local v226 = v11.new(v220.SliderFrame, {
+		SliderData = {
+			Start = v222[1], 
+			End = v222[2], 
+			Increment = l_v220_Attribute_0
+		}, 
+		MoveInfo = TweenInfo.new(0.25, Enum.EasingStyle.Exponential)
+	});
+	v226:Track();
+	l_TextBox_0.Text = v226:GetValue();
+	v220:SetAttribute("Value", v226:GetValue());
+	v226.Released:Connect(function(v227) --[[ Line: 415 ]]
+		l_SoundService_0.SFX.Confirm:Play();
+		l_TextBox_0.Text = v227;
+		v220:SetAttribute("Value", v227);
+		v220:SetAttribute("ValueChanged", v227);
+	end);
+	l_TextBox_0:GetPropertyChangedSignal("Text"):Connect(function() --[[ Line: 422 ]]
+		v226:OverrideValue(l_TextBox_0.Text);
+	end);
+	v220.SliderFrame.Slider.MouseEnter:Connect(function() --[[ Line: 426 ]]
+		local l_UIScale_0 = v220.SliderFrame.Slider.UIScale;
+		local v229 = {
+			Scale = 1.1
+		};
+		local l_Back_7 = Enum.EasingStyle.Back;
+		local v231 = TweenInfo.new(0.5, l_Back_7 or Enum.EasingStyle.Quint);
+		l_TweenService_0:Create(l_UIScale_0, v231, v229):Play();
+	end);
+	v220.SliderFrame.Slider.MouseLeave:Connect(function() --[[ Line: 430 ]]
+		local l_UIScale_1 = v220.SliderFrame.Slider.UIScale;
+		local v233 = {
+			Scale = 1
+		};
+		local l_Back_8 = Enum.EasingStyle.Back;
+		local v235 = TweenInfo.new(0.5, l_Back_8 or Enum.EasingStyle.Quint);
+		l_TweenService_0:Create(l_UIScale_1, v235, v233):Play();
+	end);
+	v220.MouseEnter:Connect(function() --[[ Line: 435 ]]
+		l_SoundService_0.SFX.Hover:Play();
+		local l_v220_0 = v220;
+		local v237 = {
+			BackgroundColor3 = Color3.fromRGB(235, 235, 235)
+		};
+		local v238 = TweenInfo.new(0.3, Enum.EasingStyle.Quint);
+		l_TweenService_0:Create(l_v220_0, v238, v237):Play();
+	end);
+	v220.MouseLeave:Connect(function() --[[ Line: 440 ]]
+		local l_v220_1 = v220;
+		local v240 = {
+			BackgroundColor3 = Color3.fromRGB(245, 245, 245)
+		};
+		local v241 = TweenInfo.new(0.3, Enum.EasingStyle.Quint);
+		l_TweenService_0:Create(l_v220_1, v241, v240):Play();
+	end);
+end;
+for _, v243 in l_CollectionService_0:GetTagged("Selection") do
+	local l_v243_Children_0 = v243:GetChildren();
+	for _, v246 in l_v243_Children_0 do
+		if v246:IsA("ImageButton") then
+			if v243:GetAttribute("Value") == v246.Name then
+				local l_UIStroke_0 = v246.UIStroke;
+				local v248 = {
+					Thickness = 2
+				};
+				l_TweenService_0:Create(l_UIStroke_0, TweenInfo.new(0.2, Enum.EasingStyle.Quint), v248):Play();
+			end;
+			v246.Activated:Connect(function() --[[ Line: 456 ]]
+				local l_v246_Attribute_0 = v246:GetAttribute("Locked");
+				if l_v246_Attribute_0 then
+					local l_spawn_5 = spawn;
+					local v251 = "danger";
+					local l_v251_0 = v251 --[[ copy: 4 -> 8 ]];
+					local l_l_v246_Attribute_0_0 = l_v246_Attribute_0 --[[ copy: 1 -> 9 ]];
+					l_spawn_5(function() --[[ Line: 28 ]]
+						if l_ScreenGui_0.Popups:GetAttribute("Enabled") then
+							l_SoundService_0.SFX.BellRing:Play();
+							local v254 = l_UITemplates_0[l_v251_0 .. "Popup"];
+							if not v254 then
+								print("NOPE");
+								return;
+							else
+								local v255 = v254:Clone();
+								v255.Message.Text = l_l_v246_Attribute_0_0;
+								v255.Transparency = 1;
+								v255.UIScale.Scale = 0;
+								v255.Parent = l_ScreenGui_0.Popups;
+								local v256 = {
+									Transparency = 0
+								};
+								local v257 = TweenInfo.new(0.5, Enum.EasingStyle.Quint);
+								l_TweenService_0:Create(v255, v257, v256):Play();
+								v256 = v255.UIScale;
+								v257 = {
+									Scale = 1
+								};
+								local l_Back_9 = Enum.EasingStyle.Back;
+								local v259 = TweenInfo.new(0.3, l_Back_9 or Enum.EasingStyle.Quint);
+								l_TweenService_0:Create(v256, v259, v257):Play();
+								v256 = v255.Message;
+								v257 = {
+									MaxVisibleGraphemes = #l_l_v246_Attribute_0_0
+								};
+								l_Back_9 = TweenInfo.new(1, Enum.EasingStyle.Quint);
+								l_TweenService_0:Create(v256, l_Back_9, v257):Play();
+								wait(4);
+								v256 = {
+									Transparency = 1
+								};
+								v257 = TweenInfo.new(0.25, Enum.EasingStyle.Quint);
+								l_TweenService_0:Create(v255, v257, v256):Play();
+								v256 = v255.UIScale;
+								v257 = {
+									Scale = 0
+								};
+								l_Back_9 = Enum.EasingStyle.Back;
+								v259 = TweenInfo.new(0.5, l_Back_9 or Enum.EasingStyle.Quint);
+								l_TweenService_0:Create(v256, v259, v257):Play();
+								wait(0.5);
+								v255:Destroy();
+							end;
+						end;
+					end);
+					l_SoundService_0.SFX.Fail:Play();
+					coroutine.yield();
+				end;
+				l_SoundService_0.SFX.Confirm:Play();
+				for _, v261 in l_v243_Children_0 do
+					if v261:IsA("ImageButton") then
+						local l_UIStroke_1 = v261.UIStroke;
+						local v263 = {
+							Thickness = 0
+						};
+						local v264 = TweenInfo.new(0.2, Enum.EasingStyle.Quint);
+						l_TweenService_0:Create(l_UIStroke_1, v264, v263):Play();
+					end;
+				end;
+				local l_UIStroke_2 = v246.UIStroke;
+				l_v246_Attribute_0 = {
+					Thickness = 2
+				};
+				local v266 = TweenInfo.new(0.2, Enum.EasingStyle.Quint);
+				l_TweenService_0:Create(l_UIStroke_2, v266, l_v246_Attribute_0):Play();
+				v243:SetAttribute("Value", v246.Name);
+				v243:SetAttribute("ValueChanged", v246.Name);
+			end);
+			v246.MouseEnter:Connect(function() --[[ Line: 469 ]]
+				l_SoundService_0.SFX.Hover:Play();
+			end);
+		end;
+	end;
+end;
+local function v285(v267, v268) --[[ Line: 477 ]] --[[ Name: setupBuyPrompt ]]
+	local v269 = nil;
+	if v267.Parent:FindFirstChild("Icon") then
+		v269 = v267.Parent.Icon.Position;
+	end;
+	local v270 = 1.1;
+	if v268 == "Subscribe" then
+		v270 = 1;
+	end;
+	v267.Parent.MouseEnter:Connect(function() --[[ Line: 489 ]]
+		l_SoundService_0.SFX.Hover:Play();
+		if v267.Parent:FindFirstChild("Icon") then
+			local l_Icon_0 = v267.Parent.Icon;
+			local v272 = {
+				Position = v269 - UDim2.new(0, 0, 0, 15)
+			};
+			local v273 = TweenInfo.new(0.5, Enum.EasingStyle.Quint);
+			l_TweenService_0:Create(l_Icon_0, v273, v272):Play();
+		end;
+	end);
+	v267.Parent.MouseLeave:Connect(function() --[[ Line: 498 ]]
+		if v267.Parent:FindFirstChild("Icon") then
+			local l_Icon_1 = v267.Parent.Icon;
+			local v275 = {
+				Position = v269
+			};
+			local v276 = TweenInfo.new(0.5, Enum.EasingStyle.Quint);
+			l_TweenService_0:Create(l_Icon_1, v276, v275):Play();
+		end;
+	end);
+	v267.MouseEnter:Connect(function() --[[ Line: 506 ]]
+		l_SoundService_0.SFX.Hover:Play();
+		v267.UIGradient.Enabled = false;
+		local l_UIScale_2 = v267.UIScale;
+		local v278 = {
+			Scale = v270
+		};
+		local l_Back_10 = Enum.EasingStyle.Back;
+		local v280 = TweenInfo.new(0.2, l_Back_10 or Enum.EasingStyle.Quint);
+		l_TweenService_0:Create(l_UIScale_2, v280, v278):Play();
+	end);
+	v267.MouseLeave:Connect(function() --[[ Line: 512 ]]
+		v267.UIGradient.Enabled = true;
+		local l_UIScale_3 = v267.UIScale;
+		local v282 = {
+			Scale = 1
+		};
+		local l_Back_11 = Enum.EasingStyle.Back;
+		local v284 = TweenInfo.new(0.2, l_Back_11 or Enum.EasingStyle.Quint);
+		l_TweenService_0:Create(l_UIScale_3, v284, v282):Play();
+	end);
+	v267.Activated:Connect(function() --[[ Line: 517 ]]
+		if v28 then
+			l_SoundService_0.SFX.Fail:Play();
+		end;
+		l_SoundService_0.SFX.Click:Play();
+		l_SoundService_0.SFX.Confirm:Play();
+		l_SoundService_0.SFX.Success:Play();
+		if v268 == "Buy" then
+			l_MarketplaceService_0:PromptGamePassPurchase(l_LocalPlayer_0, v267:GetAttribute("Id"));
+			return;
+		elseif v268 == "Subscribe" then
+			l_MarketplaceService_0:PromptSubscriptionPurchase(l_LocalPlayer_0, "EXP-" .. v267:GetAttribute("Id"));
+			return;
+		elseif v268 == "Product" then
+			l_MarketplaceService_0:PromptProductPurchase(l_LocalPlayer_0, v267:GetAttribute("Id"));
+			return;
+		else
+			if v268 == "Catalog" then
+				l_MarketplaceService_0:PromptPurchase(l_LocalPlayer_0, v267:GetAttribute("Id"));
+			end;
+			return;
+		end;
+	end);
+end;
+spawn(function() --[[ Line: 536 ]]
+	local v286, v287 = v12.Function("FetchGroupItems"):InvokeServer();
+	print(v286, v287);
+	for _, v289 in v286 do
+		if v289.id == 125088123100297 then
+			return;
+		else
+			local v290 = l_UITemplates_0.UGCTemplate:Clone();
+			v290.Parent = l_ScreenGui_0.Shop.Frame.UGC;
+			v290.Icon.Image = ("https://www.roblox.com/asset-thumbnail/image?assetId=%*&width=420&height=420&format=png"):format(v289.id);
+			v290.Buy:SetAttribute("Id", v289.id);
+			v290.Buy.Text = ("\238\128\130%*"):format(v289.lowestPrice or v289.price);
+		end;
+	end;
+	for _, v292 in v287 do
+		if v292.assetType > 7 then
+			if v292.id == 125088123100297 then
+				return;
+			else
+				local v293 = l_UITemplates_0.UGCTemplate:Clone();
+				v293.Parent = l_ScreenGui_0.Shop.Frame.UGC;
+				v293.Icon.Image = ("https://www.roblox.com/asset-thumbnail/image?assetId=%*&width=420&height=420&format=png"):format(v292.id);
+				v293.Buy:SetAttribute("Id", v292.id);
+				v293.Buy.Text = ("\238\128\130%*"):format(v292.lowestPrice or v292.price);
+			end;
+		end;
+	end;
+end);
+for _, v295 in l_CollectionService_0:GetTagged("Catalog") do
+	v285(v295, "Catalog");
+end;
+for _, v297 in l_CollectionService_0:GetTagged("Buy") do
+	v285(v297, "Buy");
+end;
+for _, v299 in l_CollectionService_0:GetTagged("Subscribe") do
+	v285(v299, "Subscribe");
+end;
+for _, v301 in l_CollectionService_0:GetTagged("Product") do
+	v285(v301, "Product");
+end;

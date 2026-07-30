@@ -1,0 +1,92 @@
+task.wait(2)
+local TweenService = game:GetService("TweenService")
+local Modules = require(game.ServerStorage.RaygunModules.Shared);
+local Services = require(game.ServerStorage.RaygunModules.Services)
+script.Parent.Shot.OnServerEvent:Connect(function(player, mouseposition, tool)
+	local character = player.Character;
+	print('shot')
+	if character then
+		print('aa')
+		Modules.Emit(tool.Handle.EmitPoint:GetDescendants());
+		tool.Handle.EmitPoint.Shoot.PitchShift.Octave = Random.new():NextNumber(0.9, 1.1);
+		tool.Handle.EmitPoint.Shoot:Play();
+		local bullet = script.GunBullet:Clone();
+		bullet.Parent = workspace;
+		bullet.Position = tool.Handle.EmitPoint.WorldPosition;
+		bullet.CFrame = CFrame.lookAt(bullet.Position, mouseposition);
+		local bulletposition = TweenService:Create(bullet, TweenInfo.new((mouseposition - tool.Handle.EmitPoint.WorldPosition).Magnitude / 150, Enum.EasingStyle.Linear, Enum.EasingDirection.Out), {
+			Position = mouseposition
+		});
+		bulletposition:Play();
+		bulletposition.Completed:Connect(function()
+			bullet.Middle.Circles.Enabled = false;
+			task.wait(bullet.Trail.Lifetime);
+			bullet:Destroy();
+		end);
+		local raycastparams = RaycastParams.new();
+		raycastparams.FilterType = Enum.RaycastFilterType.Include;
+		raycastparams.FilterDescendantsInstances = workspace:GetDescendants()
+		local raycastforraygun = workspace:Raycast(tool.Handle.EmitPoint.WorldPosition, (mouseposition - tool.Handle.EmitPoint.WorldPosition).Unit * 500, raycastparams);
+		if raycastforraygun and raycastforraygun.Instance:IsDescendantOf(workspace) then
+			local humanoid = raycastforraygun.Instance:FindFirstAncestorWhichIsA("Model"):FindFirstChild("Humanoid");
+			if humanoid then
+				if humanoid.Parent.Name ~= player.Name then
+					local playerfromcharacter = game:GetService("Players"):GetPlayerFromCharacter(humanoid.Parent);
+					local character = playerfromcharacter.Character
+					local humanoidrootpart =  character:FindFirstChild("HumanoidRootPart")
+					vkill(character, humanoidrootpart)
+					humanoid:TakeDamage(20);
+				end
+			end;
+		end;
+	end;
+end);
+
+game:GetService("Players").PlayerAdded:Connect(function(p1)
+	p1.CharacterAdded:Connect(function(character)
+		local humanoid = character:WaitForChild("Humanoid")
+		local humanoidrootpart = character:WaitForChild("HumanoidRootPart")
+		vkill(character, humanoid, humanoidrootpart)
+	end)
+end)
+
+function vkill(character, humanoidrootpart)
+	local DamageTaken = script.DamageTaken:Clone()
+	DamageTaken.Parent = humanoidrootpart
+	local Highlight = character:FindFirstChild("Highlight")
+	if not Highlight then
+		Highlight = script.DamageTaken.Highlight:Clone()
+		Highlight.Parent = character
+	end
+	DamageTaken.DamageTaken_Attachment.WorldCFrame = character:FindFirstChild("HumanoidRootPart"):FindFirstChild("RootAttachment").WorldCFrame;
+	Modules.Emit(DamageTaken.DamageTaken_Attachment:GetChildren());
+	local highlightuh = character.Highlight;
+	if not Highlight then
+		Highlight = script.DamageTaken.Highlight:Clone()
+		Highlight.Parent = character
+	end
+	Services.TweenService:Create(highlightuh, TweenInfo.new(0.15, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {
+		FillTransparency = 0.2
+	}):Play();
+	task.wait(0.15);
+	Services.TweenService:Create(highlightuh, TweenInfo.new(0.15, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {
+		FillTransparency = 1
+	}):Play();
+	delay(5, function()
+		DamageTaken:Destroy();
+	end)
+end;
+--[[
+script.Parent.Parent.Equipped:Connect(function(player)
+	local EventUI = game.ServerStorage.Event:Clone();
+	for _, players in pairs(game.Players:GetPlayers()) do
+		EventUI.Parent = players.PlayerGui or EventUI:Destroy();
+	end;
+end);
+script.Parent.Parent.Unequipped:Connect(function(player)
+	for _, players in pairs(game.Players:GetPlayers()) do
+		if players.PlayerGui:FindFirstChild("Event") then
+			players.PlayerGui.Event:Destroy();
+		end;
+	end;
+end);]]

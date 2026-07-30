@@ -1,0 +1,332 @@
+-- Saved by UniversalSynSaveInstance (Join to Copy Games) https://discord.gg/wx4ThpAsmw
+
+local l_Players_0 = game:GetService("Players");
+local l_Config_0 = require(script:WaitForChild("Config"));
+local l_Events_0 = require(script:WaitForChild("Events"));
+local l_InitClient_0 = script:WaitForChild("InitClient");
+local l_PlayClient_0 = l_InitClient_0:WaitForChild("PlayClient");
+local function _(v5) --[[ Line: 12 ]] --[[ Name: safeRequire ]]
+    local l_status_0, l_result_0 = pcall(function() --[[ Line: 13 ]]
+        -- upvalues: v5 (copy)
+        return require(v5);
+    end);
+    if l_status_0 then
+        return l_result_0;
+    else
+        warn(("safeRequire failed for %s: %s"):format(tostring(v5), (tostring(l_result_0))));
+        return nil;
+    end;
+end;
+local function _(v9, v10) --[[ Line: 19 ]] --[[ Name: createAttachment ]]
+    local l_Attachment_0 = Instance.new("Attachment");
+    l_Attachment_0.Name = v9;
+    if v10 then
+        l_Attachment_0.CFrame = v10;
+    end;
+    return l_Attachment_0;
+end;
+local function _(v13, v14) --[[ Line: 26 ]] --[[ Name: createPart ]]
+    local l_Part_0 = Instance.new("Part");
+    l_Part_0.Name = v13;
+    if v14 then
+        l_Part_0.CFrame = v14;
+    end;
+    l_Part_0.Anchored = true;
+    l_Part_0.Size = Vector3.new(1, 1, 1, 0);
+    l_Part_0.CanCollide = false;
+    l_Part_0.CanQuery = false;
+    l_Part_0.CanTouch = false;
+    l_Part_0.Transparency = 1;
+    return l_Part_0;
+end;
+local function v22(v17, v18, ...) --[[ Line: 39 ]] --[[ Name: safeFireClient ]]
+    if not v18 then
+        return false;
+    else
+        local v19 = table.pack(...);
+        local l_status_1, l_result_1 = pcall(function() --[[ Line: 42 ]]
+            -- upvalues: v17 (copy), v18 (copy), v19 (copy)
+            v17:FireClient(v18, table.unpack(v19, 1, v19.n));
+        end);
+        if not l_status_1 then
+            warn(("FireClient failed (%s): %s"):format(tostring(v17), (tostring(l_result_1))));
+        end;
+        return l_status_1;
+    end;
+end;
+local function _(v23, v24) --[[ Line: 51 ]] --[[ Name: initFireClientToPlayer ]]
+    -- upvalues: l_InitClient_0 (copy)
+    local l_status_2, l_result_2 = pcall(function() --[[ Line: 52 ]]
+        -- upvalues: l_InitClient_0 (ref), v23 (copy), v24 (copy)
+        l_InitClient_0:FireClient(v23, v24);
+    end);
+    if not l_status_2 then
+        warn(("InitClient failed (%s): %s"):format(v24, l_result_2));
+    end;
+    return l_status_2;
+end;
+local function v34(v28, v29) --[[ Line: 61 ]] --[[ Name: playFireClientToPlayers ]]
+    -- upvalues: v22 (copy), l_PlayClient_0 (copy)
+    local l_ipairs_0 = ipairs;
+    local v31 = v28.IsClientInit or {};
+    for _, v33 in l_ipairs_0(v31) do
+        v22(l_PlayClient_0, v33, v28, v29);
+    end;
+end;
+local l_Actor_0 = Instance.new("Actor");
+l_Actor_0.Name = "EventMarker";
+l_Actor_0:PivotTo(l_Config_0.MapRoot);
+l_Actor_0.Parent = workspace;
+local v36 = {
+    InitClientOnJoin = {}, 
+    CreatedEvents = {}, 
+    Queue = {}, 
+    Playing = nil, 
+    DidLoadServerUtils = false, 
+    Utils = {}
+};
+local function _(v37, v38) --[[ Line: 89 ]] --[[ Name: enqueue ]]
+    -- upvalues: v36 (copy)
+    table.insert(v36.Queue, {
+        Event = v37, 
+        Info = v38
+    });
+end;
+local function _() --[[ Line: 93 ]] --[[ Name: dequeue ]]
+    -- upvalues: v36 (copy)
+    return table.remove(v36.Queue, 1);
+end;
+v36.LoadOnJoin = function(_) --[[ Line: 101 ]] --[[ Name: LoadOnJoin ]]
+    -- upvalues: l_InitClient_0 (copy), v36 (copy)
+    l_InitClient_0.OnServerEvent:Connect(function(v42) --[[ Line: 102 ]]
+        -- upvalues: v36 (ref), l_InitClient_0 (ref)
+        for v43, v44 in pairs(v36.InitClientOnJoin) do
+            local l_status_3, l_result_3 = pcall(function() --[[ Line: 52 ]]
+                -- upvalues: l_InitClient_0 (ref), v42 (copy), v43 (copy)
+                l_InitClient_0:FireClient(v42, v43);
+            end);
+            if not l_status_3 then
+                warn(("InitClient failed (%s): %s"):format(v43, l_result_3));
+            end;
+            if l_status_3 and not table.find(v44.IsClientInit, v42) then
+                table.insert(v44.IsClientInit, v42);
+            end;
+        end;
+    end);
+end;
+v36.CreateEvent = function(v47) --[[ Line: 117 ]] --[[ Name: CreateEvent ]]
+    -- upvalues: v36 (copy), l_Events_0 (copy), l_Players_0 (copy), l_InitClient_0 (copy), l_Config_0 (copy), l_Actor_0 (copy), v34 (copy)
+    local v48 = false;
+    assert(type(v47) == "string", "CreateEvent expects string");
+    if v36.CreatedEvents[v47] then
+        return v36.CreatedEvents[v47];
+    else
+        local v49 = l_Events_0[v47];
+        if not v49 then
+            warn("Missing EventDef:", v47);
+            return nil;
+        else
+            if not v36.DidLoadServerUtils then
+                v36.LoadServerUtils();
+                v36.DidLoadServerUtils = true;
+            end;
+            local l_Inst_0 = script:WaitForChild("Inst");
+            local l_l_Inst_0_0 = l_Inst_0 --[[ copy: 3 -> 18 ]];
+            local l_status_4, l_result_4 = pcall(function() --[[ Line: 13 ]]
+                -- upvalues: l_l_Inst_0_0 (copy)
+                return require(l_l_Inst_0_0);
+            end);
+            local v54;
+            if l_status_4 then
+                v54 = l_result_4;
+            else
+                warn(("safeRequire failed for %s: %s"):format(tostring(l_Inst_0), (tostring(l_result_4))));
+                v54 = nil;
+            end;
+            l_Inst_0 = v54.new();
+            if not l_Inst_0 then
+                return nil;
+            else
+                l_Inst_0.EventName = v47;
+                l_Inst_0.PlayServer = v49.PlayServer;
+                l_Inst_0.PlayClient = v49.PlayClient;
+                l_Inst_0.RunTime = v49.RunTime or 0;
+                l_Inst_0.IsClientInit = {};
+                l_Inst_0.FinishedBinds = {};
+                if v49.InitServer and not l_Inst_0.IsServerInit then
+                    l_status_4, l_result_4 = pcall(function() --[[ Line: 151 ]]
+                        -- upvalues: v49 (copy)
+                        return require(v49.InitServer);
+                    end);
+                    if l_status_4 and l_result_4 and type(l_result_4.Init) == "function" then
+                        pcall(l_result_4.Init);
+                        l_Inst_0.IsServerInit = true;
+                    end;
+                end;
+                for _, v56 in ipairs(l_Players_0:GetPlayers()) do
+                    local l_status_5, l_result_5 = pcall(function() --[[ Line: 52 ]]
+                        -- upvalues: l_InitClient_0 (ref), v56 (copy), v47 (copy)
+                        l_InitClient_0:FireClient(v56, v47);
+                    end);
+                    if not l_status_5 then
+                        warn(("InitClient failed (%s): %s"):format(v47, l_result_5));
+                    end;
+                    if l_status_5 then
+                        table.insert(l_Inst_0.IsClientInit, v56);
+                    end;
+                end;
+                v36.InitClientOnJoin[v47] = l_Inst_0;
+                l_result_4 = l_Config_0.MapRoot;
+                local l_Part_1 = Instance.new("Part");
+                l_Part_1.Name = v47;
+                if l_result_4 then
+                    l_Part_1.CFrame = l_result_4;
+                end;
+                l_Part_1.Anchored = true;
+                l_Part_1.Size = Vector3.new(1, 1, 1, 0);
+                l_Part_1.CanCollide = false;
+                l_Part_1.CanQuery = false;
+                l_Part_1.CanTouch = false;
+                l_Part_1.Transparency = 1;
+                l_status_4 = l_Part_1;
+                l_status_4.Parent = l_Actor_0;
+                l_Inst_0.MapPositions = l_status_4;
+                l_result_4 = pairs;
+                l_Part_1 = v49.MapPositions or {};
+                for v60, v61 in l_result_4(l_Part_1) do
+                    local v62, v63, v64;
+                    if v61.Type == "Attachment" then
+                        v62 = v61.CFrame;
+                        v63 = Instance.new("Attachment");
+                        v63.Name = v60;
+                        if v62 then
+                            v63.CFrame = v62;
+                        end;
+                        v64 = v63;
+                        v48 = v64;
+                    end;
+                    if not v48 then
+                        v62 = v61.CFrame;
+                        v63 = Instance.new("Part");
+                        v63.Name = v60;
+                        if v62 then
+                            v63.CFrame = v62;
+                        end;
+                        v63.Anchored = true;
+                        v63.Size = Vector3.new(1, 1, 1, 0);
+                        v63.CanCollide = false;
+                        v63.CanQuery = false;
+                        v63.CanTouch = false;
+                        v63.Transparency = 1;
+                        v64 = v63;
+                    end;
+                    v48 = false;
+                    v64.Parent = l_status_4;
+                    v62 = pairs;
+                    v63 = v61.Descendants or {};
+                    for v65, v66 in v62(v63) do
+                        local l_Attachment_1 = Instance.new("Attachment");
+                        l_Attachment_1.Name = v65;
+                        if v66 then
+                            l_Attachment_1.CFrame = v66;
+                        end;
+                        l_Attachment_1.Parent = v64;
+                    end;
+                end;
+                l_Inst_0.PrePlay = function(v68) --[[ Line: 194 ]] --[[ Name: PrePlay ]]
+                    v68.DidPrePlay = true;
+                end;
+                l_Inst_0.Play = function(v69, v70) --[[ Line: 202 ]] --[[ Name: Play ]]
+                    -- upvalues: v36 (ref), v34 (ref)
+                    if not v69.DidPrePlay then
+                        v69:PrePlay();
+                    end;
+                    if v36.Playing then
+                        table.insert(v36.Queue, {
+                            Event = v69, 
+                            Info = v70
+                        });
+                        return;
+                    else
+                        if v70 and v70.RunTime then
+                            v69.RunTime = v70.RunTime;
+                        end;
+                        v69.IsPlaying = true;
+                        v36.Playing = v69;
+                        local l_status_6, l_result_6 = pcall(function() --[[ Line: 219 ]]
+                            -- upvalues: v69 (copy)
+                            return require(v69.PlayServer);
+                        end);
+                        if l_status_6 and l_result_6 and type(l_result_6.PlayEffect) == "function" then
+                            pcall(function() --[[ Line: 221 ]]
+                                -- upvalues: l_result_6 (copy), v70 (copy)
+                                l_result_6:PlayEffect(v70);
+                            end);
+                        end;
+                        v34(v69, v70);
+                        task.delay(v69.RunTime, function() --[[ Line: 226 ]]
+                            -- upvalues: v36 (ref), v69 (copy)
+                            if v36.Playing ~= v69 then
+                                return;
+                            else
+                                v69.IsPlaying = false;
+                                v36.Playing = nil;
+                                for _, v74 in ipairs(v69.FinishedBinds) do
+                                    pcall(v74);
+                                end;
+                                table.clear(v69.FinishedBinds);
+                                local v75 = table.remove(v36.Queue, 1);
+                                if v75 then
+                                    v75.Event:Play(v75.Info);
+                                end;
+                                return;
+                            end;
+                        end);
+                        return;
+                    end;
+                end;
+                v36.CreatedEvents[v47] = l_Inst_0;
+                return l_Inst_0;
+            end;
+        end;
+    end;
+end;
+v36.LoadUtils = function() --[[ Line: 252 ]] --[[ Name: LoadUtils ]]
+    -- upvalues: v36 (copy)
+    local l_Utils_0 = script:WaitForChild("Utils");
+    local l_CurrentCamera_0 = workspace.CurrentCamera;
+    for _, v79 in pairs(l_Utils_0.Client:GetChildren()) do
+        if v79.Name == "CameraShaker" then
+            local v80 = require(v79);
+            local v82 = v80.new(Enum.RenderPriority.Camera.Value, function(v81) --[[ Line: 258 ]]
+                -- upvalues: l_CurrentCamera_0 (copy)
+                l_CurrentCamera_0.CFrame = l_CurrentCamera_0.CFrame * v81;
+            end);
+            v82:Start();
+            v36.Utils.CameraShaker = {
+                mod = v80, 
+                inst = v82
+            };
+        elseif v79.Name == "Transitions" then
+            local v83 = require(v79);
+            v83:init();
+            v36.Utils[v79.Name] = v83;
+        elseif v79.Name == "Lightning" then
+            local v84 = require(v79);
+            v84:Init();
+            v36.Utils[v79.Name] = v84;
+        else
+            v36.Utils[v79.Name] = require(v79);
+        end;
+    end;
+end;
+v36.LoadServerUtils = function() --[[ Line: 277 ]] --[[ Name: LoadServerUtils ]]
+    -- upvalues: v36 (copy)
+    for _, v86 in ipairs(script.Utils.Server:GetChildren()) do
+        v36.Utils[v86.Name] = require(v86);
+    end;
+end;
+v36.DefaultLighting = l_Config_0.DefaultLighting;
+v36.Ocean = l_Config_0.Ocean;
+v36.Booths = l_Config_0.BoothFolder;
+return v36;

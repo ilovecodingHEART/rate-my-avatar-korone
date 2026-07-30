@@ -1,0 +1,96 @@
+-- Saved by UniversalSynSaveInstance (Join to Copy Games) https://discord.gg/wx4ThpAsmw
+
+local v0 = {};
+local l_Players_0 = game:GetService("Players");
+local l_TweenService_0 = game:GetService("TweenService");
+local l_CustomText_0 = l_Players_0.LocalPlayer.PlayerGui.ScreenGui.PDRewind.Frame.CustomText;
+local v4 = require(script.ConfettiModule);
+local function _(v5, v6, v7, v8) --[[ Line: 10 ]] --[[ Name: tween ]]
+    -- upvalues: l_TweenService_0 (copy)
+    local v9 = TweenInfo.new(v6, v8 or Enum.EasingStyle.Quint);
+    l_TweenService_0:Create(v5, v9, v7):Play();
+end;
+v0.display = function(v11) --[[ Line: 15 ]] --[[ Name: display ]]
+    -- upvalues: l_CustomText_0 (copy), l_TweenService_0 (copy), v4 (copy)
+    local v12 = false;
+    for _, v14 in l_CustomText_0:GetChildren() do
+        if v14:IsA("TextLabel") then
+            v12 = true;
+            spawn(function() --[[ Line: 20 ]]
+                -- upvalues: v14 (copy), l_TweenService_0 (ref)
+                local l_v14_0 = v14;
+                local v16 = {
+                    TextTransparency = 1
+                };
+                local v17 = TweenInfo.new(1, Enum.EasingStyle.Quint);
+                l_TweenService_0:Create(l_v14_0, v17, v16):Play();
+                task.wait(1);
+                v14:Destroy();
+            end);
+        end;
+    end;
+    if v12 then
+        task.wait(1);
+    end;
+    v4.create(script.Parent.Parent, script.PDCash, 2, 30, false);
+    local v18 = false;
+    for v19 in string.gmatch(v11, "%S+") do
+        local v20 = script.Word:Clone();
+        v20.TextTransparency = 1;
+        v20.Text = v19;
+        v20.Parent = l_CustomText_0;
+        v20.LayoutOrder = 1;
+        local v21 = {
+            TextTransparency = 0
+        };
+        local v22 = TweenInfo.new(2, Enum.EasingStyle.Quint);
+        l_TweenService_0:Create(v20, v22, v21):Play();
+        v21 = v20.UIPadding;
+        v22 = {
+            PaddingBottom = UDim.new(1, 5)
+        };
+        local v23 = TweenInfo.new(0.7, Enum.EasingStyle.Quint);
+        l_TweenService_0:Create(v21, v23, v22):Play();
+        v21, v22 = v19:gsub("\"", "");
+        if v22 == 1 then
+            v18 = not v18;
+        end;
+        v23 = v18 and Enum.FontStyle.Italic or Enum.FontStyle.Normal;
+        v20.FontFace = Font.fromName("Montserrat", Enum.FontWeight.Regular, v23);
+        if string.find(v19, "%%") or string.find(v19, "@") or string.find(v19, "\238\128\130") or tonumber((v19:gsub("[^%d%.]", ""))) ~= nil then
+            v20.FontFace = Font.fromName("Montserrat", Enum.FontWeight.ExtraBold, v23);
+            local v24 = v19:gsub("[^%d%.]", "");
+            local v25 = v19:match("([^%d%.]+)$") or "";
+            if v24 and tonumber(v24) then
+                local v26 = tonumber(v24);
+                local v27 = string.find(v19, "\238\128\130");
+                local v28 = #v24:match("^(%d+)");
+                local l_NumberValue_0 = Instance.new("NumberValue");
+                l_NumberValue_0.Value = 0;
+                local v30 = l_TweenService_0:Create(l_NumberValue_0, TweenInfo.new(3, Enum.EasingStyle.Linear), {
+                    Value = v26
+                });
+                l_NumberValue_0:GetPropertyChangedSignal("Value"):Connect(function() --[[ Line: 94 ]]
+                    -- upvalues: l_NumberValue_0 (copy), v28 (copy), v20 (copy), v27 (copy), v25 (copy)
+                    local l_Value_0 = l_NumberValue_0.Value;
+                    local v32 = string.format("%0" .. v28 .. "d", (math.floor(l_Value_0)));
+                    local _ = tostring(l_Value_0):match("%.(%d+)$") or "";
+                    local v34 = v32:reverse():gsub("(%d%d%d)", "%1,"):reverse():gsub("^,", "");
+                    v20.Text = v27 and "\238\128\130" .. v34 .. v25 or v34 .. v25;
+                end);
+                v30:Play();
+                v30.Completed:Wait();
+            end;
+            print(v19);
+        else
+            v20.FontFace = Font.fromName("Montserrat", Enum.FontWeight.Medium, v23);
+        end;
+        if string.find(v19, "%.") then
+            task.wait(0.75);
+        else
+            task.wait(0.15);
+        end;
+    end;
+    task.wait(2);
+end;
+return v0;

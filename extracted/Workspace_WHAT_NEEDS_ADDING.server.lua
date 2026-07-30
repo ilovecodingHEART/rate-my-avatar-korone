@@ -1,0 +1,18 @@
+-- WHAT NEEDS ADDING
+
+-- make lbs load when joining
+-- new pls donate booth unlocked
+-- fix large sign
+-- gifting ban message "user is banned for: [reasoning]"
+-- we also need a restore stats command cause if someone gets banned then make it so we can restore or reset stats stats
+-- fix settings
+-- fix tictactoe
+-- fix admin panel ban and kick
+-- add fast loading
+-- fix unlock
+-- playerlist kick
+-- add biplane for 5 donations
+-- you gain raised even if a person doesnt claim (fix this)
+-- add nameplates
+-- additem if u dont have gamepasses
+-- fix headtags

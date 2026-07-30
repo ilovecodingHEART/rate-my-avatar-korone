@@ -1,0 +1,1440 @@
+-- Saved by UniversalSynSaveInstance (Join to Copy Games) https://discord.gg/wx4ThpAsmw
+
+-- Decompiler will be improved VERY SOON!
+-- Decompiled with Konstant V2.1, a fast Luau decompiler made in Luau by plusgiant5 (https://discord.gg/brNTY8nX8t)
+-- Decompiled on 2025-08-24 05:01:33
+-- Luau version 6, Types version 3
+-- Time taken: 0.026828 seconds
+
+local Players_upvr = game:GetService("Players")
+local RunService_upvr = game:GetService("RunService")
+local Lighting_upvr = game:GetService("Lighting")
+local TweenService_upvr = game:GetService("TweenService")
+local PolicyService_upvr = game:GetService("PolicyService")
+local Parent = script.Parent
+local Assets_upvr = Parent:WaitForChild("Assets")
+local CameraShaker_upvr = require(Parent.CameraShaker)
+local var9_upvw = false
+local function _() -- Line 20, Named "canShowMerchAd"
+	--[[ Upvalues[2]:
+		[1]: PolicyService_upvr (readonly)
+		[2]: Players_upvr (readonly)
+	]]
+	local pcall_result1, pcall_result2_2 = pcall(function() -- Line 21
+		--[[ Upvalues[2]:
+			[1]: PolicyService_upvr (copied, readonly)
+			[2]: Players_upvr (copied, readonly)
+		]]
+		return PolicyService_upvr:GetPolicyInfoForPlayerAsync(Players_upvr.LocalPlayer)
+	end)
+	local var13
+	if not pcall_result1 then
+		var13 = warn
+		var13("[PolicyService] GetPolicyInfoForPlayerAsync failed: ", pcall_result2_2)
+		var13 = false
+		return var13
+	end
+	if pcall_result2_2.IsEligibleToPurchaseCommerceProduct ~= true then
+		var13 = false
+	else
+		var13 = true
+	end
+	return var13
+end
+local function LoadAnimations_upvr(arg1, arg2, arg3) -- Line 31, Named "LoadAnimations"
+	local module = {}
+	for _, v in pairs(arg2:GetChildren()) do
+		module[v.Name] = arg1.Animator:LoadAnimation(v)
+		if arg3 then
+			repeat
+				task.wait()
+			until 0 < module[v.Name].Length
+		end
+	end
+	warn("Rig animations loaded in "..(tick() - tick()).." seconds")
+	return module
+end
+local function Emit_upvr(arg1) -- Line 47, Named "Emit"
+	for _, v_2 in pairs(arg1:GetChildren()) do
+		if v_2:IsA("ParticleEmitter") then
+			v_2:Emit(v_2:GetAttribute("EmitCount"))
+		elseif v_2:IsA("Sound") then
+			v_2:Play()
+		end
+	end
+end
+local function Enable_upvr(arg1, arg2) -- Line 57, Named "Enable"
+	for _, v_3 in pairs(arg1:GetChildren()) do
+		if v_3:IsA("ParticleEmitter") or v_3:IsA("Trail") or v_3:IsA("Beam") then
+			v_3.Enabled = arg2
+		elseif v_3:IsA("Sound") then
+			if arg2 then
+				v_3:Play()
+			else
+				v_3:Stop()
+			end
+		end
+	end
+end
+local function _(arg1, arg2, arg3) -- Line 71, Named "EmitSound"
+	local clone_23_upvr = arg2:Clone()
+	clone_23_upvr.Parent = arg1
+	clone_23_upvr.Volume = arg3
+	clone_23_upvr:Play()
+	task.spawn(function() -- Line 77
+		--[[ Upvalues[1]:
+			[1]: clone_23_upvr (readonly)
+		]]
+		repeat
+			task.wait()
+		until 0 < clone_23_upvr.TimeLength
+		task.delay(clone_23_upvr.TimeLength, function() -- Line 80
+			--[[ Upvalues[1]:
+				[1]: clone_23_upvr (copied, readonly)
+			]]
+			clone_23_upvr:Destroy()
+		end)
+	end)
+end
+local function ToggleItem_upvr(arg1, arg2, arg3) -- Line 86, Named "ToggleItem"
+	-- KONSTANTERROR: [0] 1. Error Block 1 start (CF ANALYSIS FAILED)
+	local pairs_result1_3, pairs_result2_4, pairs_result3_9 = pairs(arg1:GetDescendants())
+	-- KONSTANTERROR: [0] 1. Error Block 1 end (CF ANALYSIS FAILED)
+	-- KONSTANTERROR: [68] 50. Error Block 12 start (CF ANALYSIS FAILED)
+	-- KONSTANTERROR: [68] 50. Error Block 12 end (CF ANALYSIS FAILED)
+	-- KONSTANTERROR: [7] 6. Error Block 20 start (CF ANALYSIS FAILED)
+	-- KONSTANTWARNING: Failed to evaluate expression, replaced with nil [68.8]
+	local function INLINED_2() -- Internal function, doesn't exist in bytecode
+		-- KONSTANTERROR: Expression was reused, decompilation is incorrect
+		return nil
+	end
+	if nil or INLINED_2() then
+		if arg2 then
+			if arg3 then
+				-- KONSTANTERROR: Expression was reused, decompilation is incorrect
+				if nil then
+					-- KONSTANTWARNING: GOTO [68] #50
+				end
+				-- KONSTANTWARNING: GOTO [68] #50
+			end
+		elseif arg3 then
+			-- KONSTANTERROR: Expression was reused, decompilation is incorrect
+			if nil then
+			end
+		end
+	end
+	-- KONSTANTERROR: [7] 6. Error Block 20 end (CF ANALYSIS FAILED)
+end
+local function ScaleModel_upvr(arg1, arg2, arg3) -- Line 108, Named "ScaleModel"
+	--[[ Upvalues[2]:
+		[1]: TweenService_upvr (readonly)
+		[2]: RunService_upvr (readonly)
+	]]
+	local NumberValue_upvr = Instance.new("NumberValue")
+	local tbl_4 = {}
+	tbl_4.Value = arg1
+	local any_Create_result1_3_upvr = TweenService_upvr:Create(NumberValue_upvr, arg2, tbl_4)
+	any_Create_result1_3_upvr:Play()
+	local any_Connect_result1_upvr_2 = RunService_upvr.RenderStepped:Connect(function() -- Line 117
+		--[[ Upvalues[2]:
+			[1]: arg3 (readonly)
+			[2]: NumberValue_upvr (readonly)
+		]]
+		arg3(NumberValue_upvr.Value)
+	end)
+	any_Create_result1_3_upvr.Completed:Once(function() -- Line 121
+		--[[ Upvalues[3]:
+			[1]: any_Connect_result1_upvr_2 (readonly)
+			[2]: any_Create_result1_3_upvr (readonly)
+			[3]: NumberValue_upvr (readonly)
+		]]
+		any_Connect_result1_upvr_2:Disconnect()
+		any_Create_result1_3_upvr:Destroy()
+		NumberValue_upvr:Destroy()
+	end)
+end
+local module_2_upvr = {}
+function module_2_upvr.Sequence0(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8) -- Line 131
+	--[[ Upvalues[9]:
+		[1]: ToggleItem_upvr (readonly)
+		[2]: var9_upvw (read and write)
+		[3]: Players_upvr (readonly)
+		[4]: Assets_upvr (readonly)
+		[5]: Emit_upvr (readonly)
+		[6]: TweenService_upvr (readonly)
+		[7]: ScaleModel_upvr (readonly)
+		[8]: Enable_upvr (readonly)
+		[9]: module_2_upvr (readonly)
+	]]
+	if not arg2 or not arg5 then
+	else
+		arg5.Rig.Sequence0:Play()
+		arg5.Rig.Sequence0:AdjustSpeed(0.85)
+		local tbl_3 = {}
+		table.insert(tbl_3, arg5.Rig.Sequence0:GetMarkerReachedSignal("Spawn"):Connect(function() -- Line 139
+			--[[ Upvalues[3]:
+				[1]: ToggleItem_upvr (copied, readonly)
+				[2]: arg2 (readonly)
+				[3]: var9_upvw (copied, read and write)
+			]]
+			ToggleItem_upvr(arg2, true)
+			var9_upvw = arg2.UpperTorso
+		end))
+		table.insert(tbl_3, arg5.Rig.Sequence0:GetMarkerReachedSignal("ReverbStep"):Connect(function() -- Line 145
+			--[[ Upvalues[3]:
+				[1]: arg6 (readonly)
+				[2]: Players_upvr (copied, readonly)
+				[3]: Assets_upvr (copied, readonly)
+			]]
+			arg6:ShakeOnce(0.35, 8, 0.05, 1.5)
+			local clone_7_upvr = Assets_upvr.Sound.ReverbFootstep:Clone()
+			clone_7_upvr.Parent = Players_upvr.LocalPlayer
+			clone_7_upvr.Volume = 0.05
+			clone_7_upvr:Play()
+			task.spawn(function() -- Line 77
+				--[[ Upvalues[1]:
+					[1]: clone_7_upvr (readonly)
+				]]
+				repeat
+					task.wait()
+				until 0 < clone_7_upvr.TimeLength
+				task.delay(clone_7_upvr.TimeLength, function() -- Line 80
+					--[[ Upvalues[1]:
+						[1]: clone_7_upvr (copied, readonly)
+					]]
+					clone_7_upvr:Destroy()
+				end)
+			end)
+		end))
+		local var53_upvw = 1
+		local var54_upvw = true
+		table.insert(tbl_3, arg5.Rig.Sequence0:GetMarkerReachedSignal("Step"):Connect(function() -- Line 154
+			--[[ Upvalues[7]:
+				[1]: arg6 (readonly)
+				[2]: var53_upvw (read and write)
+				[3]: Players_upvr (copied, readonly)
+				[4]: Assets_upvr (copied, readonly)
+				[5]: var54_upvw (read and write)
+				[6]: arg2 (readonly)
+				[7]: Emit_upvr (copied, readonly)
+			]]
+			arg6:ShakeOnce(var53_upvw / 2 * 0.35, var53_upvw / 2 * 8, 0.05, 1.1)
+			local clone_21_upvr = Assets_upvr.Sound.WaterFootstep:Clone()
+			clone_21_upvr.Parent = Players_upvr.LocalPlayer
+			clone_21_upvr.Volume = math.clamp(var53_upvw / 3, 0.025, 1.25)
+			clone_21_upvr:Play()
+			task.spawn(function() -- Line 77
+				--[[ Upvalues[1]:
+					[1]: clone_21_upvr (readonly)
+				]]
+				repeat
+					task.wait()
+				until 0 < clone_21_upvr.TimeLength
+				task.delay(clone_21_upvr.TimeLength, function() -- Line 80
+					--[[ Upvalues[1]:
+						[1]: clone_21_upvr (copied, readonly)
+					]]
+					clone_21_upvr:Destroy()
+				end)
+			end)
+			if var54_upvw then
+				clone_21_upvr = arg2.LeftFoot.WaterSplash.WorldCFrame
+				arg2.LeftFoot.WaterSplash.WorldCFrame = CFrame.new(clone_21_upvr.Position)
+				clone_21_upvr = arg2
+				Emit_upvr(clone_21_upvr.LeftFoot.WaterSplash)
+				var54_upvw = false
+			else
+				clone_21_upvr = arg2.RightFoot.WaterSplash.WorldCFrame
+				arg2.RightFoot.WaterSplash.WorldCFrame = CFrame.new(clone_21_upvr.Position)
+				clone_21_upvr = arg2
+				Emit_upvr(clone_21_upvr.RightFoot.WaterSplash)
+				var54_upvw = true
+			end
+			var53_upvw += 1
+		end))
+		table.insert(tbl_3, arg5.Rig.Sequence0:GetMarkerReachedSignal("Stare"):Connect(function() -- Line 171
+			--[[ Upvalues[4]:
+				[1]: Emit_upvr (copied, readonly)
+				[2]: arg2 (readonly)
+				[3]: Players_upvr (copied, readonly)
+				[4]: Assets_upvr (copied, readonly)
+			]]
+			Emit_upvr(arg2.Head.Star1)
+			local clone_upvr_3 = Assets_upvr.Sound.Twinkle:Clone()
+			clone_upvr_3.Parent = Players_upvr.LocalPlayer
+			clone_upvr_3.Volume = 1
+			clone_upvr_3:Play()
+			task.spawn(function() -- Line 77
+				--[[ Upvalues[1]:
+					[1]: clone_upvr_3 (readonly)
+				]]
+				repeat
+					task.wait()
+				until 0 < clone_upvr_3.TimeLength
+				task.delay(clone_upvr_3.TimeLength, function() -- Line 80
+					--[[ Upvalues[1]:
+						[1]: clone_upvr_3 (copied, readonly)
+					]]
+					clone_upvr_3:Destroy()
+				end)
+			end)
+		end))
+		local var62_upvw
+		table.insert(tbl_3, arg5.Rig.Sequence0:GetMarkerReachedSignal("Shovel"):Connect(function() -- Line 177
+			--[[ Upvalues[6]:
+				[1]: TweenService_upvr (copied, readonly)
+				[2]: arg2 (readonly)
+				[3]: var62_upvw (read and write)
+				[4]: Assets_upvr (copied, readonly)
+				[5]: arg7 (readonly)
+				[6]: Players_upvr (copied, readonly)
+			]]
+			TweenService_upvr:Create(arg2.HumanoidRootPart.Handle, TweenInfo.new(0.45, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {
+				C0 = CFrame.new(50, 25, 5) * arg2.HumanoidRootPart.Handle.C0.Rotation;
+			}):Play()
+			var62_upvw = Assets_upvr.Models.DirtPile:Clone()
+			var62_upvw.Parent = arg7.Debris
+			var62_upvw:ScaleTo(0.005)
+			var62_upvw:PivotTo(arg7.EventPositions.RigPositions.Digging.CFrame * CFrame.Angles((-math.pi/2), 0, 0))
+			local clone_15_upvr = Assets_upvr.Sound.ShovelEquipWoosh:Clone()
+			clone_15_upvr.Parent = Players_upvr.LocalPlayer
+			clone_15_upvr.Volume = 2
+			clone_15_upvr:Play()
+			task.spawn(function() -- Line 77
+				--[[ Upvalues[1]:
+					[1]: clone_15_upvr (readonly)
+				]]
+				repeat
+					task.wait()
+				until 0 < clone_15_upvr.TimeLength
+				task.delay(clone_15_upvr.TimeLength, function() -- Line 80
+					--[[ Upvalues[1]:
+						[1]: clone_15_upvr (copied, readonly)
+					]]
+					clone_15_upvr:Destroy()
+				end)
+			end)
+		end))
+		table.insert(tbl_3, arg5.Rig.Sequence0:GetMarkerReachedSignal("ShovelSwing"):Connect(function() -- Line 190
+			--[[ Upvalues[2]:
+				[1]: Players_upvr (copied, readonly)
+				[2]: Assets_upvr (copied, readonly)
+			]]
+			local clone_2_upvr = Assets_upvr.Sound.ShovelSwing:Clone()
+			clone_2_upvr.Parent = Players_upvr.LocalPlayer
+			clone_2_upvr.Volume = 1
+			clone_2_upvr:Play()
+			task.spawn(function() -- Line 77
+				--[[ Upvalues[1]:
+					[1]: clone_2_upvr (readonly)
+				]]
+				repeat
+					task.wait()
+				until 0 < clone_2_upvr.TimeLength
+				task.delay(clone_2_upvr.TimeLength, function() -- Line 80
+					--[[ Upvalues[1]:
+						[1]: clone_2_upvr (copied, readonly)
+					]]
+					clone_2_upvr:Destroy()
+				end)
+			end)
+		end))
+		local var72_upvw = 1
+		table.insert(tbl_3, arg5.Rig.Sequence0:GetMarkerReachedSignal("Dig"):Connect(function() -- Line 195
+			--[[ Upvalues[9]:
+				[1]: var62_upvw (read and write)
+				[2]: ScaleModel_upvr (copied, readonly)
+				[3]: Assets_upvr (copied, readonly)
+				[4]: arg7 (readonly)
+				[5]: Emit_upvr (copied, readonly)
+				[6]: arg2 (readonly)
+				[7]: var72_upvw (read and write)
+				[8]: Players_upvr (copied, readonly)
+				[9]: arg6 (readonly)
+			]]
+			if not var62_upvw then
+			else
+				local any_GetScale_result1_upvr_2 = var62_upvw:GetScale()
+				ScaleModel_upvr(4, TweenInfo.new(0.75, Enum.EasingStyle.Back, Enum.EasingDirection.Out), function(arg1_2) -- Line 199
+					--[[ Upvalues[2]:
+						[1]: var62_upvw (copied, read and write)
+						[2]: any_GetScale_result1_upvr_2 (readonly)
+					]]
+					var62_upvw:ScaleTo(any_GetScale_result1_upvr_2 + arg1_2)
+				end)
+				local clone_9 = Assets_upvr.Particles.SandParticles1:Clone()
+				clone_9:PivotTo(var62_upvw.Root.CFrame)
+				clone_9:ScaleTo(any_GetScale_result1_upvr_2 + 4)
+				clone_9.Parent = arg7.Debris
+				Emit_upvr(clone_9.SandParticles1.Main)
+				local any_GetScale_result1_upvr_3 = arg2.Shovel.Dirt:GetScale()
+				ScaleModel_upvr(math.clamp(var72_upvw * 32.5, 40, 70), TweenInfo.new(0.25, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), function(arg1_3) -- Line 211
+					--[[ Upvalues[2]:
+						[1]: arg2 (copied, readonly)
+						[2]: any_GetScale_result1_upvr_3 (readonly)
+					]]
+					arg2.Shovel.Dirt:ScaleTo(math.clamp(any_GetScale_result1_upvr_3 + arg1_3, 0.01, math.huge))
+				end)
+				local clone_3_upvr = Assets_upvr.Sound["ShovelImpact"..tostring(var72_upvw)]:Clone()
+				clone_3_upvr.Parent = Players_upvr.LocalPlayer
+				clone_3_upvr.Volume = 1
+				clone_3_upvr:Play()
+				task.spawn(function() -- Line 77
+					--[[ Upvalues[1]:
+						[1]: clone_3_upvr (readonly)
+					]]
+					repeat
+						task.wait()
+					until 0 < clone_3_upvr.TimeLength
+					task.delay(clone_3_upvr.TimeLength, function() -- Line 80
+						--[[ Upvalues[1]:
+							[1]: clone_3_upvr (copied, readonly)
+						]]
+						clone_3_upvr:Destroy()
+					end)
+				end)
+				clone_3_upvr = 0.6
+				arg6:ShakeOnce(clone_3_upvr, 2, 0.05, 1)
+				var72_upvw += 1
+			end
+		end))
+		table.insert(tbl_3, arg5.Rig.Sequence0:GetMarkerReachedSignal("ShovelSwingBack"):Connect(function() -- Line 221
+			--[[ Upvalues[6]:
+				[1]: arg2 (readonly)
+				[2]: ScaleModel_upvr (copied, readonly)
+				[3]: Emit_upvr (copied, readonly)
+				[4]: Players_upvr (copied, readonly)
+				[5]: Assets_upvr (copied, readonly)
+				[6]: var72_upvw (read and write)
+			]]
+			local any_GetScale_result1_upvr_6 = arg2.Shovel.Dirt:GetScale()
+			ScaleModel_upvr(any_GetScale_result1_upvr_6, TweenInfo.new(0.25, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), function(arg1_4) -- Line 223
+				--[[ Upvalues[2]:
+					[1]: arg2 (copied, readonly)
+					[2]: any_GetScale_result1_upvr_6 (readonly)
+				]]
+				arg2.Shovel.Dirt:ScaleTo(math.clamp(any_GetScale_result1_upvr_6 - arg1_4, 0.01, math.huge))
+			end)
+			Emit_upvr(arg2.Shovel.Shovel1.Dirt)
+			local clone_19_upvr = Assets_upvr.Sound["ShovelSwingTreasure"..tostring(var72_upvw)]:Clone()
+			clone_19_upvr.Parent = Players_upvr.LocalPlayer
+			clone_19_upvr.Volume = 1.65
+			clone_19_upvr:Play()
+			task.spawn(function() -- Line 77
+				--[[ Upvalues[1]:
+					[1]: clone_19_upvr (readonly)
+				]]
+				repeat
+					task.wait()
+				until 0 < clone_19_upvr.TimeLength
+				task.delay(clone_19_upvr.TimeLength, function() -- Line 80
+					--[[ Upvalues[1]:
+						[1]: clone_19_upvr (copied, readonly)
+					]]
+					clone_19_upvr:Destroy()
+				end)
+			end)
+		end))
+		table.insert(tbl_3, arg5.Rig.Sequence0:GetMarkerReachedSignal("ThrowShovel"):Connect(function() -- Line 231
+			--[[ Upvalues[2]:
+				[1]: Players_upvr (copied, readonly)
+				[2]: Assets_upvr (copied, readonly)
+			]]
+			local clone_16_upvr = Assets_upvr.Sound.ThrowShovel2:Clone()
+			clone_16_upvr.Parent = Players_upvr.LocalPlayer
+			clone_16_upvr.Volume = 1.65
+			clone_16_upvr:Play()
+			task.spawn(function() -- Line 77
+				--[[ Upvalues[1]:
+					[1]: clone_16_upvr (readonly)
+				]]
+				repeat
+					task.wait()
+				until 0 < clone_16_upvr.TimeLength
+				task.delay(clone_16_upvr.TimeLength, function() -- Line 80
+					--[[ Upvalues[1]:
+						[1]: clone_16_upvr (copied, readonly)
+					]]
+					clone_16_upvr:Destroy()
+				end)
+			end)
+		end))
+		table.insert(tbl_3, arg5.Rig.Sequence0:GetMarkerReachedSignal("ShovelLand"):Connect(function() -- Line 235
+			--[[ Upvalues[5]:
+				[1]: Emit_upvr (copied, readonly)
+				[2]: arg2 (readonly)
+				[3]: Players_upvr (copied, readonly)
+				[4]: Assets_upvr (copied, readonly)
+				[5]: arg6 (readonly)
+			]]
+			Emit_upvr(arg2.Shovel.Shovel1.Water1)
+			local clone_22_upvr = Assets_upvr.Sound.ThrowShovelLand:Clone()
+			clone_22_upvr.Parent = Players_upvr.LocalPlayer
+			clone_22_upvr.Volume = 1.65
+			clone_22_upvr:Play()
+			task.spawn(function() -- Line 77
+				--[[ Upvalues[1]:
+					[1]: clone_22_upvr (readonly)
+				]]
+				repeat
+					task.wait()
+				until 0 < clone_22_upvr.TimeLength
+				task.delay(clone_22_upvr.TimeLength, function() -- Line 80
+					--[[ Upvalues[1]:
+						[1]: clone_22_upvr (copied, readonly)
+					]]
+					clone_22_upvr:Destroy()
+				end)
+			end)
+			clone_22_upvr = 1
+			arg6:ShakeOnce(clone_22_upvr, 4, 0.05, 1)
+			function clone_22_upvr() -- Line 240
+				--[[ Upvalues[3]:
+					[1]: Players_upvr (copied, readonly)
+					[2]: Assets_upvr (copied, readonly)
+					[3]: arg6 (copied, readonly)
+				]]
+				local clone_20_upvr = Assets_upvr.Sound.RigFall:Clone()
+				clone_20_upvr.Parent = Players_upvr.LocalPlayer
+				clone_20_upvr.Volume = 1.65
+				clone_20_upvr:Play()
+				task.spawn(function() -- Line 77
+					--[[ Upvalues[1]:
+						[1]: clone_20_upvr (readonly)
+					]]
+					repeat
+						task.wait()
+					until 0 < clone_20_upvr.TimeLength
+					task.delay(clone_20_upvr.TimeLength, function() -- Line 80
+						--[[ Upvalues[1]:
+							[1]: clone_20_upvr (copied, readonly)
+						]]
+						clone_20_upvr:Destroy()
+					end)
+				end)
+				clone_20_upvr = 1.5
+				arg6:ShakeOnce(clone_20_upvr, 6, 0.05, 0.75)
+			end
+			task.delay(1.2, clone_22_upvr)
+		end))
+		table.insert(tbl_3, arg5.Rig.Sequence0:GetMarkerReachedSignal("HandsDown"):Connect(function() -- Line 246
+			--[[ Upvalues[5]:
+				[1]: var62_upvw (read and write)
+				[2]: ScaleModel_upvr (copied, readonly)
+				[3]: Assets_upvr (copied, readonly)
+				[4]: arg7 (readonly)
+				[5]: Enable_upvr (copied, readonly)
+			]]
+			if not var62_upvw then
+			else
+				local any_GetScale_result1_upvr_5 = var62_upvw:GetScale()
+				ScaleModel_upvr(1.3, TweenInfo.new(1.1, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), function(arg1_5) -- Line 250
+					--[[ Upvalues[2]:
+						[1]: var62_upvw (copied, read and write)
+						[2]: any_GetScale_result1_upvr_5 (readonly)
+					]]
+					var62_upvw:ScaleTo(any_GetScale_result1_upvr_5 + arg1_5)
+				end)
+				local clone_8_upvr = Assets_upvr.Particles.SandParticles2:Clone()
+				clone_8_upvr:PivotTo(var62_upvw.Root.CFrame)
+				clone_8_upvr:ScaleTo(6)
+				clone_8_upvr.Parent = arg7.Debris
+				Enable_upvr(clone_8_upvr.SandParticles2, true)
+				task.delay(1.1, function() -- Line 261
+					--[[ Upvalues[2]:
+						[1]: Enable_upvr (copied, readonly)
+						[2]: clone_8_upvr (readonly)
+					]]
+					Enable_upvr(clone_8_upvr.SandParticles2, false)
+				end)
+			end
+		end))
+		table.insert(tbl_3, arg5.Rig.Sequence0:GetMarkerReachedSignal("Hold"):Connect(function() -- Line 266
+			--[[ Upvalues[12]:
+				[1]: Assets_upvr (copied, readonly)
+				[2]: arg7 (readonly)
+				[3]: ScaleModel_upvr (copied, readonly)
+				[4]: TweenService_upvr (copied, readonly)
+				[5]: var9_upvw (copied, read and write)
+				[6]: Emit_upvr (copied, readonly)
+				[7]: Players_upvr (copied, readonly)
+				[8]: arg4 (readonly)
+				[9]: arg6 (readonly)
+				[10]: arg2 (readonly)
+				[11]: ToggleItem_upvr (copied, readonly)
+				[12]: Enable_upvr (copied, readonly)
+			]]
+			local clone_17_upvr = Assets_upvr.Models.PinkCrystal1:Clone()
+			clone_17_upvr:PivotTo(arg7.EventPositions.RigPositions.Digging.CFrame * CFrame.Angles((-math.pi/2), 0, 0))
+			clone_17_upvr.Parent = arg7.Debris
+			local any_GetScale_result1_upvr = clone_17_upvr:GetScale()
+			ScaleModel_upvr(20, TweenInfo.new(0.7, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), function(arg1_6) -- Line 272
+				--[[ Upvalues[2]:
+					[1]: clone_17_upvr (readonly)
+					[2]: any_GetScale_result1_upvr (readonly)
+				]]
+				clone_17_upvr:ScaleTo(any_GetScale_result1_upvr + arg1_6)
+			end)
+			TweenService_upvr:Create(clone_17_upvr.Root, TweenInfo.new(4, Enum.EasingStyle.Elastic, Enum.EasingDirection.Out), {
+				CFrame = arg7.EventPositions.RigPositions.Digging.CFrame * CFrame.new(0, 0, -135) * CFrame.Angles((-math.pi/2), 0, 0);
+			}):Play()
+			clone_17_upvr.Root.Ambient.MagicAmbience:Play()
+			var9_upvw = clone_17_upvr.Root
+			task.delay(1, function() -- Line 285
+				--[[ Upvalues[12]:
+					[1]: clone_17_upvr (readonly)
+					[2]: ScaleModel_upvr (copied, readonly)
+					[3]: Assets_upvr (copied, readonly)
+					[4]: arg7 (copied, readonly)
+					[5]: Emit_upvr (copied, readonly)
+					[6]: Players_upvr (copied, readonly)
+					[7]: arg4 (copied, readonly)
+					[8]: arg6 (copied, readonly)
+					[9]: var9_upvw (copied, read and write)
+					[10]: arg2 (copied, readonly)
+					[11]: ToggleItem_upvr (copied, readonly)
+					[12]: Enable_upvr (copied, readonly)
+				]]
+				local any_GetScale_result1_upvr_7 = clone_17_upvr:GetScale()
+				ScaleModel_upvr(any_GetScale_result1_upvr_7, TweenInfo.new(0.5, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), function(arg1_7) -- Line 287
+					--[[ Upvalues[2]:
+						[1]: clone_17_upvr (copied, readonly)
+						[2]: any_GetScale_result1_upvr_7 (readonly)
+					]]
+					clone_17_upvr:ScaleTo(math.clamp(any_GetScale_result1_upvr_7 - arg1_7, 0.1, math.huge))
+				end)
+				local clone_18 = Assets_upvr.Particles.CrystalExplode:Clone()
+				clone_18.Parent = arg7.Debris
+				clone_18:PivotTo(clone_17_upvr:GetPivot())
+				Emit_upvr(clone_18.CrystalExplode.Explode)
+				local clone_5_upvr = Assets_upvr.Sound.CrystalActivate:Clone()
+				clone_5_upvr.Parent = Players_upvr.LocalPlayer
+				clone_5_upvr.Volume = 1.65
+				clone_5_upvr:Play()
+				task.spawn(function() -- Line 77
+					--[[ Upvalues[1]:
+						[1]: clone_5_upvr (readonly)
+					]]
+					repeat
+						task.wait()
+					until 0 < clone_5_upvr.TimeLength
+					task.delay(clone_5_upvr.TimeLength, function() -- Line 80
+						--[[ Upvalues[1]:
+							[1]: clone_5_upvr (copied, readonly)
+						]]
+						clone_5_upvr:Destroy()
+					end)
+				end)
+				clone_5_upvr = arg4.C2
+				Emit_upvr(clone_5_upvr.Spawn)
+				clone_5_upvr = arg4.C3
+				Emit_upvr(clone_5_upvr.Spawn)
+				clone_5_upvr = clone_17_upvr.Root
+				clone_5_upvr.Ambient.MagicAmbience:Stop()
+				clone_5_upvr = 0.3
+				arg6:ShakeOnce(clone_5_upvr, 8, 0.05, 1)
+				var9_upvw = arg2.UpperTorso
+				function clone_5_upvr() -- Line 305
+					--[[ Upvalues[4]:
+						[1]: ToggleItem_upvr (copied, readonly)
+						[2]: arg4 (copied, readonly)
+						[3]: Players_upvr (copied, readonly)
+						[4]: Assets_upvr (copied, readonly)
+					]]
+					ToggleItem_upvr(arg4, true, true)
+					local clone_11_upvr = Assets_upvr.Sound.CrystalThrow:Clone()
+					clone_11_upvr.Parent = Players_upvr.LocalPlayer
+					clone_11_upvr.Volume = 1.65
+					clone_11_upvr:Play()
+					task.spawn(function() -- Line 77
+						--[[ Upvalues[1]:
+							[1]: clone_11_upvr (readonly)
+						]]
+						repeat
+							task.wait()
+						until 0 < clone_11_upvr.TimeLength
+						task.delay(clone_11_upvr.TimeLength, function() -- Line 80
+							--[[ Upvalues[1]:
+								[1]: clone_11_upvr (copied, readonly)
+							]]
+							clone_11_upvr:Destroy()
+						end)
+					end)
+				end
+				task.delay(0.075, clone_5_upvr)
+				clone_5_upvr = arg4.C2
+				clone_5_upvr = true
+				Enable_upvr(clone_5_upvr.Main, clone_5_upvr)
+				clone_5_upvr = arg4.C3
+				clone_5_upvr = true
+				Enable_upvr(clone_5_upvr.Main, clone_5_upvr)
+				clone_5_upvr = arg4
+				clone_5_upvr = true
+				Enable_upvr(clone_5_upvr.Crystal1, clone_5_upvr)
+				clone_5_upvr = arg4
+				clone_5_upvr = true
+				Enable_upvr(clone_5_upvr.Crystal2, clone_5_upvr)
+			end)
+		end))
+		table.insert(tbl_3, arg5.Rig.Sequence0:GetMarkerReachedSignal("CrystalLift"):Connect(function() -- Line 318
+			--[[ Upvalues[3]:
+				[1]: arg5 (readonly)
+				[2]: arg4 (readonly)
+				[3]: arg3 (readonly)
+			]]
+			arg5.Rig.Sequence0:Stop()
+			arg5.Rig.Sequence1:Play()
+			arg5.Rig.Sequence1:AdjustSpeed(0.85)
+			arg4:ScaleTo(58.596)
+			arg5.Crystals.Sequence1:Play()
+			arg5.Crystals.Sequence1:AdjustSpeed(0.85)
+			arg5.Nuke.Sequence1:Play()
+			arg3:ScaleTo(58.596)
+			arg5.Nuke.Sequence1:AdjustSpeed(0.85)
+		end))
+		table.insert(tbl_3, arg5.Rig.Sequence0.Stopped:Connect(function() -- Line 335
+			--[[ Upvalues[8]:
+				[1]: module_2_upvr (copied, readonly)
+				[2]: arg2 (readonly)
+				[3]: arg3 (readonly)
+				[4]: arg4 (readonly)
+				[5]: arg5 (readonly)
+				[6]: arg6 (readonly)
+				[7]: arg7 (readonly)
+				[8]: arg8 (readonly)
+			]]
+			print("Playing Seq1")
+			module_2_upvr:Sequence1(arg2, arg3, arg4, arg5, arg6, arg7, arg8)
+		end))
+		arg8.Seq0_Steps = tbl_3
+	end
+end
+local Rift_upvr = require(Parent.Rift)
+local Bezier_upvr = require(Parent.Bezier)
+local random_state_upvr = Random.new()
+function module_2_upvr.Sequence1(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8) -- Line 343
+	--[[ Upvalues[14]:
+		[1]: Enable_upvr (readonly)
+		[2]: var9_upvw (read and write)
+		[3]: ToggleItem_upvr (readonly)
+		[4]: Rift_upvr (readonly)
+		[5]: CameraShaker_upvr (readonly)
+		[6]: Assets_upvr (readonly)
+		[7]: Bezier_upvr (readonly)
+		[8]: random_state_upvr (readonly)
+		[9]: ScaleModel_upvr (readonly)
+		[10]: Emit_upvr (readonly)
+		[11]: Players_upvr (readonly)
+		[12]: TweenService_upvr (readonly)
+		[13]: Lighting_upvr (readonly)
+		[14]: PolicyService_upvr (readonly)
+	]]
+	local tbl = {}
+	arg5.Nuke.Sequence1:AdjustSpeed(0.6)
+	arg5.Rig.Sequence1:AdjustSpeed(0.6)
+	arg5.Crystals.Sequence1:AdjustSpeed(0.6)
+	print("Playing Nuke Anim")
+	table.insert(tbl, arg5.Crystals.Sequence1:GetMarkerReachedSignal("LaunchCrystals"):Connect(function() -- Line 356
+		--[[ Upvalues[5]:
+			[1]: Enable_upvr (copied, readonly)
+			[2]: arg4 (readonly)
+			[3]: arg6 (readonly)
+			[4]: var9_upvw (copied, read and write)
+			[5]: arg7 (readonly)
+		]]
+		Enable_upvr(arg4.C2.Trail, true)
+		Enable_upvr(arg4.C3.Trail, true)
+		arg6:ShakeOnce(0.5, 4, 0.05, 1)
+		var9_upvw = arg7.EventPositions.MapPositions.Rift_CenterMap
+	end))
+	table.insert(tbl, arg5.Crystals.Sequence1:GetMarkerReachedSignal("CrystalsCrash"):Connect(function() -- Line 364
+		--[[ Upvalues[3]:
+			[1]: Enable_upvr (copied, readonly)
+			[2]: arg4 (readonly)
+			[3]: ToggleItem_upvr (copied, readonly)
+		]]
+		Enable_upvr(arg4.C2.Trail, false)
+		Enable_upvr(arg4.C3.Trail, false)
+		Enable_upvr(arg4.C2.Main, false)
+		Enable_upvr(arg4.C3.Main, false)
+		Enable_upvr(arg4.Crystal1, false)
+		Enable_upvr(arg4.Crystal2, false)
+		ToggleItem_upvr(arg4, false, true)
+	end))
+	local var130_upvw
+	table.insert(tbl, arg5.Crystals.Sequence1:GetMarkerReachedSignal("CrystalRift"):Connect(function() -- Line 378
+		--[[ Upvalues[12]:
+			[1]: var130_upvw (read and write)
+			[2]: Rift_upvr (copied, readonly)
+			[3]: arg7 (readonly)
+			[4]: arg6 (readonly)
+			[5]: CameraShaker_upvr (copied, readonly)
+			[6]: arg5 (readonly)
+			[7]: Assets_upvr (copied, readonly)
+			[8]: Bezier_upvr (copied, readonly)
+			[9]: random_state_upvr (copied, readonly)
+			[10]: ScaleModel_upvr (copied, readonly)
+			[11]: Enable_upvr (copied, readonly)
+			[12]: Emit_upvr (copied, readonly)
+		]]
+		var130_upvw = Rift_upvr:Rift(arg7.EventPositions.MapPositions.Rift_CenterMap.CFrame, 1.8, Color3.fromRGB(255, 78, 146), {
+			AutoCloseRift = true;
+			AutoSlowBeams = true;
+		})
+		arg6:Shake(CameraShaker_upvr.Presets.Explosion)
+		arg5.Rig.Sequence1:AdjustSpeed(1.4)
+		arg5.Nuke.Sequence1:AdjustSpeed(1.4)
+		for _, v_4_upvr in pairs(arg7.EventPositions.MapPositions.Merch_LandPositions:GetChildren()) do
+			local clone_upvr_7 = Assets_upvr.Models.Merch:GetChildren()[math.random(1, #Assets_upvr.Models.Merch:GetChildren())]:Clone()
+			local clone_upvr_2 = Assets_upvr.Particles.OutRiftTrail:Clone()
+			clone_upvr_2.Parent = clone_upvr_7.PrimaryPart
+			clone_upvr_7:ScaleTo(0.01)
+			clone_upvr_7:PivotTo(arg7.EventPositions.MapPositions.Rift_CenterMap.CFrame)
+			clone_upvr_7.Parent = workspace
+			local Position = v_4_upvr.Position
+			local any_CreateCFrameTween_result1 = Bezier_upvr.new(arg7.EventPositions.MapPositions.Rift_CenterMap.Position, (arg7.EventPositions.MapPositions.Rift_CenterMap.Position + Position) / 2 + Vector3.new(0, random_state_upvr:NextNumber(150, 500)), Position):CreateCFrameTween(clone_upvr_7.PrimaryPart, {"CFrame"}, TweenInfo.new(1.35, Enum.EasingStyle.Sine, Enum.EasingDirection.Out))
+			any_CreateCFrameTween_result1:Play()
+			local any_GetScale_result1_upvr_4 = clone_upvr_7:GetScale()
+			ScaleModel_upvr(9.5, TweenInfo.new(0.5, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), function(arg1_8) -- Line 412
+				--[[ Upvalues[2]:
+					[1]: clone_upvr_7 (readonly)
+					[2]: any_GetScale_result1_upvr_4 (readonly)
+				]]
+				clone_upvr_7:ScaleTo(math.clamp(any_GetScale_result1_upvr_4 + arg1_8, 0.1, math.huge))
+			end)
+			Enable_upvr(clone_upvr_2, true)
+			any_CreateCFrameTween_result1.Completed:Once(function() -- Line 418
+				--[[ Upvalues[4]:
+					[1]: Enable_upvr (copied, readonly)
+					[2]: clone_upvr_2 (readonly)
+					[3]: Emit_upvr (copied, readonly)
+					[4]: v_4_upvr (readonly)
+				]]
+				Enable_upvr(clone_upvr_2, false)
+				Emit_upvr(v_4_upvr.Land)
+			end)
+			task.wait(0.09)
+		end
+	end))
+	local OutRiftTrail_upvr = arg3.RootPart.Bone.OutRiftTrail
+	table.insert(tbl, arg5.Nuke.Sequence1:GetMarkerReachedSignal("Rift"):Connect(function() -- Line 428
+		--[[ Upvalues[8]:
+			[1]: ToggleItem_upvr (copied, readonly)
+			[2]: arg3 (readonly)
+			[3]: arg5 (readonly)
+			[4]: Players_upvr (copied, readonly)
+			[5]: Assets_upvr (copied, readonly)
+			[6]: Enable_upvr (copied, readonly)
+			[7]: OutRiftTrail_upvr (readonly)
+			[8]: var9_upvw (copied, read and write)
+		]]
+		ToggleItem_upvr(arg3, true, false)
+		arg5.Rig.Sequence1:AdjustSpeed(0.85)
+		arg5.Nuke.Sequence1:AdjustSpeed(0.85)
+		local clone_upvr_6 = Assets_upvr.Sound.NukePopUp:Clone()
+		clone_upvr_6.Parent = Players_upvr.LocalPlayer
+		clone_upvr_6.Volume = 2.2
+		clone_upvr_6:Play()
+		task.spawn(function() -- Line 77
+			--[[ Upvalues[1]:
+				[1]: clone_upvr_6 (readonly)
+			]]
+			repeat
+				task.wait()
+			until 0 < clone_upvr_6.TimeLength
+			task.delay(clone_upvr_6.TimeLength, function() -- Line 80
+				--[[ Upvalues[1]:
+					[1]: clone_upvr_6 (copied, readonly)
+				]]
+				clone_upvr_6:Destroy()
+			end)
+		end)
+		function clone_upvr_6() -- Line 436
+			--[[ Upvalues[2]:
+				[1]: Players_upvr (copied, readonly)
+				[2]: Assets_upvr (copied, readonly)
+			]]
+			local clone_upvr = Assets_upvr.Sound.NukeFall:Clone()
+			clone_upvr.Parent = Players_upvr.LocalPlayer
+			clone_upvr.Volume = 2.25
+			clone_upvr:Play()
+			task.spawn(function() -- Line 77
+				--[[ Upvalues[1]:
+					[1]: clone_upvr (readonly)
+				]]
+				repeat
+					task.wait()
+				until 0 < clone_upvr.TimeLength
+				task.delay(clone_upvr.TimeLength, function() -- Line 80
+					--[[ Upvalues[1]:
+						[1]: clone_upvr (copied, readonly)
+					]]
+					clone_upvr:Destroy()
+				end)
+			end)
+		end
+		task.delay(0.75, clone_upvr_6)
+		clone_upvr_6 = arg3.RootPart.Bone
+		clone_upvr_6 = true
+		Enable_upvr(clone_upvr_6.Middle, clone_upvr_6)
+		clone_upvr_6 = true
+		Enable_upvr(OutRiftTrail_upvr, clone_upvr_6)
+		clone_upvr_6 = arg3.RootPart
+		var9_upvw = clone_upvr_6.Bone.Middle
+	end))
+	table.insert(tbl, arg5.Nuke.Sequence1:GetMarkerReachedSignal("Grab"):Connect(function() -- Line 447
+		--[[ Upvalues[6]:
+			[1]: Emit_upvr (copied, readonly)
+			[2]: arg3 (readonly)
+			[3]: Players_upvr (copied, readonly)
+			[4]: Assets_upvr (copied, readonly)
+			[5]: Enable_upvr (copied, readonly)
+			[6]: OutRiftTrail_upvr (readonly)
+		]]
+		Emit_upvr(arg3.RootPart.Bone.Grab)
+		local clone_upvr_5 = Assets_upvr.Sound.NukeLandHands:Clone()
+		clone_upvr_5.Parent = Players_upvr.LocalPlayer
+		clone_upvr_5.Volume = 1.65
+		clone_upvr_5:Play()
+		task.spawn(function() -- Line 77
+			--[[ Upvalues[1]:
+				[1]: clone_upvr_5 (readonly)
+			]]
+			repeat
+				task.wait()
+			until 0 < clone_upvr_5.TimeLength
+			task.delay(clone_upvr_5.TimeLength, function() -- Line 80
+				--[[ Upvalues[1]:
+					[1]: clone_upvr_5 (copied, readonly)
+				]]
+				clone_upvr_5:Destroy()
+			end)
+		end)
+		clone_upvr_5 = false
+		Enable_upvr(OutRiftTrail_upvr, clone_upvr_5)
+	end))
+	local var158_upvw
+	table.insert(tbl, arg5.Nuke.Sequence1:GetMarkerReachedSignal("Shake"):Connect(function() -- Line 454
+		--[[ Upvalues[7]:
+			[1]: Enable_upvr (copied, readonly)
+			[2]: arg3 (readonly)
+			[3]: var158_upvw (read and write)
+			[4]: TweenService_upvr (copied, readonly)
+			[5]: Players_upvr (copied, readonly)
+			[6]: Assets_upvr (copied, readonly)
+			[7]: arg6 (readonly)
+		]]
+		Enable_upvr(arg3.RootPart.Bone.Charge, true)
+		var158_upvw = Instance.new("Highlight")
+		var158_upvw.FillColor = Color3.fromRGB(255, 255, 255)
+		var158_upvw.OutlineColor = Color3.fromRGB(255, 255, 255)
+		var158_upvw.OutlineTransparency = 1
+		var158_upvw.FillTransparency = 1
+		var158_upvw.DepthMode = Enum.HighlightDepthMode.Occluded
+		var158_upvw.Parent = arg3
+		local any_Create_result1_upvr = TweenService_upvr:Create(var158_upvw, TweenInfo.new(3.25, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {
+			FillTransparency = 0;
+		})
+		any_Create_result1_upvr:Play()
+		any_Create_result1_upvr.Completed:Once(function() -- Line 471
+			--[[ Upvalues[1]:
+				[1]: any_Create_result1_upvr (readonly)
+			]]
+			any_Create_result1_upvr:Destroy()
+		end)
+		local clone_24_upvr = Assets_upvr.Sound.ShakeNuke:Clone()
+		clone_24_upvr.Parent = Players_upvr.LocalPlayer
+		clone_24_upvr.Volume = 1.65
+		clone_24_upvr:Play()
+		task.spawn(function() -- Line 77
+			--[[ Upvalues[1]:
+				[1]: clone_24_upvr (readonly)
+			]]
+			repeat
+				task.wait()
+			until 0 < clone_24_upvr.TimeLength
+			task.delay(clone_24_upvr.TimeLength, function() -- Line 80
+				--[[ Upvalues[1]:
+					[1]: clone_24_upvr (copied, readonly)
+				]]
+				clone_24_upvr:Destroy()
+			end)
+		end)
+		clone_24_upvr = 0.5
+		arg6:ShakeOnce(clone_24_upvr, 1.4, 0.05, 2.4)
+	end))
+	table.insert(tbl, arg5.Nuke.Sequence1:GetMarkerReachedSignal("SizeUp"):Connect(function() -- Line 477
+		--[[ Upvalues[6]:
+			[1]: var158_upvw (read and write)
+			[2]: Enable_upvr (copied, readonly)
+			[3]: arg3 (readonly)
+			[4]: Emit_upvr (copied, readonly)
+			[5]: arg6 (readonly)
+			[6]: TweenService_upvr (copied, readonly)
+		]]
+		if not var158_upvw then
+		else
+			Enable_upvr(arg3.RootPart.Bone.Charge, false)
+			Emit_upvr(arg3.RootPart.Bone.SizeUp)
+			arg6:ShakeOnce(0.4, 3, 0.05, 0.4)
+			local any_Create_result1_2_upvr = TweenService_upvr:Create(var158_upvw, TweenInfo.new(0.15, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {
+				FillTransparency = 1;
+			})
+			any_Create_result1_2_upvr:Play()
+			any_Create_result1_2_upvr.Completed:Once(function() -- Line 489
+				--[[ Upvalues[1]:
+					[1]: any_Create_result1_2_upvr (readonly)
+				]]
+				any_Create_result1_2_upvr:Destroy()
+			end)
+		end
+	end))
+	table.insert(tbl, arg5.Nuke.Sequence1:GetMarkerReachedSignal("Throttle"):Connect(function() -- Line 492
+		--[[ Upvalues[5]:
+			[1]: Enable_upvr (copied, readonly)
+			[2]: arg3 (readonly)
+			[3]: var9_upvw (copied, read and write)
+			[4]: arg2 (readonly)
+			[5]: arg6 (readonly)
+		]]
+		Enable_upvr(arg3.RootPart.Bone.Throttle, true)
+		var9_upvw = arg2.UpperTorso
+		arg6:ShakeOnce(0.2, 2.5, 0.05, 2)
+	end))
+	local var171_upvw = true
+	table.insert(tbl, arg5.Nuke.Sequence1:GetMarkerReachedSignal("Launch"):Connect(function() -- Line 499
+		--[[ Upvalues[7]:
+			[1]: Enable_upvr (copied, readonly)
+			[2]: arg3 (readonly)
+			[3]: Emit_upvr (copied, readonly)
+			[4]: arg6 (readonly)
+			[5]: TweenService_upvr (copied, readonly)
+			[6]: Lighting_upvr (copied, readonly)
+			[7]: var171_upvw (read and write)
+		]]
+		Enable_upvr(arg3.RootPart.Bone.Throttle, false)
+		Enable_upvr(arg3.RootPart.Bone.Throttle2, true)
+		Emit_upvr(arg3.RootPart.Bone.Launch)
+		arg6:ShakeOnce(0.3, 3.75, 0.05, 2)
+		local any_Create_result1_6_upvr = TweenService_upvr:Create(Lighting_upvr.Atmosphere, TweenInfo.new(3, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {
+			Offset = 0.1;
+			Density = 0.2;
+		})
+		any_Create_result1_6_upvr:Play()
+		any_Create_result1_6_upvr.Completed:Once(function() -- Line 512
+			--[[ Upvalues[1]:
+				[1]: any_Create_result1_6_upvr (readonly)
+			]]
+			any_Create_result1_6_upvr:Destroy()
+		end)
+		local function Force(arg1_9) -- Line 514
+			--[[ Upvalues[1]:
+				[1]: var171_upvw (copied, read and write)
+			]]
+			while var171_upvw do
+				arg1_9:Emit(1)
+				task.wait(1 / arg1_9.Rate)
+			end
+		end
+		for _, v_5 in pairs(arg3.RootPart.Bone.Throttle2.Force:GetChildren()) do
+			task.spawn(Force, v_5)
+		end
+	end))
+	table.insert(tbl, arg5.Nuke.Sequence1:GetMarkerReachedSignal("RiftIn"):Connect(function() -- Line 526
+		--[[ Upvalues[9]:
+			[1]: Enable_upvr (copied, readonly)
+			[2]: arg3 (readonly)
+			[3]: var171_upvw (read and write)
+			[4]: Rift_upvr (copied, readonly)
+			[5]: arg7 (readonly)
+			[6]: arg6 (readonly)
+			[7]: CameraShaker_upvr (copied, readonly)
+			[8]: var9_upvw (copied, read and write)
+			[9]: arg5 (readonly)
+		]]
+		Enable_upvr(arg3.RootPart.Bone.Throttle2, false)
+		var171_upvw = false
+		Rift_upvr:Rift(arg7.EventPositions.MapPositions.Rift_NukeIn.CFrame, 4, false, {
+			AutoCloseRift = true;
+			AutoSlowBeams = true;
+		})
+		arg6:Shake(CameraShaker_upvr.Presets.Explosion)
+		var9_upvw = arg7.EventPositions.MapPositions.Rift_NukeOut
+		arg5.Rig.Sequence1:AdjustSpeed(0.4)
+		arg5.Nuke.Sequence1:AdjustSpeed(0.4)
+	end))
+	table.insert(tbl, arg5.Nuke.Sequence1:GetMarkerReachedSignal("RiftOut"):Connect(function() -- Line 541
+		--[[ Upvalues[9]:
+			[1]: Enable_upvr (copied, readonly)
+			[2]: arg3 (readonly)
+			[3]: Rift_upvr (copied, readonly)
+			[4]: arg7 (readonly)
+			[5]: arg6 (readonly)
+			[6]: CameraShaker_upvr (copied, readonly)
+			[7]: arg5 (readonly)
+			[8]: Players_upvr (copied, readonly)
+			[9]: Assets_upvr (copied, readonly)
+		]]
+		Enable_upvr(arg3.RootPart.Bone.Throttle3, true)
+		Rift_upvr:Rift(arg7.EventPositions.MapPositions.Rift_NukeOut.CFrame, 5, false, {
+			AutoCloseRift = true;
+			AutoSlowBeams = true;
+		})
+		arg6:Shake(CameraShaker_upvr.Presets.Explosion)
+		Enable_upvr(arg3.RootPart.Bone.Wind.Particles, true)
+		arg5.Rig.Sequence1:AdjustSpeed(1.4)
+		arg5.Nuke.Sequence1:AdjustSpeed(1.4)
+		local clone_upvr_4 = Assets_upvr.Sound.Drop1:Clone()
+		clone_upvr_4.Parent = Players_upvr.LocalPlayer
+		clone_upvr_4.Volume = 1.75
+		clone_upvr_4:Play()
+		task.spawn(function() -- Line 77
+			--[[ Upvalues[1]:
+				[1]: clone_upvr_4 (readonly)
+			]]
+			repeat
+				task.wait()
+			until 0 < clone_upvr_4.TimeLength
+			task.delay(clone_upvr_4.TimeLength, function() -- Line 80
+				--[[ Upvalues[1]:
+					[1]: clone_upvr_4 (copied, readonly)
+				]]
+				clone_upvr_4:Destroy()
+			end)
+		end)
+		clone_upvr_4 = Assets_upvr.Sound
+		clone_upvr_4 = clone_upvr_4.Drop2:Clone()
+		local var190_upvr = clone_upvr_4
+		var190_upvr.Parent = Players_upvr.LocalPlayer
+		var190_upvr.Volume = 1.75
+		var190_upvr:Play()
+		task.spawn(function() -- Line 77
+			--[[ Upvalues[1]:
+				[1]: var190_upvr (readonly)
+			]]
+			repeat
+				task.wait()
+			until 0 < var190_upvr.TimeLength
+			task.delay(var190_upvr.TimeLength, function() -- Line 80
+				--[[ Upvalues[1]:
+					[1]: var190_upvr (copied, readonly)
+				]]
+				var190_upvr:Destroy()
+			end)
+		end)
+		var190_upvr = 1
+		arg6:ShakeOnce(var190_upvr, 5, 0.05, 1)
+	end))
+	table.insert(tbl, arg5.Nuke.Sequence1:GetMarkerReachedSignal("Land"):Connect(function() -- Line 561
+		--[[ Upvalues[10]:
+			[1]: Lighting_upvr (copied, readonly)
+			[2]: TweenService_upvr (copied, readonly)
+			[3]: arg6 (readonly)
+			[4]: arg8 (readonly)
+			[5]: arg7 (readonly)
+			[6]: Assets_upvr (copied, readonly)
+			[7]: Players_upvr (copied, readonly)
+			[8]: PolicyService_upvr (copied, readonly)
+			[9]: var9_upvw (copied, read and write)
+			[10]: arg3 (readonly)
+		]]
+		local ColorCorrectionEffect_upvr = Instance.new("ColorCorrectionEffect")
+		ColorCorrectionEffect_upvr.Parent = Lighting_upvr
+		local any_Create_result1_5_upvr = TweenService_upvr:Create(ColorCorrectionEffect_upvr, TweenInfo.new(0.5, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {
+			Brightness = 2;
+		})
+		any_Create_result1_5_upvr:Play()
+		any_Create_result1_5_upvr.Completed:Once(function() -- Line 571
+			--[[ Upvalues[10]:
+				[1]: any_Create_result1_5_upvr (readonly)
+				[2]: arg6 (copied, readonly)
+				[3]: TweenService_upvr (copied, readonly)
+				[4]: arg8 (copied, readonly)
+				[5]: Lighting_upvr (copied, readonly)
+				[6]: arg7 (copied, readonly)
+				[7]: Assets_upvr (copied, readonly)
+				[8]: Players_upvr (copied, readonly)
+				[9]: PolicyService_upvr (copied, readonly)
+				[10]: ColorCorrectionEffect_upvr (readonly)
+			]]
+			any_Create_result1_5_upvr:Destroy()
+			arg6:Stop()
+			local any_Create_result1_9_upvr = TweenService_upvr:Create(arg8.Music, TweenInfo.new(1, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {
+				Volume = 0;
+			})
+			any_Create_result1_9_upvr:Play()
+			any_Create_result1_9_upvr.Completed:Once(function() -- Line 579
+				--[[ Upvalues[2]:
+					[1]: any_Create_result1_9_upvr (readonly)
+					[2]: arg8 (copied, readonly)
+				]]
+				any_Create_result1_9_upvr:Destroy()
+				arg8.Music:Destroy()
+			end)
+			for i_6, v_6 in pairs(arg8.Lighting) do
+				Lighting_upvr[i_6] = v_6
+			end
+			for i_7, v_7 in pairs(arg8.Atmosphere) do
+				Lighting_upvr.Atmosphere[i_7] = v_7
+			end
+			for _, v_8 in pairs(arg8.Seq0_Steps) do
+				v_8:Disconnect()
+			end
+			for _, v_9 in pairs(arg8.Seq1_Steps) do
+				v_9:Disconnect()
+			end
+			for _, v_10 in pairs(arg7.Debris:GetChildren()) do
+				v_10:Destroy()
+			end
+			arg8.LerpCameraClose()
+			task.wait(2.5)
+			local clone_10_upvr = Assets_upvr.UI.Event:Clone()
+			clone_10_upvr.Parent = Players_upvr.LocalPlayer.PlayerGui
+			clone_10_upvr.VideoBack.VideoFrame:Play()
+			repeat
+				task.wait()
+			until 0 < clone_10_upvr.VideoBack.VideoFrame.TimeLength
+			task.delay(clone_10_upvr.VideoBack.VideoFrame.TimeLength, function() -- Line 613
+				--[[ Upvalues[4]:
+					[1]: clone_10_upvr (readonly)
+					[2]: TweenService_upvr (copied, readonly)
+					[3]: PolicyService_upvr (copied, readonly)
+					[4]: Players_upvr (copied, readonly)
+				]]
+				clone_10_upvr.VideoBack.VideoFrame.Visible = false
+				local any_Create_result1_8_upvr = TweenService_upvr:Create(clone_10_upvr.VideoBack, TweenInfo.new(1, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {
+					BackgroundTransparency = 1;
+				})
+				any_Create_result1_8_upvr:Play()
+				any_Create_result1_8_upvr.Completed:Once(function() -- Line 620
+					--[[ Upvalues[4]:
+						[1]: any_Create_result1_8_upvr (readonly)
+						[2]: clone_10_upvr (copied, readonly)
+						[3]: PolicyService_upvr (copied, readonly)
+						[4]: Players_upvr (copied, readonly)
+					]]
+					any_Create_result1_8_upvr:Destroy()
+					clone_10_upvr:Destroy()
+					task.spawn(function() -- Line 624
+						--[[ Upvalues[2]:
+							[1]: PolicyService_upvr (copied, readonly)
+							[2]: Players_upvr (copied, readonly)
+						]]
+						-- KONSTANTERROR: [0] 1. Error Block 14 start (CF ANALYSIS FAILED)
+						local pcall_result1_2, pcall_result2 = pcall(function() -- Line 21
+							--[[ Upvalues[2]:
+								[1]: PolicyService_upvr (copied, readonly)
+								[2]: Players_upvr (copied, readonly)
+							]]
+							return PolicyService_upvr:GetPolicyInfoForPlayerAsync(Players_upvr.LocalPlayer)
+						end)
+						local var235
+						if not pcall_result1_2 then
+							warn("[PolicyService] GetPolicyInfoForPlayerAsync failed: ", pcall_result2)
+							var235 = false
+							-- KONSTANTWARNING: GOTO [20] #17
+						end
+						-- KONSTANTERROR: [0] 1. Error Block 14 end (CF ANALYSIS FAILED)
+						-- KONSTANTERROR: [14] 13. Error Block 15 start (CF ANALYSIS FAILED)
+						if pcall_result2.IsEligibleToPurchaseCommerceProduct ~= true then
+							var235 = false
+						else
+							var235 = true
+						end
+						if var235 then
+							var235 = Players_upvr.LocalPlayer.PlayerGui:WaitForChild("ScreenGui").MerchAd
+							var235.Visible = true
+						end
+						-- KONSTANTERROR: [14] 13. Error Block 15 end (CF ANALYSIS FAILED)
+					end)
+				end)
+			end)
+			ColorCorrectionEffect_upvr:Destroy()
+		end)
+		var9_upvw = arg3.RootPart.Bone
+		local clone_6_upvr = Assets_upvr.Sound.NukeLand:Clone()
+		clone_6_upvr.Parent = Players_upvr.LocalPlayer
+		clone_6_upvr.Volume = 1
+		clone_6_upvr:Play()
+		task.spawn(function() -- Line 77
+			--[[ Upvalues[1]:
+				[1]: clone_6_upvr (readonly)
+			]]
+			repeat
+				task.wait()
+			until 0 < clone_6_upvr.TimeLength
+			task.delay(clone_6_upvr.TimeLength, function() -- Line 80
+				--[[ Upvalues[1]:
+					[1]: clone_6_upvr (copied, readonly)
+				]]
+				clone_6_upvr:Destroy()
+			end)
+		end)
+	end))
+	arg8.Seq1_Steps = tbl
+end
+function module_2_upvr.PlayEffect(arg1) -- Line 643
+	--[[ Upvalues[10]:
+		[1]: Players_upvr (readonly)
+		[2]: CameraShaker_upvr (readonly)
+		[3]: RunService_upvr (readonly)
+		[4]: var9_upvw (read and write)
+		[5]: Assets_upvr (readonly)
+		[6]: ToggleItem_upvr (readonly)
+		[7]: LoadAnimations_upvr (readonly)
+		[8]: TweenService_upvr (readonly)
+		[9]: Lighting_upvr (readonly)
+		[10]: module_2_upvr (readonly)
+	]]
+	local CurrentCamera_upvr = workspace.CurrentCamera
+	local any_new_result1 = CameraShaker_upvr.new(Enum.RenderPriority.Camera.Value, function(arg1_10) -- Line 647
+		--[[ Upvalues[1]:
+			[1]: CurrentCamera_upvr (readonly)
+		]]
+		CurrentCamera_upvr.CFrame *= arg1_10
+	end)
+	local var242_upvw = false
+	any_new_result1:Start()
+	local Event = workspace:WaitForChild("Event")
+	if not Event then
+	else
+		local EventPositions = Event:WaitForChild("EventPositions")
+		if not EventPositions then return end
+		local RigPositions = EventPositions:WaitForChild("RigPositions")
+		if not RigPositions then return end
+		local clone_14_upvr = Assets_upvr.Sound.Summon:Clone()
+		clone_14_upvr.Parent = Players_upvr.LocalPlayer
+		clone_14_upvr.Volume = 5
+		clone_14_upvr:Play()
+		task.spawn(function() -- Line 77
+			--[[ Upvalues[1]:
+				[1]: clone_14_upvr (readonly)
+			]]
+			repeat
+				task.wait()
+			until 0 < clone_14_upvr.TimeLength
+			task.delay(clone_14_upvr.TimeLength, function() -- Line 80
+				--[[ Upvalues[1]:
+					[1]: clone_14_upvr (copied, readonly)
+				]]
+				clone_14_upvr:Destroy()
+			end)
+		end)
+		clone_14_upvr = Assets_upvr
+		local clone_13 = clone_14_upvr.Sound.Music1:Clone()
+		clone_13.Parent = Players_upvr.LocalPlayer
+		clone_13:Play()
+		clone_14_upvr = Assets_upvr.Models
+		local clone = clone_14_upvr.haz3mn:Clone()
+		clone_14_upvr = clone:PivotTo
+		clone_14_upvr(RigPositions.Sequence0.CFrame)
+		clone_14_upvr = ToggleItem_upvr
+		clone_14_upvr(clone, false)
+		clone_14_upvr = Event.Debris
+		clone.Parent = clone_14_upvr
+		clone_14_upvr = clone:WaitForChild("Humanoid")
+		local var253 = clone_14_upvr
+		if not var253 then return end
+		local clone_12 = Assets_upvr.Models.Nuke:Clone()
+		clone_12:PivotTo(RigPositions.NukeRoot.CFrame)
+		ToggleItem_upvr(clone_12, false)
+		clone_12.Parent = Event.Debris
+		local clone_4 = Assets_upvr.Models.Crystal1:Clone()
+		clone_4:PivotTo(RigPositions.CrystalRoot.CFrame)
+		ToggleItem_upvr(clone_4, false, true)
+		clone_4.Parent = Event.Debris
+		local clone_upvr_8 = Assets_upvr.UI.HoldToFocus:Clone()
+		clone_upvr_8.Parent = Players_upvr.LocalPlayer.PlayerGui
+		local any_Create_result1_7_upvr = TweenService_upvr:Create(clone_upvr_8.Base, TweenInfo.new(1, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {
+			GroupTransparency = 0;
+		})
+		any_Create_result1_7_upvr:Play()
+		any_Create_result1_7_upvr.Completed:Once(function() -- Line 724
+			--[[ Upvalues[1]:
+				[1]: any_Create_result1_7_upvr (readonly)
+			]]
+			any_Create_result1_7_upvr:Destroy()
+		end)
+		local any_Create_result1_4 = TweenService_upvr:Create(Lighting_upvr, TweenInfo.new(6, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {
+			ClockTime = 18.8;
+		})
+		local any_Create_result1_10 = TweenService_upvr:Create(Lighting_upvr.Atmosphere, TweenInfo.new(6, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {
+			Offset = 0.1;
+			Density = 0.55;
+			Haze = 0.23;
+		})
+		local any_Create_result1 = TweenService_upvr:Create(Lighting_upvr.Atmosphere, TweenInfo.new(8, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {
+			Offset = 0.1;
+			Density = 0.3;
+		})
+		any_Create_result1_4:Play()
+		task.wait(any_Create_result1_4.TweenInfo.Time / 2)
+		Lighting_upvr.Atmosphere.Color = Color3.fromRGB(99, 226, 255)
+		any_Create_result1_10:Play()
+		task.wait(any_Create_result1_10.TweenInfo.Time)
+		any_Create_result1:Play()
+		clone:ScaleTo(58.596)
+		local tbl_2 = {
+			Lighting = {
+				ClockTime = Lighting_upvr.ClockTime;
+			};
+			Atmosphere = {
+				Offset = Lighting_upvr.Atmosphere.Offset;
+				Density = Lighting_upvr.Atmosphere.Density;
+				Haze = Lighting_upvr.Atmosphere.Haze;
+				Color = Lighting_upvr.Atmosphere.Color;
+			};
+			Music = clone_13;
+		}
+		local any_Connect_result1_upvr = RunService_upvr.RenderStepped:Connect(function(arg1_11) -- Line 652
+			--[[ Upvalues[3]:
+				[1]: var9_upvw (copied, read and write)
+				[2]: var242_upvw (read and write)
+				[3]: CurrentCamera_upvr (readonly)
+			]]
+			if var9_upvw and var242_upvw then
+			else
+				return
+			end
+			local var244
+			if var9_upvw:IsA("Attachment") then
+				var244 = var9_upvw.WorldPosition
+			else
+				var244 = var9_upvw.Position
+			end
+			CurrentCamera_upvr.CFrame = CurrentCamera_upvr.CFrame:Lerp(CFrame.lookAt(CurrentCamera_upvr.CFrame.Position, var244), arg1_11 / 1)
+		end)
+		local any_Connect_result1_upvr_3 = clone_upvr_8.Base.Toggle.MouseButton1Click:Connect(function() -- Line 708
+			--[[ Upvalues[2]:
+				[1]: var242_upvw (read and write)
+				[2]: clone_upvr_8 (readonly)
+			]]
+			if var242_upvw then
+				var242_upvw = false
+				clone_upvr_8.Base.Toggle.Text = "Toggle To Focus: OFF"
+			else
+				var242_upvw = true
+				clone_upvr_8.Base.Toggle.Text = "Toggle To Focus: ON"
+			end
+		end)
+		function tbl_2.LerpCameraClose() -- Line 778
+			--[[ Upvalues[3]:
+				[1]: any_Connect_result1_upvr (readonly)
+				[2]: any_Connect_result1_upvr_3 (readonly)
+				[3]: clone_upvr_8 (readonly)
+			]]
+			any_Connect_result1_upvr:Disconnect()
+			any_Connect_result1_upvr_3:Disconnect()
+			clone_upvr_8:Destroy()
+		end
+		module_2_upvr:Sequence0(clone, clone_12, clone_4, {
+			Rig = LoadAnimations_upvr(var253, Assets_upvr.Animations.Rig, true);
+			Nuke = LoadAnimations_upvr(clone_12.AnimationController, Assets_upvr.Animations.Nuke, false);
+			Crystals = LoadAnimations_upvr(clone_4.AnimationController, Assets_upvr.Animations.Crystals, false);
+		}, any_new_result1, Event, tbl_2)
+		any_Create_result1_4:Destroy()
+		any_Create_result1_10:Destroy()
+		any_Create_result1:Destroy()
+	end
+end
+return module_2_upvr

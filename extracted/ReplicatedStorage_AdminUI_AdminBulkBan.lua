@@ -1,0 +1,302 @@
+-- Saved by UniversalSynSaveInstance (Join to Copy Games) https://discord.gg/wx4ThpAsmw
+
+local l_ReplicatedStorage_0 = game:GetService("ReplicatedStorage");
+local _ = game:GetService("UserService");
+local _ = game:GetService("Players");
+local _ = require(l_ReplicatedStorage_0.Packages.Promise);
+local v4 = require(l_ReplicatedStorage_0.Packages.Fusion);
+local _ = require(l_ReplicatedStorage_0.FeaturePlaces);
+local v6 = require(l_ReplicatedStorage_0.AdminUI.Theme);
+local v7 = require(script.InlineButton);
+local v8 = require(script.InlineTextBox);
+local function v15(v9) --[[ Line: 15 ]] --[[ Name: UsernamesBox ]]
+    local v10 = v4.State(false);
+    local v11 = v4.Computed(function() --[[ Line: 17 ]]
+        if v9.HighlightEmptyError and v9.HighlightEmptyError:get() then
+            return v6.InlineTextBoxPlaceholderEmptyError;
+        else
+            return v6.InlineTextBoxPlaceholder;
+        end;
+    end);
+    local v12 = "";
+    return v4.New("TextBox")({
+        Name = v9.Name, 
+        AutomaticSize = v4.Computed(function() --[[ Line: 25 ]]
+            if v10:get() then
+                return Enum.AutomaticSize.Y;
+            else
+                return Enum.AutomaticSize.None;
+            end;
+        end), 
+        Size = UDim2.fromScale(1, 0) + UDim2.fromOffset(0, 34), 
+        BackgroundColor3 = v6.InlineTextBoxBackground, 
+        PlaceholderText = v9.PlaceholderText, 
+        PlaceholderColor3 = v11, 
+        TextEditable = v9.TextEditable, 
+        TextTruncate = Enum.TextTruncate.AtEnd, 
+        Text = v9.Text, 
+        TextColor3 = v6.InlineTextBoxText, 
+        TextXAlignment = Enum.TextXAlignment.Left, 
+        TextSize = 14, 
+        TextWrapped = true, 
+        Font = Enum.Font.Gotham, 
+        Visible = v9.Visible, 
+        [v4.OnChange("Text")] = function(v13) --[[ Line: 43 ]]
+            v12 = v13;
+        end, 
+        [v4.OnEvent("Focused")] = function() --[[ Line: 46 ]]
+            v10:set(true);
+        end, 
+        [v4.OnEvent("FocusLost")] = function(v14) --[[ Line: 49 ]]
+            v10:set(false);
+            if v14 then
+                v9.OnTextEntered(v12);
+            end;
+        end, 
+        [v4.OnChange("Text")] = v9.TextChanged, 
+        [v4.Children] = {
+            v4.New("UICorner")({
+                CornerRadius = UDim.new(0, 5)
+            }), 
+            v4.New("UIPadding")({
+                PaddingLeft = UDim.new(0, 18), 
+                PaddingRight = UDim.new(0, 18), 
+                PaddingTop = UDim.new(0, 10), 
+                PaddingBottom = UDim.new(0, 10)
+            }), 
+            v9[v4.Children]
+        }
+    });
+end;
+local function v18(v16) --[[ Line: 69 ]] --[[ Name: BanButton ]]
+    local v17 = v4.State("None");
+    return v7({
+        Name = "BanButton", 
+        GuiButtonState = v17, 
+        Color = v4.Computed(function() --[[ Line: 74 ]]
+            if v17:get() == "Pressing" then
+                return v6.BanButtonPressing;
+            elseif v17:get() == "Hovering" then
+                return v6.BanButtonHovering;
+            else
+                return v6.BanButtonBackground;
+            end;
+        end), 
+        Text = "Ban", 
+        Visible = v16.Visible, 
+        OnActivated = v16.OnActivated
+    });
+end;
+local function v21(v19) --[[ Line: 89 ]] --[[ Name: CancelButton ]]
+    local v20 = v4.State("None");
+    return v7({
+        Name = "CancelButton", 
+        GuiButtonState = v20, 
+        Color = v4.Computed(function() --[[ Line: 94 ]]
+            if v20:get() == "Pressing" then
+                return v6.KickButtonPressing;
+            elseif v20:get() == "Hovering" then
+                return v6.KickButtonHovering;
+            else
+                return v6.KickButtonBackground;
+            end;
+        end), 
+        Text = "Cancel", 
+        Visible = v19.Visible, 
+        OnActivated = v19.OnActivated
+    });
+end;
+local function _(v22) --[[ Line: 109 ]] --[[ Name: RefNew ]]
+    return function(v23) --[[ Line: 110 ]]
+        return function(v24) --[[ Line: 111 ]]
+            local v25 = v4.New(v23)(v24);
+            v22:set(v25);
+            return v25;
+        end;
+    end;
+end;
+return function(v27) --[[ Line: 121 ]]
+    local v28 = v4.State(nil);
+    local v29 = v4.State(table.concat({
+        "Initializing protocol buffers", 
+        "Expanding scope tensioners", 
+        "Connected to Quataun global satellite network", 
+		"PLS DONATE Mass Punishment Enforcer initialized"
+    }, "\n"));
+    local function _(v30) --[[ Line: 134 ]] --[[ Name: addLog ]]
+        v29:set(v29:get() .. "\n" .. v30);
+    end;
+    local v32 = v4.State(nil);
+    local v33 = v4.State(nil);
+    local v34 = v4.State("");
+    local v35 = v4.State(0);
+    local v36 = v4.State(0);
+    local v37 = v4.State(false);
+    local v38 = "";
+    return v4.New("Frame")({
+        Name = "AdminPanel", 
+        AnchorPoint = Vector2.new(0.5, 0.5), 
+        Position = UDim2.fromScale(0.5, 0.45), 
+        Size = UDim2.new(0.95, 0, 0, 450), 
+        BackgroundColor3 = v6.Background, 
+        Visible = v27.Visible, 
+        [v4.Children] = {
+            v4.New("UICorner")({
+                CornerRadius = UDim.new(0, 10)
+            }), 
+            v4.New("UIPadding")({
+                PaddingTop = UDim.new(0, 20)
+            }), 
+            v4.New("UISizeConstraint")({
+                MaxSize = Vector2.new(450, 1e999)
+            }), 
+            (function(v39) --[[ Line: 110 ]]
+                return function(v40) --[[ Line: 111 ]]
+                    local v41 = v4.New(v39)(v40);
+                    v32:set(v41);
+                    return v41;
+                end;
+            end)("ScrollingFrame")({
+                Name = "Logs", 
+                ScrollingDirection = Enum.ScrollingDirection.Y, 
+                AutomaticCanvasSize = Enum.AutomaticSize.Y, 
+                ScrollBarThickness = v6.ScrollBarThickness, 
+                ScrollBarImageColor3 = v6.ScrollBar, 
+                CanvasSize = UDim2.new(), 
+                BackgroundTransparency = 1, 
+                Size = v4.Computed(function() --[[ Line: 168 ]]
+                    return UDim2.new(1, -1, 1, -v35:get() - 12);
+                end), 
+                [v4.Children] = {
+                    v4.New("UIPadding")({
+                        PaddingLeft = UDim.new(0, 24), 
+                        PaddingRight = UDim.new(0, 24)
+                    }), 
+                    v4.New("TextBox")({
+                        Text = v29, 
+                        TextEditable = false, 
+                        TextWrapped = true, 
+                        Position = UDim2.fromScale(0.5, 0), 
+                        AnchorPoint = Vector2.new(0.5, 0), 
+                        Size = v4.Computed(function() --[[ Line: 183 ]]
+                            local v42 = UDim2.fromScale(1, 0) - UDim2.fromOffset(48, 0);
+                            local l_GetTextBoundsParams_0 = Instance.new("GetTextBoundsParams");
+                            l_GetTextBoundsParams_0.Text = v29:get();
+                            l_GetTextBoundsParams_0.Font = Font.fromEnum(Enum.Font.RobotoMono);
+                            l_GetTextBoundsParams_0.Size = 20;
+                            l_GetTextBoundsParams_0.Width = v36:get();
+                            l_GetTextBoundsParams_0.Width = l_GetTextBoundsParams_0.Width - 36;
+                            local l_TextBoundsAsync_0 = game:GetService("TextService"):GetTextBoundsAsync(l_GetTextBoundsParams_0);
+                            task.spawn(function() --[[ Line: 192 ]]
+                                task.wait();
+                                local v45 = v32:get();
+                                v45.CanvasPosition = Vector2.new(0, v45.AbsoluteCanvasSize.Y - v45.AbsoluteWindowSize.Y);
+                            end);
+                            return v42 + UDim2.fromOffset(0, l_TextBoundsAsync_0.Y + 20);
+                        end), 
+                        BackgroundColor3 = v6.AdminLog, 
+                        TextColor3 = v6.AdminLogText, 
+                        Font = Enum.Font.RobotoMono, 
+                        TextSize = 20, 
+                        TextXAlignment = Enum.TextXAlignment.Left, 
+                        TextYAlignment = Enum.TextYAlignment.Bottom, 
+                        [v4.OnChange("AbsoluteSize")] = function(v46) --[[ Line: 205 ]]
+                            v36:set(v46.X);
+                        end, 
+                        [v4.Children] = {
+                            v4.New("UIPadding")({
+                                PaddingLeft = UDim.new(0, 12), 
+                                PaddingRight = UDim.new(0, 24), 
+                                PaddingTop = UDim.new(0, 8), 
+                                PaddingBottom = UDim.new(0, 12)
+                            })
+                        }
+                    })
+                }
+            }), 
+            v4.New("Frame")({
+                Name = "Bottom", 
+                AutomaticSize = Enum.AutomaticSize.Y, 
+                AnchorPoint = Vector2.new(0, 1), 
+                Position = UDim2.fromScale(0, 1), 
+                Size = UDim2.fromScale(1, 0), 
+                BackgroundColor3 = v6.Background, 
+                [v4.OnChange("AbsoluteSize")] = function(v47) --[[ Line: 226 ]]
+                    v35:set(v47.Y);
+                end, 
+                [v4.Children] = {
+                    v4.New("UICorner")({
+                        CornerRadius = UDim.new(0, 10)
+                    }), 
+                    v4.New("UIListLayout")({
+                        SortOrder = Enum.SortOrder.LayoutOrder, 
+                        Padding = UDim.new(0, 6)
+                    }), 
+                    v4.New("UIPadding")({
+                        PaddingBottom = UDim.new(0, 20), 
+                        PaddingLeft = UDim.new(0, 24), 
+                        PaddingRight = UDim.new(0, 24)
+                    }), 
+                    v15({
+                        Name = "Usernames", 
+                        PlaceholderText = "Comma seperated usernames", 
+                        TextChanged = function(v48) --[[ Line: 244 ]] --[[ Name: TextChanged ]]
+                            v34:set(v48);
+                        end
+                    }), 
+                    v8({
+                        Name = "BanReason", 
+                        PlaceholderText = v4.Computed(function() --[[ Line: 250 ]]
+                            if v37:get() then
+                                return "Ban Reason (required)";
+                            else
+                                return "Ban Reason";
+                            end;
+                        end), 
+                        HighlightEmptyError = v37, 
+                        Ref = v33, 
+                        TextChanged = function(v49) --[[ Line: 255 ]] --[[ Name: TextChanged ]]
+                            v37:set(false);
+                            v38 = v49;
+                        end
+                    }), 
+                    v18({
+                        Visible = v4.Computed(function() --[[ Line: 261 ]]
+                            return v28:get() == nil;
+                        end), 
+                        OnActivated = function() --[[ Line: 264 ]] --[[ Name: OnActivated ]]
+                            if v38 == "" then
+                                v33:get():CaptureFocus();
+                                v37:set(true);
+                                return;
+                            else
+                                local v50 = v34:get();
+                                v28:set(task.defer(function() --[[ Line: 271 ]]
+                                    v29:set(v29:get() .. "\n" .. "Starting banning");
+                                    for v51 in string.gmatch(v50, "([^,]+)") do
+                                        v51 = string.match(v51, "^%s*(.-)%s*$");
+                                        local v52 = v27.BanUser(v51, v38);
+                                        v29:set(v29:get() .. "\n" .. v52);
+                                    end;
+                                    v28:set(nil);
+                                    v29:set(v29:get() .. "\n" .. "Finished banning");
+                                end));
+                                return;
+                            end;
+                        end
+                    }), 
+                    v21({
+                        Visible = v4.Computed(function() --[[ Line: 284 ]]
+                            return v28:get() ~= nil;
+                        end), 
+                        OnActivated = function() --[[ Line: 287 ]] --[[ Name: OnActivated ]]
+                            task.cancel(v28:get());
+                            v28:set(nil);
+                            v29:set(v29:get() .. "\n" .. "Cancelled banning");
+                        end
+                    })
+                }
+            })
+        }
+    });
+end;
